@@ -1,0 +1,686 @@
+<!-- landing.html — body partial consumed by app/page.tsx (dangerouslySetInnerHTML).
+     <head>, meta/OG and <script> tags live in app/layout.tsx + app/page.tsx, not here. -->
+<body data-mentor-source="static/data/previous-gstar-mentors.json">
+
+<!-- ============ NAV (pill + hamburger) ============ -->
+<div class="nav-wrap">
+  <header class="nav" id="nav">
+    <a href="#top" class="nav-brand">
+      <img src="static/img/logo-nti-white.svg" alt="New Turing Institute">
+    </a>
+
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#curriculum">Curriculum</a>
+      <a href="#mentors">Mentors</a>
+      <a href="#outcomes">Outcomes</a>
+      <a href="#projects">Projects</a>
+      <a href="#tuition">Tuition</a>
+      <a href="#faq">FAQ</a>
+      <a href="#apply" class="btn btn-secondary-dark btn--size-32">Apply for 2026</a>
+    </nav>
+
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+      <svg class="ico-open"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="ico-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+
+  <div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
+
+  <div class="nav-menu" id="nav-menu">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#curriculum">Curriculum</a></li>
+      <li><a href="#mentors">Mentors</a></li>
+      <li><a href="#outcomes">Outcomes</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#tuition">Tuition</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-menu-ctas">
+      <a href="mailto:contact@newturing.ai?subject=GStar%202026%20interest" class="btn btn-ghost">Register interest</a>
+      <a href="#apply" class="btn btn-primary">Apply for 2026 →</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="hero">
+  <img class="hero-bg" src="static/img/hero-background.png" alt="" aria-hidden="true">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-vignette" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-tag">NTI Global Talent Program · 2026</div>
+    <h1 class="h1 h1--sheen" data-text="GStar Bootcamp">GStar Bootcamp</h1>
+    <p class="hero-sub">Build AI <span class="text-gradient">at the frontier.</span></p>
+    <p class="hero-lead lead">
+      <b>From strong engineers to world-class AI builders.</b> A 12-week, fully online accelerator for engineers who already build — and want to build at the frontier. Trained and mentored by researchers from Google DeepMind, OpenAI, Stanford, Princeton, and Carnegie Mellon, and culminating in a mentored capstone showcased at the GStar Summit.
+    </p>
+    <p class="hero-tagline">Started in Asia. Built to a global bar.</p>
+
+    <div class="hero-facts" aria-label="Program facts">
+      <span><b>12 weeks</b> · <span id="hero-program-dates">Sep–Dec 2026</span></span>
+      <span><b>Online</b> · taught in English</span>
+      <span><b>100% scholarships available</b> · $4,500 tuition</span>
+    </div>
+
+    <div class="hero-ctas">
+      <a href="#apply" class="btn btn-primary">Apply Now →</a>
+    </div>
+    <div class="hero-note" id="hero-deadline-note"><span>Applications are open</span><span class="hero-note-sep" aria-hidden="true"> · </span><span>Early Bird Deadline: July 25, 2026</span></div>
+
+    <div id="countdown" class="countdown" aria-label="Early Bird countdown">
+      <div class="countdown-label">Early Bird Deadline</div>
+      <div class="countdown-cell"><div id="cd-days"  class="countdown-num">--</div><div class="countdown-lbl">Days</div></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-cell"><div id="cd-hours" class="countdown-num">--</div><div class="countdown-lbl">Hours</div></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-cell"><div id="cd-mins"  class="countdown-num">--</div><div class="countdown-lbl">Mins</div></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-cell countdown-cell--last"><div id="cd-secs" class="countdown-num">--</div><div class="countdown-lbl">Secs</div></div>
+    </div>
+
+    <a href="#fit" class="hero-jump"><svg class="hero-jump__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg><span>See if it's you</span></a>
+  </div>
+</section>
+
+<!-- ============ TRUSTED STRIP ============ -->
+<div class="container">
+  <div class="strip">
+    <small>Organizations represented across NTI's programs and community</small>
+    <img src="static/img/logo-google-white.svg" alt="Google" class="strip-logo">
+    <img src="static/img/logo-vietai-white.svg" alt="VietAI" class="strip-logo">
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="section">
+  <div class="container">
+    <span class="eyebrow">How GStar works</span>
+    <h2 class="h2" style="margin-top: 22px; max-width: 780px;">Learn deeply. Build publicly. Earn your place in the network.</h2>
+    <p class="lead" style="margin-top: 18px; max-width: 780px;">
+      GStar turns existing engineering foundations into evidence: trained models, evaluated systems, a working capstone, and a technical presentation.
+    </p>
+
+    <div class="two-col-copy">
+      <div class="card">
+        <p class="lead" style="color: var(--text-2); font-size: 16px;">
+          <b>Learn and implement.</b> Go from attention internals and pre-training to post-training, GRPO, inference optimization, and agent evaluation through hands-on assignments.
+        </p>
+      </div>
+      <div class="card">
+        <p class="lead" style="color: var(--text-2); font-size: 16px;">
+          <b>Build and demonstrate.</b> Form a team, iterate with technical reviewers, and finish with a graded codebase, short paper, and public capstone presentation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BY THE NUMBERS (crimson) ============ -->
+<section class="section section--red">
+  <div class="container">
+    <span class="eyebrow">Proven in cohort 1 — by the numbers</span>
+    <h2 class="h2" style="margin-top: 22px; max-width: 780px;">The bar GStar 2026 is built on.</h2>
+
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num">269</div><div class="stat-desc">applicants from 15+ countries</div></div>
+      <div class="stat"><div class="stat-num">17.8%</div><div class="stat-desc">acceptance rate in Cohort 1</div></div>
+      <div class="stat"><div class="stat-num">50</div><div class="stat-desc">engineers selected</div></div>
+      <div class="stat"><div class="stat-num">20+ universities</div><div class="stat-desc">represented worldwide</div></div>
+      <div class="stat"><div class="stat-num">10+</div><div class="stat-desc">companies — Kaggle, eBay, Grab, GSK, Coupang, A*STAR and more</div></div>
+      <div class="stat"><div class="stat-num">10</div><div class="stat-desc">frontier capstone projects shipped in 12 weeks</div></div>
+    </div>
+    <p class="stats-source">Source: GStar Cohort 1 program records. Organization and employer names describe cohort representation, not sponsorship.</p>
+
+    <p class="lead" style="margin-top: 26px; max-width: 780px;">
+      Every Cohort 1 project was mentored, graded, and ranked — and reputable start-up accelerators showed immediate interest in the top 3.
+    </p>
+
+    <div class="events" id="previous-events">
+      <div class="event-grid">
+
+        <div class="event-video">
+          <div class="event-video-wrap">
+            <iframe src="https://www.youtube.com/embed/7God10zpDGM?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=7God10zpDGM&amp;controls=0&amp;rel=0&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0"
+                    title="Uncharted Frontiers — GenAI Summit 2024"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+          <div class="event-caption">
+            <h4>Uncharted Frontiers</h4>
+            <a href="https://summit.newturing.ai/2024/" target="_blank" rel="noopener nofollow">GenAI Summit 2024 · Organizer: NTI</a>
+          </div>
+        </div>
+
+        <a class="event-photo" href="https://summit.newturing.ai/2024/" target="_blank" rel="noopener nofollow" style="background-image: url('static/img/event/news-04.webp');">
+          <div class="event-caption">
+            <h4>Uncharted Frontiers</h4>
+            <p>GenAI Summit 2024 · Organizer: NTI</p>
+          </div>
+        </a>
+
+        <a class="event-photo" href="https://www.vinai.io/aiday2023/" target="_blank" rel="noopener nofollow" style="background-image: url('static/img/event/news-01.webp');">
+          <div class="event-caption">
+            <h4>Empower AI: "Reality Reimagined"</h4>
+            <p>AI Day 2023 · Organizer: NTI</p>
+          </div>
+        </a>
+
+        <div class="event-photo" style="background-image: url('static/img/event/news-02.webp');">
+          <div class="event-caption">
+            <h4>AI for the future</h4>
+            <p>AI Summit 2019 · Organizer: NTI</p>
+          </div>
+        </div>
+
+        <div class="event-photo" style="background-image: url('static/img/event/news-03.webp');">
+          <div class="event-caption">
+            <h4>Emerging trends in AI &amp; Its applications</h4>
+            <p>AI Summit 2018 · Organizer: NTI</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ IS THIS FOR YOU (dark, 2-col) ============ -->
+<section id="fit" class="section">
+  <div class="container">
+    <div class="split-2">
+      <div>
+        <span class="eyebrow">Is this for you?</span>
+        <h2 class="h2" style="margin-top: 22px;">GStar Bootcamp is hard. It's also built for people who are more ready than they think.</h2>
+        <p class="lead" style="margin-top: 18px;">
+          You don't need a PhD or a job at a frontier lab. You need a real foundation and the drive to build. <b style="color: var(--text-1); font-weight: 500;">You're ready if:</b>
+        </p>
+        <p class="lead" style="margin-top: 16px;">
+          If you read that and thought "most of it, not all of it" — that's the point. Register your interest and take the entrance assessment. Let the work decide.
+        </p>
+        <a href="#apply" class="btn btn-primary" style="margin-top: 22px;">Register Your Interest →</a>
+      </div>
+
+      <ul class="fit-requirements" aria-label="Recommended background">
+        <li class="fit-requirement shine-hover">
+          <svg class="fit-requirement__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 4.5A3.5 3.5 0 0 0 6 8v.5a3.5 3.5 0 0 0-1 6.86V16a4 4 0 0 0 4 4h1V4.5h-.5Z"/><path d="M14.5 4.5A3.5 3.5 0 0 1 18 8v.5a3.5 3.5 0 0 1 1 6.86V16a4 4 0 0 1-4 4h-1V4.5h.5Z"/><path d="M6 8.5h2M16 8.5h2M5 15h3M16 15h3"/></svg>
+          <div class="fit-requirement__content">
+            <h3>Python &amp; Research</h3>
+            <p>You're fluent in <strong>Python</strong> and <strong>PyTorch</strong> and comfortable reading research papers.</p>
+          </div>
+        </li>
+        <li class="fit-requirement shine-hover">
+          <svg class="fit-requirement__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 9h6v6H9zM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>
+          <div class="fit-requirement__content">
+            <h3>Transformer Systems</h3>
+            <p>You can follow a <strong>Transformer end to end</strong> — attention, backpropagation, and the training loop.</p>
+          </div>
+        </li>
+        <li class="fit-requirement shine-hover">
+          <svg class="fit-requirement__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6"/><circle cx="14" cy="7" r="2"/><circle cx="6" cy="17" r="2"/></svg>
+          <div class="fit-requirement__content">
+            <h3>Model Training</h3>
+            <p>You've <strong>trained or fine-tuned a model</strong>, even a small one.</p>
+          </div>
+        </li>
+        <li class="fit-requirement shine-hover">
+          <svg class="fit-requirement__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5v-16ZM21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"/></svg>
+          <div class="fit-requirement__content">
+            <h3>Deep Learning Fundamentals</h3>
+            <p>You understand <strong>deep learning, NLP, and LLMs</strong> and want to move from applying them to engineering them.</p>
+          </div>
+        </li>
+        <li class="fit-requirement shine-hover">
+          <svg class="fit-requirement__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+          <div class="fit-requirement__content">
+            <h3>Global Standard</h3>
+            <p>You want your work measured against a <strong>global technical bar</strong>, alongside peers who push you.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ READINESS ASSESSMENT ============ -->
+<section id="readiness" class="section section--dim readiness-v3">
+  <div class="container">
+    <div class="readiness-layout">
+      <div class="readiness-intro">
+        <span class="eyebrow">Readiness check</span>
+        <h2 class="h2">Find your strongest starting point.</h2>
+        <p class="lead">Five signals, two minutes. This is guidance, not an admissions decision.</p>
+        <div class="readiness-progress" aria-hidden="true"><span id="readiness-progress-bar"></span></div>
+        <p class="readiness-progress-copy" id="readiness-progress-copy">0 of 5 signals selected</p>
+      </div>
+
+      <form class="readiness-form" id="readiness-form">
+        <fieldset>
+          <legend class="sr-only">Select statements that describe your current experience</legend>
+          <label class="readiness-option"><input type="checkbox" name="readiness" value="python"><span><b>Python &amp; PyTorch</b><small>I can build and debug training code without relying entirely on templates.</small></span></label>
+          <label class="readiness-option"><input type="checkbox" name="readiness" value="papers"><span><b>Research literacy</b><small>I can read a paper, identify the contribution, and trace the implementation.</small></span></label>
+          <label class="readiness-option"><input type="checkbox" name="readiness" value="transformers"><span><b>Transformer internals</b><small>I understand attention, backpropagation, and the training loop end to end.</small></span></label>
+          <label class="readiness-option"><input type="checkbox" name="readiness" value="training"><span><b>Model training</b><small>I have trained or fine-tuned at least one model, even a small one.</small></span></label>
+          <label class="readiness-option"><input type="checkbox" name="readiness" value="time"><span><b>Weekly commitment</b><small>I can protect 15–20 hours each week for twelve intensive weeks.</small></span></label>
+        </fieldset>
+        <div class="readiness-result" id="readiness-result" aria-live="polite">
+          <span class="readiness-result__label">Your signal</span>
+          <h3>Select what already feels true.</h3>
+          <p>We will show the most useful next step based on your current foundation.</p>
+          <a href="#curriculum" class="btn btn-secondary-dark btn--size-40 btn--icon-right">Explore the curriculum <span class="btn-arrow" aria-hidden="true">→</span></a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CURRICULUM (cream) ============ -->
+<section id="curriculum" class="section section--cream">
+  <div class="container">
+    <span class="eyebrow">What you'll learn</span>
+    <h2 class="h2" style="margin-top: 22px; max-width: 900px;">A 12-week curriculum built on what AI labs are actually shipping today — now with an expanded Agent Tech track.</h2>
+
+    <div id="curriculum-scrolly" class="scrolly"></div>
+
+    <div id="curriculum-cta" class="scrolly-main__cta">
+      <a href="#apply" class="btn btn-primary btn--size-48 btn--icon-right">Register Your Interest <span class="btn-arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENTORS (dark, 4-col) ============ -->
+<section id="mentors" class="section mentors-v2">
+  <div class="container">
+    <div class="mentor-network-header">
+      <div>
+        <span class="eyebrow">Previous GStar mentor network</span>
+        <h2 class="h2">The standard behind the program.</h2>
+        <p class="lead">The people below contributed to Cohort 1 as program leaders, lecturers, or mentors. Participation may vary by cohort.</p>
+      </div>
+      <aside class="mentor-network-meta" aria-label="Mentor network summary">
+        <div><strong>17</strong><span>contributors</span></div>
+        <div><strong>03</strong><span>network layers</span></div>
+        <div><strong>01</strong><span>previous cohort</span></div>
+      </aside>
+    </div>
+
+    <div class="mentor-group-title"><span>Program leadership &amp; senior mentors <em>Previous cohort</em></span><b>04</b></div>
+    <div class="mentors-grid mentors-grid--featured">
+      <div class="mentor"><div class="mentor-avatar"><span>TL</span><img src="static/img/mentor/m_2025_thangluong.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Dr. Thang Luong</div><div class="mentor-role">Senior Staff Research Scientist, Google DeepMind · Co-founder, NTI · GStar Program Director</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>JD</span><img src="static/img/mentor/m_2025_jeff_dean.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Dr. Jeff Dean</div><div class="mentor-role">Chief Scientist, Google Research &amp; Google DeepMind</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>CM</span><img src="static/img/mentor/m_2025_christophermanning.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Prof. Christopher D. Manning</div><div class="mentor-role">Professor of Machine Learning and NLP, Stanford University</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>PN</span><img src="static/img/mentor/m_2025_preslavnakov.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Prof. Preslav Nakov</div><div class="mentor-role">Department Chair &amp; Professor of NLP, MBZUAI</div></div></div>
+    </div>
+
+    <div class="mentor-group-title mentor-group-title--secondary"><span>Guest lecturers &amp; mentors <em>Previous cohort</em></span><b>05</b></div>
+    <div class="mentors-grid mentors-grid--featured mentors-grid--experts">
+      <div class="mentor"><div class="mentor-avatar"><span>YT</span><img src="static/img/mentor/m_2025_yitay.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Dr. Yi Tay</div><div class="mentor-role">Scientist &amp; Engineer, Google DeepMind</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>GN</span><img src="static/img/mentor/m_2025_graham_neubig.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Prof. Graham Neubig</div><div class="mentor-role">Associate Professor, School of Computer Science, Carnegie Mellon University</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>DC</span><img src="static/img/mentor/m_2025_danqi_chen.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Prof. Danqi Chen</div><div class="mentor-role">Associate Professor of Computer Science, Princeton University</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>PL</span><img src="static/img/mentor/m_2025_poshenloh.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Prof. Po-Shen Loh</div><div class="mentor-role">Professor of Mathematics, Carnegie Mellon University (Leadership)</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>JK</span><img src="static/img/mentor/m_2025_jing_yu_koh.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Jing Yu Koh</div><div class="mentor-role">Research Scientist &amp; Tech Lead, Llama Computer Control Agents Team, Meta</div></div></div>
+    </div>
+
+    <div class="mentor-group-title mentor-group-title--secondary"><span>Academic &amp; mentoring team <em>Previous cohort</em></span><b>08</b></div>
+    <div class="mentors-grid mentors-grid--featured mentors-grid--team">
+      <div class="mentor"><div class="mentor-avatar"><span>TN</span><img src="static/img/mentor/m_2025_tiepnguyen.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Dr. Tiep Nguyen</div><div class="mentor-role">Lecturer, University of Information Technology · Head of Academics, NTI</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>TV</span><img src="static/img/mentor/m_2025_tuvu.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Prof. Tu Vu</div><div class="mentor-role">Assistant Professor, Virginia Tech · Head of Research, NTI</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>HT</span><img src="static/img/mentor/m_2025_hoangtran.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Hoang Tran</div><div class="mentor-role">Research Engineer, OpenAI · Head of Industry, NTI</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>CN</span><img src="static/img/mentor/m_2025_chiennguyen.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Chien Nguyen</div><div class="mentor-role">PhD student in Computer Science, University of Oregon</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>HN</span><img src="static/img/mentor/m_2025_huy_nguyen.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Huy Nguyen</div><div class="mentor-role">PhD student in Computer Science, University of Oregon</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>TL</span><img src="static/img/mentor/m_2025_thanh_le.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Thanh Le</div><div class="mentor-role">PhD student, Northeastern University</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>LP</span><img src="static/img/mentor/m_2025_long_phan.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Long Phan</div><div class="mentor-role">Research Engineer, Center for AI Safety</div></div></div>
+      <div class="mentor"><div class="mentor-avatar"><span>HN</span><img src="static/img/mentor/m_2025_hieu_ngo.webp" alt="" loading="lazy" decoding="async"></div><div><div class="mentor-name">Hieu Ngo</div><div class="mentor-role">Senior AI Engineer, MoMo</div></div></div>
+    </div>
+    <button type="button" class="btn btn-ghost btn--size-40 mentors-mobile-toggle" id="mentors-mobile-toggle" aria-expanded="false">View all mentor profiles</button>
+  </div>
+</section>
+
+<!-- ============ OUTCOMES (dark, icons) ============ -->
+<section id="outcomes" class="section section--dim outcomes-v2">
+  <div class="container">
+    <span class="eyebrow">What you'll walk away with</span>
+    <h2 class="h2" style="margin-top: 22px; max-width: 780px;">Six outcomes engineered into every cohort.</h2>
+
+    <div class="outcomes-ledger">
+      <aside class="outcomes-ledger__intro" aria-label="Program outcome summary">
+        <span class="outcomes-ledger__count">06</span>
+        <p>One program, designed around evidence of technical depth, execution, and long-term professional leverage.</p>
+        <div class="outcomes-ledger__signal" aria-hidden="true"><span></span></div>
+      </aside>
+
+      <ol class="outcomes-list">
+        <li class="outcome-item">
+          <article>
+            <div class="outcome-item__meta"><span>01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-8 4 8 4 8-4-8-4Z"/><path d="m4 12 8 4 8-4M4 17l8 4 8-4"/></svg></div>
+            <h3>Frontier-grade LLM training</h3>
+            <p>Pre-training, post-training, reasoning, agentic systems, and inference optimization — taught through implementation.</p>
+          </article>
+        </li>
+        <li class="outcome-item">
+          <article>
+            <div class="outcome-item__meta"><span>02</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 11.5-5.4M18 13l1.1 2.2 2.4.4-1.7 1.7.4 2.4-2.2-1.1-2.2 1.1.4-2.4-1.7-1.7 2.4-.4L18 13Z"/></svg></div>
+            <h3>World-class mentorship</h3>
+            <p>Direct guidance shaped by researchers, professors, and engineers from leading AI labs and universities.</p>
+          </article>
+        </li>
+        <li class="outcome-item">
+          <article>
+            <div class="outcome-item__meta"><span>03</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14l2 2-2 2M13 18h3"/></svg></div>
+            <h3>A mentored capstone</h3>
+            <p>Ship a graded codebase, short paper, and public presentation that demonstrates what you can build.</p>
+          </article>
+        </li>
+        <li class="outcome-item">
+          <article>
+            <div class="outcome-item__meta"><span>04</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="m7 11 10-4M7 13l10 4"/></svg></div>
+            <h3>Visibility with R&amp;D networks</h3>
+            <p>Strong work may reach relevant research and hiring networks, based on performance and partner availability.</p>
+          </article>
+        </li>
+        <li class="outcome-item">
+          <article>
+            <div class="outcome-item__meta"><span>05</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.3 4.7L20 8.5l-4 3.9.9 5.6-4.9-2.6L7.1 18l.9-5.6-4-3.9 5.7-.8L12 3Z"/></svg></div>
+            <h3>Leadership growth</h3>
+            <p>Build communication, influence, and self-management skills that make technical talent visible.</p>
+          </article>
+        </li>
+        <li class="outcome-item">
+          <article>
+            <div class="outcome-item__meta"><span>06</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+            <h3>Global community access</h3>
+            <p>Connect with NTI builders across North America and Asia through peer channels, sessions, and meetups.</p>
+          </article>
+        </li>
+      </ol>
+    </div>
+
+    <div class="alumni-banner">
+      <strong>A lifetime alumni network</strong>
+      <p>Stay connected with builders across nine or more locations through NTI's broader AI community, ongoing peer channels, and future events.</p>
+    </div>
+
+    <figure class="outcomes-community-media outcomes-community-media--group">
+      <div class="outcomes-community-media__lead">
+        <img src="static/img/06/06-01.webp" alt="AI leaders and GStar mentors speaking on an AI Day panel" loading="lazy" decoding="async">
+      </div>
+      <div class="outcomes-community-media__support">
+        <img src="static/img/06/06-02.webp" alt="Speakers and organizers together on stage at an NTI event" loading="lazy" decoding="async">
+        <img src="static/img/06/06-03.webp" alt="Dr. Thang Luong speaking with a guest at the GenAI Summit" loading="lazy" decoding="async">
+      </div>
+      <figcaption>Researchers, mentors, and builders connected through NTI programs and community events.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS (cream) ============ -->
+<section id="testimonials" class="section section--cream">
+  <div class="container">
+    <span class="eyebrow">Testimonials</span>
+    <h2 class="h2">From the engineers who built alongside us.</h2>
+    <div class="grid grid-3" style="margin-top: 36px;">
+
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        <p class="quote-body">I deeply improved my understanding of ML systems — and learned how to use AI coding agents without creating tech debt, speeding up development at my startup by more than 3×.</p>
+        <div class="quote-footer">
+          <div class="quote-name">Geremie Yeo · Singapore</div>
+          <div class="quote-role">Founding Engineer, AI startup · Kaggle Grandmaster (Top 150 worldwide)</div>
+        </div>
+      </div>
+
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        <p class="quote-body">For me, GStar was almost life-changing. The talent density in the cohort is what left the deepest impression on me — people I could soundboard my ideas with, who helped me grow.</p>
+        <div class="quote-footer">
+          <div class="quote-name">Dhruv Agarwal · India</div>
+          <div class="quote-role">AI engineer · built fraud-detection systems at Visa</div>
+        </div>
+      </div>
+
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        <p class="quote-body">GStar Bootcamp gave me a chance to deeply explore the foundations and future directions of AI/LLM research — in a fast-paced, collaborative environment that emphasized continuous learning and impactful results.</p>
+        <div class="quote-footer">
+          <div class="quote-name">Khang Nguyen · USA</div>
+          <div class="quote-role">BSc in Computer Science, Michigan State University</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS (dark) ============ -->
+<section id="projects" class="section">
+  <div class="container">
+    <span class="eyebrow">What cohort 1 built</span>
+    <h2 class="h2" style="margin-top: 22px; max-width: 780px;">Real systems, shipped in 12 weeks. The bar for 2026.</h2>
+
+    <div class="project-filter" role="group" aria-label="Filter projects">
+      <button type="button" class="is-active" data-project-filter="all" aria-pressed="true">All projects</button>
+      <button type="button" data-project-filter="agents" aria-pressed="false">Agents</button>
+      <button type="button" data-project-filter="science" aria-pressed="false">AI for science</button>
+      <button type="button" data-project-filter="systems" aria-pressed="false">ML systems</button>
+    </div>
+
+    <div class="project-gallery-v3">
+      <article class="project-v3" data-project-category="agents" tabindex="0">
+        <img src="static/img/qgentic-ai-presentation-preview.png" alt="Qgentic AI presentation preview" loading="lazy" decoding="async">
+        <div class="project-body">
+          <div class="project-tag">Agents · Autonomous ML Engineering</div>
+          <h3 class="h3">Qgentic AI</h3>
+          <p>An agent architecture for autonomous machine learning with permanent memory, targeted code editing, and a fine-tuned Gemini model.</p>
+          <dl><div><dt>Training data</dt><dd>40K+ examples</dd></div><div><dt>Evaluation</dt><dd>~95th percentile</dd></div></dl>
+          <button type="button" class="project-detail-trigger" aria-expanded="false">View technical summary <span aria-hidden="true">+</span></button>
+          <div class="project-detail"><p>Across Kaggle competitions, the system reached nearly 95% weighted mean percentile while using stronger researcher roles and targeted code editing.</p></div>
+        </div>
+      </article>
+
+      <article class="project-v3" data-project-category="science" tabindex="0">
+        <img src="static/img/virtual-cell-presentation-preview.png" alt="Virtual Cell presentation preview" loading="lazy" decoding="async">
+        <div class="project-body">
+          <div class="project-tag">AI for science · Drug Discovery</div>
+          <h3 class="h3">Virtual Cell</h3>
+          <p>A biology-grounded architecture pairing graph neural networks with physics-informed models to predict gene interactions.</p>
+          <dl><div><dt>Approach</dt><dd>GNN + physics</dd></div><div><dt>Use case</dt><dd>Target screening</dd></div></dl>
+          <button type="button" class="project-detail-trigger" aria-expanded="false">View technical summary <span aria-hidden="true">+</span></button>
+          <div class="project-detail"><p>The virtual-cell infrastructure helps biotechnology teams screen molecular targets before wet-lab testing instead of relying on data scaling alone.</p></div>
+        </div>
+      </article>
+
+      <article class="project-v3" data-project-category="systems" tabindex="0">
+        <img src="static/img/ares-presentation-preview.png" alt="ARES presentation preview" loading="lazy" decoding="async">
+        <div class="project-body">
+          <div class="project-tag">ML systems · MoE Serving</div>
+          <h3 class="h3">ARES</h3>
+          <p>A runtime framework that identifies and skips redundant experts before dispatch to accelerate Mixture-of-Experts serving.</p>
+          <dl><div><dt>Runtime</dt><dd>vLLM</dd></div><div><dt>Goal</dt><dd>Lower latency</dd></div></dl>
+          <button type="button" class="project-detail-trigger" aria-expanded="false">View technical summary <span aria-hidden="true">+</span></button>
+          <div class="project-detail"><p>ARES combines adaptive expert skipping with drift-aware profiling to improve decoding latency while preserving model quality.</p></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TUITION (dark, red hero card + criteria) ============ -->
+<section id="tuition" class="section section--dim">
+  <div class="container">
+    <span class="eyebrow">Tuition &amp; scholarships</span>
+    <h2 class="h2" style="margin-top: 22px; max-width: 780px;">Access designed for builders — not budgets.</h2>
+
+    <div class="tuition-grid">
+      <div class="tuition-hero">
+        <div class="kicker">Scholarships</div>
+        <h3 class="tuition-headline">100% scholarships available</h3>
+        <p>We're committed to making high-quality AI education accessible, so cost never keeps the right builder out. To request a scholarship (up to 100%), simply note it in your application.</p>
+        <div class="tuition-aid">
+          <span class="tuition-aid-badge">$4,500</span>
+          <div>
+            <b>Full 12-week program</b>
+            <p>Covers frontier-grade training, mentorship from researchers at Google DeepMind, OpenAI, Stanford, Princeton &amp; CMU, a ranked capstone, and lifetime alumni access.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="criteria-col">
+        <h3 class="h3">Scholarship criteria</h3>
+        <ul class="checklist">
+          <li>Demonstrated academic excellence or research achievements</li>
+          <li>Strong performance in the technical assessment</li>
+          <li>Personal or family hardship</li>
+          <li>Clear motivation and commitment aligned with the program's mission</li>
+        </ul>
+        <p class="criteria-note">
+          Applicants who meet multiple criteria are prioritized in review. To request a scholarship, note it in your application — results are sent directly to your registered email.
+        </p>
+        <div class="program-terms">
+          <h3 class="h3">Before you enroll</h3>
+          <ul>
+            <li>Payment schedule and scholarship terms are confirmed in the admission offer.</li>
+            <li>Compute requirements and any credits are communicated before enrollment.</li>
+            <li>Refund, deferral, and capstone IP terms must be reviewed in the enrollment agreement.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APPLICATION PROCESS ============ -->
+<section id="admissions" class="section admissions-v3">
+  <div class="container">
+    <span class="eyebrow">Application process</span>
+    <div class="admissions-heading"><h2 class="h2">A selective process, with no hidden steps.</h2><p class="lead">Apply once for admission and financial aid. Shortlisted candidates complete a practical assessment before final decisions are issued on a rolling basis.</p></div>
+    <ol class="admissions-steps">
+      <li><span>01</span><b>Submit application</b><p>Share your background, technical experience, motivation, and scholarship request.</p><small id="application-step-deadline">Before Aug 10</small></li>
+      <li><span>02</span><b>Technical assessment</b><p>Shortlisted candidates complete a practical entrance test.</p><small>Instructions by email</small></li>
+      <li><span>03</span><b>Final evaluation</b><p>NTI reviews your technical evidence, motivation, and availability.</p><small>Rolling review</small></li>
+      <li><span>04</span><b>Decision &amp; enrollment</b><p>Admission, scholarship, payment, and cohort terms arrive together.</p><small id="application-step-start">September start</small></li>
+    </ol>
+
+    <div class="admissions-dates">
+      <div class="admissions-dates__label"><span>Key dates</span><p>From application to the GStar Summit.</p></div>
+      <ol>
+        <li><time data-date-key="earlyBirdDeadline" datetime="2026-07-25">Jul 25</time><b>Early Bird deadline</b></li>
+        <li><time data-date-key="finalDeadline" datetime="2026-08-10">Aug 10</time><b>Final deadline</b></li>
+        <li><time data-date-key="bootcampStart" datetime="2026-09">Early Sep</time><b>Bootcamp begins</b></li>
+        <li><time data-date-key="capstone" datetime="2026-12">Dec 2026</time><b>Capstone presentations</b></li>
+        <li><time data-date-key="summit" datetime="2027">2027</time><b>Top teams at GStar Summit</b></li>
+      </ol>
+    </div>
+
+    <div class="admissions-actions">
+      <div class="admissions-actions__buttons">
+        <a href="https://gstar.newturing.ai/" target="_blank" rel="noopener" class="btn btn-primary btn--size-48 btn--icon-right">Start Your Application <span class="btn-arrow" aria-hidden="true">→</span></a>
+      </div>
+      <p>Scholarship requests are reviewed within the same application. No separate form required.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ (dark) ============ -->
+<section id="faq" class="section section--dim">
+  <div class="container-tight">
+    <span class="eyebrow">FAQ</span>
+    <h2 class="h2" style="margin-top: 22px;">Questions, answered.</h2>
+
+    <div class="faq">
+      <div class="faq-card"><details name="faq" open>
+        <summary>I'm still doing my undergraduate. Can I still apply?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Yes. Undergraduates are welcome, provided you have a strong foundation in deep learning, NLP, and LLMs and can commit to the program's schedule.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>When does the program run?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p id="faq-program-dates">Applications open July 1, 2026, with two deadlines — Early Bird (July 25) and Final (August 10). The 12-week program runs from early September to December 2026, fully online. Top teams present at the GStar Summit in 2027.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>What are the graduation requirements?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Completion of the core curriculum, both graded assignments, and a mentored capstone — presented to the panel of lecturers, guest lecturers, and mentors.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>What's the enrollment process?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Submit your application before your chosen deadline. Selected candidates complete an entrance test and a final evaluation, after which admission and scholarship decisions are made.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>How much does it cost, and is aid available?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Tuition is $4,500 for the full program. Scholarships are available upon request, up to 100% coverage, based on merit and need.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>How and when are decisions sent?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Decisions are sent directly to your registered email on a rolling basis after each evaluation round.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>What language is the program in?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>English — all instruction, materials, and presentations, reflecting the program's global standard.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>How much time should I plan each week?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Plan for approximately 15–20 hours per week across instruction, assignments, reading, office hours, and capstone work. Actual time varies by background and project scope.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>Are sessions live, and what timezone is used?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>The program is online and includes scheduled cohort activities. The final live-session schedule, timezone, attendance policy, and recording availability are confirmed before enrollment.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>Do I need my own GPU or cloud budget?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Some assignments require accelerated compute. Exact hardware requirements, available credits, and any participant-paid compute costs are communicated before enrollment.</p>
+      </details></div>
+      <div class="faq-card"><details name="faq">
+        <summary>Who owns the capstone work?<svg class="faq-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary>
+        <p>Project publication, code licensing, confidentiality, and intellectual-property terms are defined in the enrollment and capstone agreements. Review them before committing a proprietary idea.</p>
+      </details></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section id="apply" class="cta-final">
+  <div class="container-tight">
+    <h2 class="h2">Ready to build AI at the frontier?</h2>
+    <p class="lead" style="margin-top: 18px; color: rgba(255,255,255,.9);">
+      Join the next cohort of exceptional engineers — from Southeast Asia and around the world — for a 12-week program that turns strong technical talent into world-class AI builders.
+    </p>
+    <div class="btns">
+      <a href="https://gstar.newturing.ai/" target="_blank" rel="noopener" class="btn btn-primary">Apply Now →</a>
+    </div>
+    <p class="final-note" id="final-deadline-note">Applications are open · Final Deadline: August 10, 2026 (Indochina Time)</p>
+  </div>
+</section>
+
+</main>
+
+<aside class="sticky-apply-v3" id="sticky-apply" aria-label="Application status">
+  <div><span id="sticky-deadline-label">Applications open</span><b id="sticky-deadline-value">Final deadline · Aug 10</b></div>
+  <a href="#apply" class="btn btn-secondary-dark btn--size-40">Apply now</a>
+</aside>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer-top">
+    <div>
+      <a href="#top" class="nav-brand">
+        <img src="static/img/new-turing-institute.png" alt="New Turing Institute">
+        <span class="nav-brand-name"><span>NEW TURING</span><span>INSTITUTE</span></span>
+      </a>
+      <p class="footer-desc">GStar Bootcamp · NTI Global Talent Program 2026.<br>Started in Asia. Built to a global bar.</p>
+    </div>
+    <nav class="footer-links">
+      <a href="#about">About</a>
+      <a href="#curriculum">Curriculum</a>
+      <a href="#mentors">Mentors</a>
+      <a href="#tuition">Tuition</a>
+      <a href="#faq">FAQ</a>
+      <a href="#apply">Apply Now</a>
+      <a href="mailto:contact@newturing.ai">Contact</a>
+    </nav>
+  </div>
+  <p class="footer-copy container">Copyright © 2026 New Turing Institute</p>
+</footer>
+
+</body>

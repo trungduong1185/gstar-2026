@@ -1,0 +1,11 @@
+"use client";
+import { FormEvent, useEffect, useState } from "react";
+import { withBasePath } from "@/lib/base-path";
+const fields = [["applicationsOpen","Applications open"],["earlyBirdDeadline","Early Bird deadline"],["finalDeadline","Final deadline"],["bootcampStart","Bootcamp starts"],["capstone","Capstone month"],["summit","GStar Summit"]] as const;
+function local(value: string) { return value ? value.slice(0,16) : ""; }
+export function ProgramSettingsForm() {
+  const [data,setData]=useState<any>(null); const [message,setMessage]=useState(""); const [saving,setSaving]=useState(false);
+  useEffect(()=>{fetch(withBasePath("/api/admin/program")).then(r=>r.json()).then(setData)},[]);
+  async function save(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setSaving(true); setMessage(""); const form=new FormData(event.currentTarget); const dates=Object.fromEntries(fields.map(([key])=>[key,`${form.get(key)}:00+07:00`])); const response=await fetch(withBasePath("/api/admin/program"),{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({cohortYear:Number(form.get("cohortYear")),dates})}); const result=await response.json(); setMessage(response.ok?"Program dates updated across the landing page.":result.error); setSaving(false); }
+  return <main className="admin-page"><div className="admin-pagehead"><div><span>Program</span><h1>Program content</h1><p>Manage the cohort year and every application deadline from one source.</p></div><a href={withBasePath("/#admissions")} target="_blank">Preview website ↗</a></div><section className="admin-data admin-form-card"><header><div><span>Schedule</span><h2>GStar cohort dates</h2></div><small>Timezone · Indochina Time</small></header>{!data?<p>Loading…</p>:<form className="program-form" onSubmit={save}><label>Cohort year<input name="cohortYear" type="number" min="2026" max="2100" defaultValue={data.cohortYear}/></label><div>{fields.map(([key,label])=><label key={key}>{label}<input name={key} type="datetime-local" required defaultValue={local(data.dates[key])}/></label>)}</div><footer><p>{message||"Changes update countdowns, deadline notes and admissions dates."}</p><button disabled={saving}>{saving?"Saving…":"Save program"}</button></footer></form>}</section></main>;
+}

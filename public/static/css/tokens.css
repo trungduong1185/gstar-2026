@@ -1,0 +1,134 @@
+/* ============================================================
+   tokens.css — NTI design tokens & base
+   Font, design tokens, và reset tối thiểu (nền tảng cho base/components/sections).
+   Dùng: <link rel="stylesheet" href="/static/css/tokens.css">
+   ============================================================ */
+
+/* ---------- Fonts (Google Fonts, không phụ thuộc Next.js build) ---------- */
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Lato:wght@400;700;800&display=swap");
+
+/* ---------- Design tokens ---------- */
+/* Giá trị lưu dạng HSL không có wrap hsl(), dùng qua hsl(var(--token)).
+   Ví dụ: color: hsl(var(--primary-1));  background: hsl(var(--neutral-2)); */
+:root {
+  /* Bề mặt */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+
+  /* Primary — thang đỏ thương hiệu NTI (1 = đậm nhất, 5 = nhạt nhất) */
+  --primary: 0 0% 9%;
+  --primary-1: 358.18deg 75.57% 25.69%;   /* ~#731013 crimson đậm */
+  --primary-2: 358.34deg 70.73% 40.2%;    /* đỏ trung */
+  --primary-3: 351.43deg 100% 49.41%;     /* ~#FC0024 đỏ tươi */
+  --primary-4: 0deg 84% 85%;              /* hồng pastel */
+  --primary-5: 0deg 100% 96.47%;          /* hồng rất nhạt / nền */
+  --primary-foreground: 0 0% 98%;
+
+  /* Secondary / muted / accent (shadcn defaults) */
+  --secondary: 0 0% 96.1%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 0 0% 96.1%;
+  --accent-foreground: 0 0% 9%;
+
+  /* Trạng thái */
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  /* Đường viền / input / focus ring */
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 0 0% 3.9%;
+
+  /* Chart palette */
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+
+  /* Bo góc mặc định */
+  --radius: 0.5rem;
+
+  /* Neutral scale (1 = sáng nhất, 12 = tối nhất).
+     Lưu ý: source gốc thiếu --neutral-7 và --neutral-11; giữ nguyên khoảng trống.
+     Đã sửa lỗi cú pháp của --neutral-3 (nguồn gốc có dấu phẩy sai). */
+  --neutral-1: 0deg 0% 99.02%;
+  --neutral-2: 270deg 20% 98.04%;
+  --neutral-3: 285deg 14% 95%;
+  --neutral-4: 276deg 12% 92%;
+  --neutral-5: 274.29deg 12.28% 88.82%;
+  --neutral-6: 262.5deg 11.43% 86.27%;
+  --neutral-8: 249.23deg 10.4% 75.49%;
+  --neutral-9: 249.23deg 5.99% 57.45%;
+  --neutral-10: 250deg 5.04% 53.33%;
+  --neutral-12: 257.14deg 10.14% 13.53%;
+
+  /* Alias tiện dùng cho typography */
+  --font-sans: "Lato", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Lexend", var(--font-sans);
+}
+
+/* ---------- Reset tối thiểu ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  border-color: hsl(var(--border));
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography — heading dùng Lexend, thân dùng Lato */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: hsl(var(--foreground));
+}
+
+p { margin: 0; }
+
+a {
+  color: hsl(var(--primary-2));
+  text-decoration: none;
+}
+a:hover { color: hsl(var(--primary-1)); }
+
+img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ---------- Utility class rất tối thiểu (tuỳ chọn) ---------- */
+.font-display { font-family: var(--font-display); }
+.font-sans    { font-family: var(--font-sans); }

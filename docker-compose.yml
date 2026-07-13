@@ -1,0 +1,16 @@
+services:
+  gstar:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_GA_MEASUREMENT_ID: ${NEXT_PUBLIC_GA_MEASUREMENT_ID:-}
+        NEXT_PUBLIC_BASE_PATH: ${NEXT_PUBLIC_BASE_PATH:-}
+    restart: unless-stopped
+    env_file: .env.production
+    ports:
+      - "127.0.0.1:3010:3000"
+    volumes:
+      - gstar-data:/app/data
+
+volumes:
+  gstar-data:
