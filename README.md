@@ -30,6 +30,8 @@ Production admins can also configure the Sheet URL, deployed Apps Script URL, an
 
 The browser stores first-touch and last-touch values for:
 
+**UTM parameters**
+
 - `utm_source`
 - `utm_medium`
 - `utm_campaign`
@@ -37,7 +39,47 @@ The browser stores first-touch and last-touch values for:
 - `utm_term`
 - `utm_id`
 
-GA4 event hooks fire for `apply_form_open`, `apply_form_start`, and `apply_form_submit` when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is configured.
+**Ad-platform click identifiers** (captured for server-side conversion APIs)
+
+- `gclid`, `gbraid`, `wbraid` — Google Ads
+- `fbclid` — Meta Ads
+- `ttclid` — TikTok Ads
+- `msclkid` — Microsoft Ads
+- `li_fat_id` — LinkedIn Ads
+
+GA4 event hooks fire for `apply_form_open`, `apply_form_start`, and `apply_form_submit` when `NEXT_PUBLIC_GA_MEASUREMENT_ID` is configured. GA4 uses Google **Consent Mode v2** — all storage defaults to `denied` and is only granted after the visitor accepts in the consent banner (see `components/ConsentBanner.tsx`).
+
+## Duplicate protection
+
+Each drawer open mints an idempotency key that the client sends as `X-Idempotency-Key`. The API dedupes retries within 24 hours and also short-circuits repeat submissions of the same email within 24 hours — both cases respond with `{ ok: true, mode: "duplicate", id: <previousId> }` instead of storing a second row.
+
+## Slack notifications
+
+Set `SLACK_WEBHOOK_URL` (or override in `/dashboard/settings` once wired) to receive a summary in Slack or Discord after every successful application. Delivery is fire-and-forget with a 5s timeout so it never delays the response to the applicant.
+
+## Multi-touch attribution (Sprint 2)
+
+Each visit that carries a UTM or click ID appends a `Touchpoint` to `localStorage['gstar_touchpoints']`. Same-campaign visits within 30 minutes are deduped so a refresh doesn't spam entries. The array is capped at 20 touchpoints. On submit the full array is sent along with the legacy `firstTouch` / `lastTouch` snapshots — old records are still readable, new records unlock linear and position-based (40/20/40) attribution models in the dashboard.
+
+## Real dashboard data
+
+`GET /api/admin/metrics?range=30d&source=all&model=last` returns live aggregates from `data/submissions.ndjson`. Supported query parameters:
+
+- `range` — `7d` | `30d` | `90d` | `all`
+- `source` — a specific `utm_source` or `all`
+- `model` — `first` | `last` | `linear` | `position`
+
+Sessions, apply clicks and spend columns are placeholders until GA4 export / ad-platform spend sync are connected (Sprint 3 / manual).
+
+## Meta Conversions API (Sprint 2)
+
+Set `META_PIXEL_ID` and `META_ACCESS_TOKEN` to enable server-side `Lead` events. The API sends a hashed email + name + country + the reconstructed `fbc` cookie (from `fbclid`) alongside a `predicted_ltv` of 4500 USD (one full tuition) so Advantage+ can bid intelligently. `event_id` equals the application ID so any browser Pixel Lead is deduped against the server event automatically.
+
+Use `META_TEST_EVENT_CODE` only while validating in Business Manager → **Events Manager → Test events**.
+
+## Field-level drop-off (Sprint 2)
+
+Every required text field emits an `apply_form_field_exit` GA4 event when the applicant blurs it without entering a value (once per drawer open). Segment `by field` in GA4 to see which field causes the biggest drop.
 
 ## Production
 

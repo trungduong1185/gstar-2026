@@ -691,3 +691,76 @@
 @media (prefers-reduced-motion: reduce) {
   .section.is-reveal-ready { opacity: 1; transition: none; }
 }
+
+/* ============================================================
+   Consent banner (Sprint 1 — GDPR)
+   Fixed pill at bottom, respects Consent Mode v2 defaults.
+   Auto-hidden after user accepts / declines (state in localStorage).
+   ============================================================ */
+.consent-banner {
+  position: fixed;
+  left: clamp(12px, 3vw, 24px);
+  right: clamp(12px, 3vw, 24px);
+  bottom: clamp(12px, 3vw, 24px);
+  z-index: 90;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: rgba(20, 12, 16, .92);
+  color: #EDE8E6;
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  backdrop-filter: saturate(140%) blur(18px);
+  -webkit-backdrop-filter: saturate(140%) blur(18px);
+  animation: consent-in .35s ease-out;
+}
+@keyframes consent-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+.consent-banner__body {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.consent-banner__body p {
+  margin: 0;
+  font: 400 14px/1.55 var(--font-sans, system-ui);
+  color: rgba(237, 232, 230, .88);
+}
+.consent-banner__body p b { color: #fff; font-weight: 600; }
+.consent-banner__body p a { color: #F2B8BE; text-decoration: none; white-space: nowrap; }
+.consent-banner__body p a:hover { text-decoration: underline; }
+.consent-banner__actions { display: flex; gap: 10px; flex-wrap: nowrap; }
+.consent-banner__btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font: 600 13.5px var(--font-sans, system-ui);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.consent-banner__btn--ghost {
+  background: transparent;
+  color: #C9C6C4;
+  border-color: rgba(255,255,255,.22);
+}
+.consent-banner__btn--ghost:hover { color: #fff; border-color: rgba(255,255,255,.4); }
+.consent-banner__btn--primary {
+  background: linear-gradient(135deg, #731013, #AF1E22);
+  color: #fff;
+}
+.consent-banner__btn--primary:hover { background: linear-gradient(135deg, #8A171B, #C4232A); }
+
+@media (max-width: 640px) {
+  .consent-banner { padding: 14px 16px; }
+  .consent-banner__body { grid-template-columns: 1fr; gap: 12px; }
+  .consent-banner__actions { justify-content: stretch; }
+  .consent-banner__actions button { flex: 1 1 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .consent-banner { animation: none; }
+}

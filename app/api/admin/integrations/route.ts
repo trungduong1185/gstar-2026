@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readIntegrationSettings, resolvedGoogleSheetsSettings, spreadsheetIdFromUrl, writeIntegrationSettings } from "@/lib/integration-settings";
+import { readIntegrationSettings, resolvedGoogleSheetsSettings, spreadsheetIdFromUrl, writeIntegrationSettings, type IntegrationSettings } from "@/lib/integration-settings";
 
 export const runtime = "nodejs";
 
@@ -46,14 +46,15 @@ export async function PUT(request: Request) {
   const googleAppsScriptSecret = submittedSecret || current.googleAppsScriptSecret || process.env.GOOGLE_APPS_SCRIPT_SECRET || "";
   if (googleRequired && !googleAppsScriptSecret) return NextResponse.json({ error: "Shared secret is required for Google Sheets or Drive." }, { status: 400 });
 
-  const settings = {
+  const settings: IntegrationSettings = {
     googleSheetsEnabled,
     resumeStorage,
     googleSheetUrl: googleSheetUrl || current.googleSheetUrl,
     googleAppsScriptUrl: googleAppsScriptUrl || current.googleAppsScriptUrl,
     googleAppsScriptSecret,
+    slackWebhookUrl: current.slackWebhookUrl,
     updatedAt: new Date().toISOString()
-  } as const;
+  };
   await writeIntegrationSettings(settings);
   return NextResponse.json({ ok: true, googleSheetsEnabled, resumeStorage, updatedAt: settings.updatedAt });
 }

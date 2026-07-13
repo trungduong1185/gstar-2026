@@ -7,6 +7,7 @@ export type IntegrationSettings = {
   googleSheetUrl: string;
   googleAppsScriptUrl: string;
   googleAppsScriptSecret: string;
+  slackWebhookUrl: string;
   updatedAt: string;
 };
 
@@ -25,11 +26,20 @@ export async function readIntegrationSettings(): Promise<IntegrationSettings> {
       googleSheetUrl: stored.googleSheetUrl || "",
       googleAppsScriptUrl: stored.googleAppsScriptUrl || "",
       googleAppsScriptSecret: stored.googleAppsScriptSecret || "",
+      slackWebhookUrl: stored.slackWebhookUrl || "",
       updatedAt: stored.updatedAt || ""
     };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") console.error("Unable to read integration settings", error);
-    return { googleSheetsEnabled: false, resumeStorage: "vps", googleSheetUrl: "", googleAppsScriptUrl: "", googleAppsScriptSecret: "", updatedAt: "" };
+    return {
+      googleSheetsEnabled: false,
+      resumeStorage: "vps",
+      googleSheetUrl: "",
+      googleAppsScriptUrl: "",
+      googleAppsScriptSecret: "",
+      slackWebhookUrl: "",
+      updatedAt: ""
+    };
   }
 }
 
@@ -44,6 +54,16 @@ export async function resolvedGoogleSheetsSettings() {
     secret: stored.googleAppsScriptSecret || process.env.GOOGLE_APPS_SCRIPT_SECRET || "",
     source: stored.googleAppsScriptUrl ? "admin" : "environment"
   };
+}
+
+/**
+ * Resolves the Slack Incoming Webhook URL. Admin-saved value wins, environment
+ * is fallback. Returns empty string when no webhook is configured — the caller
+ * should skip notifications in that case.
+ */
+export async function resolvedSlackWebhookUrl(): Promise<string> {
+  const stored = await readIntegrationSettings();
+  return stored.slackWebhookUrl || process.env.SLACK_WEBHOOK_URL || "";
 }
 
 export async function writeIntegrationSettings(settings: IntegrationSettings) {

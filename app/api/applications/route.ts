@@ -3,6 +3,10 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { appendApplication, StoredApplication, uploadDirectory } from "@/lib/application-store";
 import { resolvedGoogleSheetsSettings } from "@/lib/integration-settings";
+import { findIdempotent, findRecentByEmail, rememberIdempotent, sanitizeIdempotencyKey } from "@/lib/dedup";
+import { notifySlack } from "@/lib/slack-notifier";
+import { sendMetaLead } from "@/lib/meta-capi";
+import { sanitizeTouchpoints } from "@/lib/utm";
 
 export const runtime = "nodejs";
 
@@ -28,6 +32,15 @@ export async function POST(request: Request) {
     if (origin && host && new URL(origin).host !== host) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
   } catch {
     return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
+  }
+
+  // Idempotency check: if the client is retrying with the same key, return the previous ID
+  // as a success instead of storing a duplicate. Runs before rate-limit so a network retry
+  // does not eat the applicant's rate budget.
+  const idempotencyKey = sanitizeIdempotencyKey(request.headers.get("x-idempotency-key"));
+  if (idempotencyKey) {
+    const previous = findIdempotent(idempotencyKey);
+    if (previous) return NextResponse.json({ ok: true, mode: "duplicate", id: previous.previousId });
   }
 
   const ip = (request.headers.get("x-forwarded-for") || "unknown").split(",")[0].trim();
@@ -84,9 +97,27 @@ export async function POST(request: Request) {
     attribution: body.attribution || {}
   };
 
+  // Sanitize the client-supplied touchpoints[] array. Bad input is dropped
+  // silently — the firstTouch/lastTouch legacy fields still carry attribution
+  // in that case, so we never fail a submission on malformed history data.
+  const rawAttribution = (application.attribution || {}) as Record<string, unknown>;
+  const touchpoints = sanitizeTouchpoints(rawAttribution.touchpoints);
+  application.attribution = { ...rawAttribution, touchpoints };
+
   const birthYear = Number(application.yearOfBirth);
   if (!application.fullName || !EMAIL.test(application.email) || birthYear < 1940 || birthYear > 2010 || !application.country || !application.organization || !application.currentStatus || !application.currentRole || !application.linkedin || !application.aiExperience || !application.motivation || !application.weeklyAvailability || !application.consent) {
     return NextResponse.json({ error: "Please complete all required fields." }, { status: 400 });
+  }
+
+  // Email dedup: reject silent double-submits within the last 24h.
+  // Applicants who legitimately need to resubmit can email ops — the alternative
+  // (allowing repeat rows) pollutes attribution reports and CRM sync.
+  const duplicate = await findRecentByEmail(application.email);
+  if (duplicate) {
+    return NextResponse.json(
+      { ok: true, mode: "duplicate", id: duplicate.previousId, message: "An application from this email was received within the last 24 hours." },
+      { status: 200 }
+    );
   }
 
   const { googleSheetsEnabled, resumeStorage, endpoint, secret, spreadsheetId } = await resolvedGoogleSheetsSettings();
@@ -139,5 +170,17 @@ export async function POST(request: Request) {
     status: "Submitted"
   };
   await appendApplication(storedApplication);
+
+  // Record the idempotency key AFTER the write succeeds so a retry of a failed
+  // submission is still allowed to save.
+  if (idempotencyKey) rememberIdempotent(idempotencyKey, application.id);
+
+  // Slack notification is fire-and-forget — see slack-notifier.ts.
+  notifySlack(storedApplication);
+
+  // Server-side Meta Conversions API — bypasses ITP / ad-blockers.
+  // No-op unless META_PIXEL_ID + META_ACCESS_TOKEN are set. Fire-and-forget.
+  sendMetaLead(storedApplication);
+
   return NextResponse.json({ ok: true, mode: googleRequired ? "local-and-google" : "local", id: application.id });
 }

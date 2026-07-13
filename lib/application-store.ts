@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import type { Touchpoint } from "@/lib/utm";
 
 export type ApplicationStatus = "Submitted" | "Assessment" | "Shortlisted" | "Rejected";
 
@@ -30,6 +31,12 @@ export type StoredApplication = {
   attribution: {
     firstTouch?: Record<string, string>;
     lastTouch?: Record<string, string>;
+    /**
+     * Full multi-touch history — populated from Sprint 2 onwards.
+     * Older records saved before this rollout may be absent; consumers should
+     * fall back to firstTouch/lastTouch when the array is missing or empty.
+     */
+    touchpoints?: Touchpoint[];
     landingPage?: string;
     referrer?: string;
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Attribution, readUtm } from "@/lib/utm";
+import { Attribution, MAX_TOUCHPOINTS, Touchpoint, hasAttribution, readUtm } from "@/lib/utm";
 import { withBasePath } from "@/lib/base-path";
 import { FormSelect } from "@/components/FormSelect";
 
@@ -9,7 +9,8 @@ declare global {
   interface Window { gtag?: (...args: unknown[]) => void; }
 }
 
-const EMPTY_ATTRIBUTION: Attribution = { firstTouch: {}, lastTouch: {}, landingPage: "", referrer: "" };
+const EMPTY_ATTRIBUTION: Attribution = { firstTouch: {}, lastTouch: {}, touchpoints: [], landingPage: "", referrer: "" };
+const TOUCHPOINTS_KEY = "gstar_touchpoints";
 const READINESS_OPTIONS = [
   ["python", "Python & PyTorch"],
   ["papers", "Research literacy"],
@@ -36,8 +37,49 @@ function storedUtm(key: string) {
   catch { localStorage.removeItem(key); return {}; }
 }
 
+function storedTouchpoints(): Touchpoint[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(TOUCHPOINTS_KEY) || "[]");
+    return Array.isArray(raw) ? raw.slice(-MAX_TOUCHPOINTS) : [];
+  } catch {
+    localStorage.removeItem(TOUCHPOINTS_KEY);
+    return [];
+  }
+}
+
+/**
+ * Append the current visit to the touchpoints history if it carries any UTM/click-ID.
+ * Same UTMs within 30 minutes are deduped so a browser refresh doesn't spam entries.
+ */
+function recordTouchpoint(current: ReturnType<typeof readUtm>): Touchpoint[] {
+  const points = storedTouchpoints();
+  if (!hasAttribution(current)) return points;
+  const now = new Date();
+  const nowIso = now.toISOString();
+  const last = points[points.length - 1];
+  if (last) {
+    const sameCampaign = last.utm_campaign === current.utm_campaign
+      && last.utm_source === current.utm_source
+      && last.utm_medium === current.utm_medium;
+    const recent = Date.parse(last.at) > now.getTime() - 30 * 60 * 1000;
+    if (sameCampaign && recent) return points;
+  }
+  const next: Touchpoint = { ...current, at: nowIso, landingPage: window.location.href, referrer: document.referrer };
+  const trimmed = [...points, next].slice(-MAX_TOUCHPOINTS);
+  try { localStorage.setItem(TOUCHPOINTS_KEY, JSON.stringify(trimmed)); }
+  catch { /* storage disabled — attribution still lives in memory for this session */ }
+  return trimmed;
+}
+
 function track(name: string, params: Record<string, unknown> = {}) {
   window.gtag?.("event", name, params);
+}
+
+function newIdempotencyKey() {
+  const raw = typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  return raw.replace(/[^a-zA-Z0-9._:-]/g, "-");
 }
 
 export function ApplicationDrawer() {
@@ -52,6 +94,9 @@ export function ApplicationDrawer() {
   const [attribution, setAttribution] = useState<Attribution>(EMPTY_ATTRIBUTION);
   const dialog = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  // Fresh key per drawer open. Reused across submit retries within the same open
+  // so a client that clicks submit twice (network flake) does not create a duplicate row.
+  const idempotencyKey = useRef<string>("");
 
   useEffect(() => {
     const current = readUtm(window.location.search);
@@ -60,7 +105,8 @@ export function ApplicationDrawer() {
     if (!Object.keys(storedFirst).length && Object.keys(current).length) localStorage.setItem("gstar_first_touch", JSON.stringify(current));
     if (Object.keys(current).length) localStorage.setItem("gstar_last_touch", JSON.stringify(current));
     const lastTouch = Object.keys(current).length ? current : storedUtm("gstar_last_touch");
-    setAttribution({ firstTouch, lastTouch, landingPage: window.location.href, referrer: document.referrer });
+    const touchpoints = recordTouchpoint(current);
+    setAttribution({ firstTouch, lastTouch, touchpoints, landingPage: window.location.href, referrer: document.referrer });
     setReadiness(storedReadiness());
 
     const syncReadiness = (event: Event) => {
@@ -82,6 +128,7 @@ export function ApplicationDrawer() {
       setResumeName("");
       setReadiness(storedReadiness());
       setAiExperience("");
+      idempotencyKey.current = newIdempotencyKey();
       track("apply_form_open", { placement: target.textContent?.trim() || "apply" });
     };
     document.addEventListener("click", handler, true);
@@ -102,6 +149,31 @@ export function ApplicationDrawer() {
     if (open) requestAnimationFrame(() => dialog.current?.focus());
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [open]);
+
+  // Track drop-off signals. We only fire once per (field, drawer-open) so
+  // toggling focus repeatedly does not spam the analytics endpoint.
+  const droppedFields = useRef<Set<string>>(new Set());
+  useEffect(() => { if (open) droppedFields.current = new Set(); }, [open]);
+
+  function handleFieldBlur(event: FormEvent<HTMLFormElement>) {
+    const target = event.target as HTMLElement;
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) return;
+    const name = target.name;
+    if (!name || droppedFields.current.has(name)) return;
+    const value = target.value?.trim() || "";
+    if (value) return;
+    // Only count blur-empty for fields the user actually touched.
+    if (!target.matches(":focus-visible") && !target.dataset.gstarTouched) return;
+    droppedFields.current.add(name);
+    track("apply_form_field_exit", { field: name });
+  }
+
+  function markTouched(event: FormEvent<HTMLFormElement>) {
+    const target = event.target;
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) {
+      target.dataset.gstarTouched = "1";
+    }
+  }
 
   function clearFieldError(name: string) {
     setErrors((current) => {
@@ -176,15 +248,21 @@ export function ApplicationDrawer() {
     const form = new FormData(event.currentTarget);
     form.set("attribution", JSON.stringify(attribution));
     try {
+      if (!idempotencyKey.current) idempotencyKey.current = newIdempotencyKey();
       const response = await fetch(withBasePath("/api/applications"), {
         method: "POST",
+        headers: { "X-Idempotency-Key": idempotencyKey.current },
         body: form
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to submit your application");
       setStatus("success");
-      setMessage("Your application has been received and saved for review.");
-      track("apply_form_submit", { utm_campaign: attribution.lastTouch.utm_campaign || "direct" });
+      if (result.mode === "duplicate") {
+        setMessage(result.message || "We already received your application for this email in the last 24 hours.");
+      } else {
+        setMessage("Your application has been received and saved for review.");
+        track("apply_form_submit", { utm_campaign: attribution.lastTouch.utm_campaign || "direct" });
+      }
     } catch (error) {
       setStatus("error");
       setMessage(error instanceof Error ? error.message : "Unable to submit. Please try again.");
@@ -212,7 +290,7 @@ export function ApplicationDrawer() {
         {status === "success" ? (
           <div className="apply-success" aria-live="polite"><b>Application received</b><p>{message}</p><button className="btn btn-secondary-dark btn--size-40" onClick={() => setOpen(false)}>Done</button></div>
         ) : (
-          <form ref={formRef} onSubmit={submit} noValidate onInput={clearEventError} onChange={clearEventError}>
+          <form ref={formRef} onSubmit={submit} noValidate onInput={(event) => { markTouched(event); clearEventError(event); }} onChange={clearEventError} onBlur={handleFieldBlur}>
             <input className="apply-honeypot" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
             <section className="apply-overview-step" hidden={step !== 1}>
               <div className="apply-overview">

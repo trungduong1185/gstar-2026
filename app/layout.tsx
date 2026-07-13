@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./app.css";
 import "./admin-nti.css";
 import { withBasePath } from "@/lib/base-path";
+import { ConsentBanner } from "@/components/ConsentBanner";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://gstar.newturing.ai").replace(/\/$/, "");
 const siteOrigin = new URL(siteUrl).origin;
@@ -138,12 +139,25 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body data-mentor-source={withBasePath("/api/mentors")}>
         {children}
+        {gaId && <ConsentBanner />}
         {gaId && <>
-          <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
-          <Script id="gstar-ga4" strategy="afterInteractive">{`
+          {/* Consent Mode v2: default everything to "denied" so GA4 does not
+              read/write cookies before the visitor makes a choice in the banner.
+              ConsentBanner updates these values via gtag('consent', 'update', …). */}
+          <Script id="gstar-consent-defaults" strategy="beforeInteractive">{`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             window.gtag = gtag;
+            gtag('consent', 'default', {
+              ad_storage: 'denied',
+              analytics_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              wait_for_update: 500
+            });
+          `}</Script>
+          <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
+          <Script id="gstar-ga4" strategy="afterInteractive">{`
             gtag('js', new Date());
             gtag('config', '${gaId}', { send_page_view: true });
           `}</Script>
