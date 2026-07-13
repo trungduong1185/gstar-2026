@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "next start",
+    "start": "node scripts/start-standalone.mjs",
+    "postbuild": "node scripts/prepare-standalone.mjs",
     "lint": "prisma generate && tsc --noEmit",
     "check": "npm run lint && npm run build",
     "db:generate": "prisma generate",

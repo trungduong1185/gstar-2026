@@ -43,6 +43,8 @@ npm run db:import
 
 ## 3. Build and run
 
+For the current PM2 deployment, `npm start` defaults to `127.0.0.1:3010`. Override `HOSTNAME` or `PORT` through environment variables when needed.
+
 ```bash
 docker compose --env-file .env.production up -d --build
 docker compose ps
@@ -74,7 +76,7 @@ Enable TLS with the VPS provider's certificate workflow or Certbot before sendin
 ## 5. Release checks
 
 ```bash
-npm ci
+npm run install:production
 npm run check
 npm audit --omit=dev
 docker compose logs --tail=100 gstar
