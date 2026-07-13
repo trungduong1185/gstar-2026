@@ -61,13 +61,13 @@ export type MetricsResponse = {
     model: AttributionModel;
     generatedAt: string;
     dataSources: {
-      applications: "local-vps";
+      applications: "prisma-sqlite";
       sessions: "unknown" | "ga4";
       clicks: "unknown" | "ga4";
       spend: "unknown";
     };
     counts: {
-      total: number;      // ALL applications in NDJSON (unfiltered)
+      total: number;      // ALL applications in SQLite (unfiltered)
       inRange: number;    // in the requested date range
       matched: number;    // after date + source filter
     };
@@ -142,7 +142,7 @@ export async function computeMetrics(query: MetricsQuery): Promise<MetricsRespon
       source: query.source,
       model: query.model,
       generatedAt: new Date().toISOString(),
-      dataSources: { applications: "local-vps", sessions: "unknown", clicks: "unknown", spend: "unknown" },
+      dataSources: { applications: "prisma-sqlite", sessions: "unknown", clicks: "unknown", spend: "unknown" },
       counts: { total: all.length, inRange: inRangeApps.length, matched: matched.length }
     },
     kpis,

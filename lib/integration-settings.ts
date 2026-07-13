@@ -1,5 +1,4 @@
-import fs from "node:fs/promises";
-import path from "node:path";
+import { prisma } from "@/lib/prisma";
 
 export type IntegrationSettings = {
   googleSheetsEnabled: boolean;
@@ -11,36 +10,32 @@ export type IntegrationSettings = {
   updatedAt: string;
 };
 
-const settingsPath = path.join(process.cwd(), "data", "integration-settings.json");
+const defaults: IntegrationSettings = {
+  googleSheetsEnabled: false,
+  resumeStorage: "vps",
+  googleSheetUrl: "",
+  googleAppsScriptUrl: "",
+  googleAppsScriptSecret: "",
+  slackWebhookUrl: "",
+  updatedAt: ""
+};
 
 export function spreadsheetIdFromUrl(value: string) {
   return value.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/)?.[1] || "";
 }
 
 export async function readIntegrationSettings(): Promise<IntegrationSettings> {
-  try {
-    const stored = JSON.parse(await fs.readFile(settingsPath, "utf8")) as Partial<IntegrationSettings>;
-    return {
-      googleSheetsEnabled: stored.googleSheetsEnabled ?? false,
-      resumeStorage: stored.resumeStorage === "google-drive" ? "google-drive" : "vps",
-      googleSheetUrl: stored.googleSheetUrl || "",
-      googleAppsScriptUrl: stored.googleAppsScriptUrl || "",
-      googleAppsScriptSecret: stored.googleAppsScriptSecret || "",
-      slackWebhookUrl: stored.slackWebhookUrl || "",
-      updatedAt: stored.updatedAt || ""
-    };
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") console.error("Unable to read integration settings", error);
-    return {
-      googleSheetsEnabled: false,
-      resumeStorage: "vps",
-      googleSheetUrl: "",
-      googleAppsScriptUrl: "",
-      googleAppsScriptSecret: "",
-      slackWebhookUrl: "",
-      updatedAt: ""
-    };
-  }
+  const stored = await prisma.integrationSetting.findUnique({ where: { id: 1 } });
+  if (!stored) return defaults;
+  return {
+    googleSheetsEnabled: stored.googleSheetsEnabled,
+    resumeStorage: stored.resumeStorage === "google-drive" ? "google-drive" : "vps",
+    googleSheetUrl: stored.googleSheetUrl,
+    googleAppsScriptUrl: stored.googleAppsScriptUrl,
+    googleAppsScriptSecret: stored.googleAppsScriptSecret,
+    slackWebhookUrl: stored.slackWebhookUrl,
+    updatedAt: stored.updatedAt.toISOString()
+  };
 }
 
 export async function resolvedGoogleSheetsSettings() {
@@ -56,20 +51,23 @@ export async function resolvedGoogleSheetsSettings() {
   };
 }
 
-/**
- * Resolves the Slack Incoming Webhook URL. Admin-saved value wins, environment
- * is fallback. Returns empty string when no webhook is configured — the caller
- * should skip notifications in that case.
- */
 export async function resolvedSlackWebhookUrl(): Promise<string> {
   const stored = await readIntegrationSettings();
   return stored.slackWebhookUrl || process.env.SLACK_WEBHOOK_URL || "";
 }
 
 export async function writeIntegrationSettings(settings: IntegrationSettings) {
-  const directory = path.dirname(settingsPath);
-  const temporaryPath = `${settingsPath}.tmp`;
-  await fs.mkdir(directory, { recursive: true });
-  await fs.writeFile(temporaryPath, JSON.stringify(settings, null, 2), { encoding: "utf8", mode: 0o600 });
-  await fs.rename(temporaryPath, settingsPath);
+  const data = {
+    googleSheetsEnabled: settings.googleSheetsEnabled,
+    resumeStorage: settings.resumeStorage,
+    googleSheetUrl: settings.googleSheetUrl,
+    googleAppsScriptUrl: settings.googleAppsScriptUrl,
+    googleAppsScriptSecret: settings.googleAppsScriptSecret,
+    slackWebhookUrl: settings.slackWebhookUrl
+  };
+  await prisma.integrationSetting.upsert({
+    where: { id: 1 },
+    create: { id: 1, ...data },
+    update: data
+  });
 }

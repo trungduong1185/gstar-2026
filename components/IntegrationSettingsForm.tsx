@@ -99,7 +99,7 @@ export function IntegrationSettingsForm() {
           <div className="settings-heading"><span>Application storage</span><h2>Admin records and file storage</h2><p>Every submission is stored locally for Admin. Optionally sync records to Google Sheets and choose where Resume / CV files are stored.</p></div>
           {loading ? <p className="settings-status">Loading settings…</p> : (
             <form className="settings-form" onSubmit={save}>
-              <div className="settings-storage-note"><b>Admin dashboard storage is always enabled</b><small>Application records are saved to <code>data/submissions.ndjson</code> and displayed in Dashboard Applications.</small></div>
+              <div className="settings-storage-note"><b>Admin dashboard storage is always enabled</b><small>Application records are stored in Prisma SQLite at <code>data/gstar.db</code> and displayed in Dashboard Applications.</small></div>
 
               <label className="settings-toggle">
                 <input name="googleSheetsEnabled" type="checkbox" checked={settings.googleSheetsEnabled} onChange={(event) => setSettings((current) => ({ ...current, googleSheetsEnabled: event.target.checked }))}/>

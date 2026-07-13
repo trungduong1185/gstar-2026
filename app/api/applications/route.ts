@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   // does not eat the applicant's rate budget.
   const idempotencyKey = sanitizeIdempotencyKey(request.headers.get("x-idempotency-key"));
   if (idempotencyKey) {
-    const previous = findIdempotent(idempotencyKey);
+    const previous = await findIdempotent(idempotencyKey);
     if (previous) return NextResponse.json({ ok: true, mode: "duplicate", id: previous.previousId });
   }
 
@@ -173,7 +173,7 @@ export async function POST(request: Request) {
 
   // Record the idempotency key AFTER the write succeeds so a retry of a failed
   // submission is still allowed to save.
-  if (idempotencyKey) rememberIdempotent(idempotencyKey, application.id);
+  if (idempotencyKey) await rememberIdempotent(idempotencyKey, application.id);
 
   // Slack notification is fire-and-forget — see slack-notifier.ts.
   notifySlack(storedApplication);

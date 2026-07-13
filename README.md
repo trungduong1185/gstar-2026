@@ -11,10 +11,14 @@
 ```bash
 cp .env.example .env.local
 npm install
+npm run db:migrate
+npm run db:import
 npm run dev
 ```
 
-Without `GOOGLE_APPS_SCRIPT_URL`, submissions are written to `data/submissions.ndjson` in development only. Production fails closed unless both the Apps Script URL and shared secret are configured.
+Application records, mentor data and Admin settings are stored through Prisma in `data/gstar.db`. Resume PDFs remain private files in `data/uploads/` when Local VPS storage is selected. Google Sheets sync is optional and runs in parallel.
+
+`npm run db:import` is an idempotent one-time importer for legacy `submissions.ndjson` and JSON settings files. New installations can run it safely; it seeds the bundled mentor network when no legacy mentor file exists.
 
 ## Google Sheets setup
 
@@ -63,7 +67,7 @@ Each visit that carries a UTM or click ID appends a `Touchpoint` to `localStorag
 
 ## Real dashboard data
 
-`GET /api/admin/metrics?range=30d&source=all&model=last` returns live aggregates from `data/submissions.ndjson`. Supported query parameters:
+`GET /api/admin/metrics?range=30d&source=all&model=last` returns live aggregates from Prisma SQLite. Supported query parameters:
 
 - `range` — `7d` | `30d` | `90d` | `all`
 - `source` — a specific `utm_source` or `all`

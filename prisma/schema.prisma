@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Application {
+  id                 String   @id
+  submittedAt        DateTime
+  fullName           String
+  email              String
+  yearOfBirth        String
+  country            String
+  currentStatus      String
+  currentRole        String
+  organization       String
+  linkedin           String
+  github             String?
+  aiExperience       String
+  readinessSignals   Json
+  motivation         String
+  resumeFileName     String
+  resumeSize         Int
+  resumeStorage      String   @default("vps")
+  resumePath         String?
+  resumeUrl          String?
+  googleSheetsSynced Boolean  @default(false)
+  scholarshipRequest Boolean  @default(false)
+  weeklyAvailability Boolean  @default(false)
+  consent            Boolean  @default(false)
+  attribution        Json
+  status             String   @default("Submitted")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([email, submittedAt])
+  @@index([submittedAt])
+  @@index([status])
+}
+
+model Mentor {
+  id           String   @id
+  name         String
+  image        String
+  alt          String
+  group        String
+  cohortStatus String
+  category     String
+  position     Json
+  bio          String
+  visible      Boolean  @default(true)
+  social       Json
+  sortOrder    Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([group, sortOrder])
+}
+
+model ProgramSetting {
+  id            Int      @id @default(1)
+  cohortYear    Int
+  timezone      String
+  timezoneLabel String
+  dates         Json
+  updatedAt     DateTime @updatedAt
+}
+
+model IntegrationSetting {
+  id                     Int      @id @default(1)
+  googleSheetsEnabled    Boolean  @default(false)
+  resumeStorage          String   @default("vps")
+  googleSheetUrl         String   @default("")
+  googleAppsScriptUrl    String   @default("")
+  googleAppsScriptSecret String   @default("")
+  slackWebhookUrl        String   @default("")
+  updatedAt              DateTime @updatedAt
+}
+
+model IdempotencyKey {
+  key           String   @id
+  applicationId String
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+
+  @@index([expiresAt])
+}

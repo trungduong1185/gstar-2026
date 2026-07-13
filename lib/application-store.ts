@@ -1,5 +1,6 @@
-import fs from "node:fs/promises";
 import path from "node:path";
+import type { Application, Prisma } from "@/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
 import type { Touchpoint } from "@/lib/utm";
 
 export type ApplicationStatus = "Submitted" | "Assessment" | "Shortlisted" | "Rejected";
@@ -31,11 +32,6 @@ export type StoredApplication = {
   attribution: {
     firstTouch?: Record<string, string>;
     lastTouch?: Record<string, string>;
-    /**
-     * Full multi-touch history — populated from Sprint 2 onwards.
-     * Older records saved before this rollout may be absent; consumers should
-     * fall back to firstTouch/lastTouch when the array is missing or empty.
-     */
     touchpoints?: Touchpoint[];
     landingPage?: string;
     referrer?: string;
@@ -45,41 +41,101 @@ export type StoredApplication = {
 
 export const dataDirectory = path.join(process.cwd(), "data");
 export const uploadDirectory = path.join(dataDirectory, "uploads");
-const submissionsPath = path.join(dataDirectory, "submissions.ndjson");
+
+const applicationStatuses = new Set<ApplicationStatus>(["Submitted", "Assessment", "Shortlisted", "Rejected"]);
+
+function toStoredApplication(row: Application): StoredApplication {
+  const status = applicationStatuses.has(row.status as ApplicationStatus) ? row.status as ApplicationStatus : "Submitted";
+  const resumeStorage = row.resumeStorage === "google-drive" ? "google-drive" : "vps";
+  return {
+    id: row.id,
+    submittedAt: row.submittedAt.toISOString(),
+    fullName: row.fullName,
+    email: row.email,
+    yearOfBirth: row.yearOfBirth,
+    country: row.country,
+    currentStatus: row.currentStatus,
+    currentRole: row.currentRole,
+    organization: row.organization,
+    linkedin: row.linkedin,
+    github: row.github || undefined,
+    aiExperience: row.aiExperience,
+    readinessSignals: Array.isArray(row.readinessSignals) ? row.readinessSignals.filter((value): value is string => typeof value === "string") : [],
+    motivation: row.motivation,
+    resumeFileName: row.resumeFileName,
+    resumeSize: row.resumeSize,
+    resumeStorage,
+    resumePath: row.resumePath || undefined,
+    resumeUrl: row.resumeUrl || undefined,
+    googleSheetsSynced: row.googleSheetsSynced,
+    scholarshipRequest: row.scholarshipRequest,
+    weeklyAvailability: row.weeklyAvailability,
+    consent: row.consent,
+    attribution: (row.attribution || {}) as StoredApplication["attribution"],
+    status
+  };
+}
+
+function applicationData(application: StoredApplication): Prisma.ApplicationCreateInput {
+  return {
+    id: application.id,
+    submittedAt: new Date(application.submittedAt),
+    fullName: application.fullName,
+    email: application.email,
+    yearOfBirth: application.yearOfBirth,
+    country: application.country,
+    currentStatus: application.currentStatus,
+    currentRole: application.currentRole,
+    organization: application.organization,
+    linkedin: application.linkedin,
+    github: application.github || null,
+    aiExperience: application.aiExperience,
+    readinessSignals: application.readinessSignals as Prisma.InputJsonValue,
+    motivation: application.motivation,
+    resumeFileName: application.resumeFileName,
+    resumeSize: application.resumeSize,
+    resumeStorage: application.resumeStorage === "google-drive" ? "google-drive" : "vps",
+    resumePath: application.resumePath || null,
+    resumeUrl: application.resumeUrl || null,
+    googleSheetsSynced: application.googleSheetsSynced ?? false,
+    scholarshipRequest: application.scholarshipRequest,
+    weeklyAvailability: application.weeklyAvailability,
+    consent: application.consent,
+    attribution: application.attribution as Prisma.InputJsonValue,
+    status: application.status || "Submitted"
+  };
+}
 
 export async function appendApplication(application: StoredApplication) {
-  await fs.mkdir(dataDirectory, { recursive: true });
-  await fs.appendFile(submissionsPath, `${JSON.stringify(application)}\n`, { encoding: "utf8", mode: 0o600 });
+  await prisma.application.create({ data: applicationData(application) });
+}
+
+export async function upsertApplication(application: StoredApplication) {
+  const data = applicationData(application);
+  await prisma.application.upsert({ where: { id: application.id }, create: data, update: data });
 }
 
 export async function readApplications(): Promise<StoredApplication[]> {
-  try {
-    const content = await fs.readFile(submissionsPath, "utf8");
-    return content.split("\n").filter(Boolean).flatMap((line) => {
-      try {
-        const item = JSON.parse(line) as StoredApplication;
-        return item?.id ? [{ ...item, status: item.status || "Submitted" }] : [];
-      } catch {
-        return [];
-      }
-    });
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") console.error("Unable to read applications", error);
-    return [];
-  }
+  const applications = await prisma.application.findMany({ orderBy: { submittedAt: "asc" } });
+  return applications.map(toStoredApplication);
 }
 
 export async function findApplication(id: string) {
-  return (await readApplications()).find((application) => application.id === id) || null;
+  const application = await prisma.application.findUnique({ where: { id } });
+  return application ? toStoredApplication(application) : null;
+}
+
+export async function findApplicationByEmailSince(email: string, cutoff: Date) {
+  const application = await prisma.application.findFirst({
+    where: { email: email.trim().toLowerCase(), submittedAt: { gte: cutoff } },
+    orderBy: { submittedAt: "desc" }
+  });
+  return application ? toStoredApplication(application) : null;
 }
 
 export async function updateApplicationStatus(id: string, status: ApplicationStatus) {
-  const applications = await readApplications();
-  const index = applications.findIndex((application) => application.id === id);
-  if (index < 0) return null;
-  applications[index] = { ...applications[index], status };
-  const temporaryPath = `${submissionsPath}.tmp`;
-  await fs.writeFile(temporaryPath, `${applications.map((application) => JSON.stringify(application)).join("\n")}\n`, { encoding: "utf8", mode: 0o600 });
-  await fs.rename(temporaryPath, submissionsPath);
-  return applications[index];
+  const existing = await prisma.application.findUnique({ where: { id }, select: { id: true } });
+  if (!existing) return null;
+  const application = await prisma.application.update({ where: { id }, data: { status } });
+  return toStoredApplication(application);
 }

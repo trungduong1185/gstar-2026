@@ -15,7 +15,7 @@ function publicApplication(application: Awaited<ReturnType<typeof readApplicatio
 
 export async function GET() {
   const applications = (await readApplications()).reverse().map(publicApplication);
-  return NextResponse.json({ applications, source: "local-vps", count: applications.length });
+  return NextResponse.json({ applications, source: "prisma-sqlite", count: applications.length });
 }
 
 export async function PUT(request: Request) {
