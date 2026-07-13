@@ -111,7 +111,8 @@ main section[id] { scroll-margin-top: 96px; }
 }
 
 .readiness-option:last-of-type { border-bottom: 1px solid var(--line-red); }
-.readiness-option input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: hsl(var(--primary-3)); }
+.readiness-option input { width: 20px; height: 20px; margin: 2px 0 0; appearance: none; border: 1px solid var(--text-4); border-radius: 3px; background-color: rgba(255, 255, 255, .035); background-position: center; background-repeat: no-repeat; background-size: 14px 14px; cursor: pointer; transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease; }
+.readiness-option input:checked { border-color: hsl(var(--primary-3)); background-color: hsl(var(--primary-3)); background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.6667 3.5L5.25001 9.91667L2.33334 7' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
 .readiness-option b { display: block; color: var(--text-1); font: 700 17px/1.35 var(--font-display); }
 .readiness-option small { display: block; margin-top: 6px; color: var(--text-3); font-size: 14px; line-height: 1.55; }
 .readiness-option:has(input:focus-visible) { outline: 2px solid var(--pink-100); outline-offset: 5px; }
