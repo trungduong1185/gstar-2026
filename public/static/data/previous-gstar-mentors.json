@@ -1,0 +1,318 @@
+{
+  "version": 2,
+  "network": "Previous GStar mentor network",
+  "mentors": [
+    {
+      "id": "thang-luong",
+      "name": "Dr. Thang Luong",
+      "image": "static/img/mentor/m_2025_thangluong.webp",
+      "alt": "Portrait of Dr. Thang Luong",
+      "group": "Program leadership & senior mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Research & Foundation Models",
+      "position": [
+        "Senior Staff Research Scientist at Google DeepMind",
+        "Co-founder of NTI",
+        "GStar Program Director"
+      ],
+      "bio": "Thang Luong is currently a Senior Staff Research Scientist and Senior Manager at Google DeepMind, formerly Google Brain. He obtained his PhD in Computer Science from Stanford University in 2016, during which he pioneered the field of deep learning for machine translation. At Google, Dr. Luong built state-of-the-art models in both language (QANet, ELECTRA) and vision (UDA, NoisyStudent). He co-founded Project Meena, which debuted the world's best chatbot in 2020 and later became Google's LaMDA chatbot in 2021. Dr. Luong has been co-leading the development of Bard Multimodality since 2022 and is the principal investigator of the AlphaGeometry project (published in Nature, 2024), which solves Olympiad-level geometry problems and competes at the International Mathematical Olympiad (IMO). Recently, he leads the Superhuman Reasoning team at Google to build the first AI that reaches Silver medalist level at IMO 2024.",
+      "social": {
+        "twitter": {
+          "url": "https://x.com/lmthang",
+          "title": "Thang Luong on X"
+        },
+        "linkedin": {
+          "url": "https://www.linkedin.com/in/thang-luong/",
+          "title": "Dr. Thang Luong on LinkedIn"
+        }
+      }
+    },
+    {
+      "id": "jeff-dean",
+      "name": "Dr. Jeff Dean",
+      "image": "static/img/mentor/m_2025_jeff_dean.webp",
+      "alt": "Portrait of Dr. Jeff Dean",
+      "group": "Program leadership & senior mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Research & Foundation Models",
+      "position": [
+        "Chief Scientist of Google Research and Google DeepMind",
+        "GStar Senior Advisor"
+      ],
+      "bio": "Jeff Dean, a distinguished figure in the realm of computer science, has made significant and lasting contributions to the field of artificial intelligence (AI). His work at Google, where he currently serves as the head of Google AI, has been instrumental in propelling the company to the forefront of AI research and development. A true visionary, Dean was one of the founding members of Google Brain, a team that pioneered the development of large-scale artificial neural networks, a cornerstone of modern AI systems. His expertise and leadership have played a pivotal role in shaping Google's AI strategy and have solidified his position as a leading voice in the AI community.",
+      "social": {}
+    },
+    {
+      "id": "christopher-manning",
+      "name": "Prof. Christopher D. Manning",
+      "image": "static/img/mentor/m_2025_christophermanning.webp",
+      "alt": "Portrait of Prof. Christopher D. Manning",
+      "group": "Program leadership & senior mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "NLP & Machine Learning",
+      "position": [
+        "Professor of Machine Learning and NLP, Stanford University",
+        "GStar Senior Advisor"
+      ],
+      "bio": "Christopher D. Manning is the Thomas M. Siebel Professor in Machine Learning and Professor of Linguistics and Computer Science at Stanford University, and Associate Director of the Stanford Institute for Human-Centered AI (HAI). He leads the Stanford NLP Group and developed widely used tools such as Stanford CoreNLP and Stanza. Manning is a pioneer in natural language processing, driving the transition from statistical methods to deep learning, with key contributions to GloVe embeddings, attention mechanisms, and neural architectures that shaped models like transformers, BERT, and GPT. He co-authored foundational textbooks and created the popular course CS224N: NLP with Deep Learning.",
+      "social": {}
+    },
+    {
+      "id": "preslav-nakov",
+      "name": "Prof. Preslav Nakov",
+      "image": "static/img/mentor/m_2025_preslavnakov.webp",
+      "alt": "Portrait of Prof. Preslav Nakov",
+      "group": "Program leadership & senior mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "Trust, Safety & Responsible AI",
+      "position": [
+        "Department Chair and Professor of Natural Language Processing, MBZUAI",
+        "GStar Senior Advisor"
+      ],
+      "bio": "Preslav Nakov is Professor and Department Chair for NLP at the Mohamed bin Zayed University of Artificial Intelligence (MBZUAI). His research focuses on natural language processing, with a particular interest in large language models. He is part of the core team at MBZUAI's Institute for Foundation Models that developed Jais, the world's best open-source Arabic-centric LLM, Nanda, the world's best open-weights Hindi model, Sherkala, the world's best open-weights Kazakh model, and LLM360, the first truly open LLM (open weights, open data, and open code).\n\nA prominent figure in computational linguistics, he is Chair of the European Chapter of the Association for Computational Linguistics (EACL). He served as Program Committee Chair for ACL 2022, as President of ACL SIGLEX, as Secretary of SIGSLAV, and holds editorial roles across leading NLP and AI journals. His research has been featured in MIT Technology Review, Forbes, WIRED, Fast Company, and Communications of the ACM, among others.",
+      "social": {
+        "linkedin": {
+          "url": "https://www.linkedin.com/in/preslavnakov/",
+          "title": "Prof. Preslav Nakov on LinkedIn"
+        }
+      }
+    },
+    {
+      "id": "yi-tay",
+      "name": "Dr. Yi Tay",
+      "image": "static/img/mentor/m_2025_yitay.webp",
+      "alt": "Portrait of Dr. Yi Tay",
+      "group": "Guest lecturers & mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Research & Foundation Models",
+      "position": [
+        "Scientist & Engineer, Google DeepMind",
+        "GStar Overall Technical Lead"
+      ],
+      "bio": "Yi Tay is a Senior Staff Research Scientist at Google DeepMind, previously spending over three years at Google Brain Singapore, where he contributed to cutting-edge research on large language models (LLMs) and NLP. He is also a co-founder of Reka AI, where his team developed Reka Core, a model that ranked in the top 5 on LMsys and competed with GPT-4 under limited resources. Yi Tay's work explores emergent abilities, scaling laws, and the science behind LLMs, combining academic rigor with real-world applications. Passionate about advancing AI, he continues to push the boundaries of trustworthy, scalable, and efficient language models.",
+      "social": {
+        "linkedin": {
+          "url": "https://www.linkedin.com/in/yi-tay/",
+          "title": "Dr. Yi Tay on LinkedIn"
+        }
+      }
+    },
+    {
+      "id": "graham-neubig",
+      "name": "Prof. Graham Neubig",
+      "image": "static/img/mentor/m_2025_graham_neubig.webp",
+      "alt": "Portrait of Prof. Graham Neubig",
+      "group": "Guest lecturers & mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "NLP & Machine Learning",
+      "position": [
+        "Associate Professor, School of Computer Science, Carnegie Mellon University",
+        "GStar Guest Lecturer"
+      ],
+      "bio": "Graham Neubig is an Associate Professor at the Language Technology Institute, School of Computer Science, Carnegie Mellon University, and serves as Chief Scientist at All Hands AI. He leads NeuLab, focusing on advancing machine learning and natural language processing (NLP) through foundational research and practical systems. His expertise spans multilingual language processing, question answering, code generation, and interpretable learning. Neubig has also developed widely used open-source software for NLP applications and regularly shares class and tutorial notes to support the community. He is known for delivering invited talks on LLM-powered agents and model evaluation at leading venues including CMU, Stanford, and UIUC.",
+      "social": {}
+    },
+    {
+      "id": "danqi-chen",
+      "name": "Prof. Danqi Chen",
+      "image": "static/img/mentor/m_2025_danqi_chen.webp",
+      "alt": "Portrait of Prof. Danqi Chen",
+      "group": "Guest lecturers & mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "NLP & Machine Learning",
+      "position": [
+        "Associate Professor of Computer Science, Princeton University",
+        "GStar Guest Lecturer"
+      ],
+      "bio": "Danqi Chen is an Associate Professor of Computer Science at Princeton University and co-leads the Princeton NLP Group. She also serves as Associate Director of Princeton's Language and Intelligence initiative, which drives foundational research on large AI models. Her expertise centers on deep learning for natural language processing — particularly in areas like text understanding, knowledge representation, question answering, and retrieval-augmented models to improve model factuality and interpretability. Before joining Princeton, she was a visiting scientist at Facebook AI Research, earned her Ph.D. at Stanford (2018) under Christopher Manning, and her B.E. at Tsinghua University.",
+      "social": {}
+    },
+    {
+      "id": "po-shen-loh",
+      "name": "Prof. Po-Shen Loh",
+      "image": "static/img/mentor/m_2025_poshenloh.webp",
+      "alt": "Portrait of Prof. Po-Shen Loh",
+      "group": "Guest lecturers & mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "Mathematics & Education",
+      "position": [
+        "Professor of Mathematics, Carnegie Mellon University",
+        "GStar Guest Lecturer on Leadership"
+      ],
+      "bio": "Po-Shen Loh is a Professor of Mathematics at Carnegie Mellon University, a social entrepreneur, and Vice President of the IMO Foundation. From 2013 to 2023, he served as national coach of the USA International Mathematical Olympiad team, guiding them to multiple first-place victories. Loh also founded Expii, a free AI-powered math education platform, and developed NOVID, a pandemic-control app built on innovative network theory. His research spans combinatorics, probability theory, and computer science, and he has been recognized with honours including the Presidential Early Career Award for Scientists and Engineers. Loh travels globally, engaging over 10,000 people annually with lectures and creative problem-solving courses.",
+      "social": {
+        "twitter": {
+          "url": "https://x.com/PoShenLoh",
+          "title": "Po-Shen Loh on X"
+        },
+        "linkedin": {
+          "url": "https://www.linkedin.com/in/poshenloh/",
+          "title": "Prof. Po-Shen Loh on LinkedIn"
+        }
+      }
+    },
+    {
+      "id": "jing-yu-koh",
+      "name": "Jing Yu Koh",
+      "image": "static/img/mentor/m_2025_jing_yu_koh.webp",
+      "alt": "Portrait of Jing Yu Koh",
+      "group": "Guest lecturers & mentors",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Agents & Systems",
+      "position": [
+        "Research Scientist & Tech Lead, Llama Computer Control Agents Team, Meta",
+        "GStar Guest Lecturer"
+      ],
+      "bio": "Jing Yu Koh is a Research Scientist and the tech lead for Meta's LLaMA computer-control agents team, where she collaborates with Ruslan Salakhutdinov to build general-purpose agents capable of automating computer tasks. She is currently on leave from her Ph.D. in Machine Learning at Carnegie Mellon University. Previously, she conducted research at Google Research on vision-and-language modeling and generative systems, and completed her undergraduate studies at the Singapore University of Technology and Design, summa cum laude.",
+      "social": {}
+    },
+    {
+      "id": "tiep-nguyen",
+      "name": "Dr. Tiep Nguyen",
+      "image": "static/img/mentor/m_2025_tiepnguyen.webp",
+      "alt": "Portrait of Dr. Tiep Nguyen",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Education",
+      "position": [
+        "Lecturer, University of Information Technology",
+        "Head of Academics, NTI",
+        "GStar Academic Team"
+      ],
+      "bio": "Dr. Nguyen Vinh Tiep is currently a lecturer and head of the Multimedia Communications Lab at the University of Information Technology – Vietnam National University, Ho Chi Minh City (VNU-HCM). He earned his PhD from the University of Information Technology, VNU-HCM. His areas of expertise include Computer Vision and Machine Learning, with numerous research contributions and mentorship of students in practical, application-driven projects. Prof. Tiep is deeply passionate about education, especially in inspiring research and developing AI skills among students and young learners.",
+      "social": {}
+    },
+    {
+      "id": "tu-vu",
+      "name": "Prof. Tu Vu",
+      "image": "static/img/mentor/m_2025_tuvu.webp",
+      "alt": "Portrait of Prof. Tu Vu",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Research",
+      "position": [
+        "Assistant Professor, Virginia Tech",
+        "Head of Research, NTI",
+        "GStar Academic Team"
+      ],
+      "bio": "Prof. Tu Vu is currently an Assistant Professor of Computer Science at Virginia Tech and a Faculty Researcher at Google. He earned his PhD from the University of Massachusetts Amherst under the supervision of Mohit Iyyer and previously worked as a Research Scientist at Google DeepMind. His research aims to advance and democratize artificial intelligence in the era of large language models (LLMs), with a focus on improving core LLM capabilities such as reasoning and instruction following, as well as their use in evaluation (e.g., LLM-as-a-Critic). He is also deeply engaged in transfer learning across tasks, modalities, and languages; efficient model updating with factual and real-time information; and parameter-efficient adaptation of LLMs to new domains, especially in low-resource settings. He actively bridges research and real-world impact through both academic mentorship and industrial collaboration, with a long-term vision of making powerful AI systems more accessible, adaptable, and aligned.",
+      "social": {}
+    },
+    {
+      "id": "hoang-tran",
+      "name": "Hoang Tran",
+      "image": "static/img/mentor/m_2025_hoangtran.webp",
+      "alt": "Portrait of Hoang Tran",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Engineering",
+      "position": [
+        "Research Engineer, OpenAI",
+        "Head of Industry, NTI",
+        "GStar Academic Team"
+      ],
+      "bio": "Hoang Tran is currently a research engineer at OpenAI. He was previously a research scientist at Snorkel AI, where he developed a state-of-the-art, open-source LLM that topped Stanford AI Lab - Tatsu Lab's AlpacaEval leaderboard, and he presented this work at NVIDIA GTC 2024. At Snorkel, he also advised Fortune 500 enterprises on building custom LLMs and agentic systems. In 2020, Hoang co-founded Vizly, a design-feedback startup selected for the Mozilla Foundation's Fix-the-Internet Spring MVP Lab.",
+      "social": {}
+    },
+    {
+      "id": "chien-nguyen",
+      "name": "Chien Nguyen",
+      "image": "static/img/mentor/m_2025_chiennguyen.webp",
+      "alt": "Portrait of Chien Nguyen",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "Computer Science",
+      "position": [
+        "PhD student, Northeastern University, Boston, Massachusetts",
+        "GStar Academic Team"
+      ],
+      "bio": "Van Thanh Le is a 2nd year Ph.D. student in Computer Engineering at Northeastern University, advised by Prof. Raymond Fu, specializing in controllable, safe and efficient deep generative models, and he is currently an intern at Adobe Research. Previously, he was an AI Research Resident at VinAI Research, where he focused on diffusion acceleration and adversarial protection against misuse. He has published at CVPR, ICCV, and ECCV, including work on one-step diffusion efficiency and defenses against unauthorized personalization.",
+      "social": {}
+    },
+    {
+      "id": "huy-nguyen",
+      "name": "Huy Nguyen",
+      "image": "static/img/mentor/m_2025_huy_nguyen.webp",
+      "alt": "Portrait of Huy Nguyen",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "Computer Science",
+      "position": [
+        "PhD student in Computer Science, University of Oregon",
+        "GStar Academic Team"
+      ],
+      "bio": "Huy Nguyen is a PhD student in Computer Science at the University of Oregon, specializing in Natural Language Processing and efficient Large Language Models. His research focuses on accelerating LLMs through low-level GPU optimization with CUDA and Triton, including instruction-level scheduling for both standard and quantized models. Nguyen previously served as an AI Resident at VinAI Research, contributing state-of-the-art methods in continual relation extraction and cross-lingual event detection. He has co-authored publications at EMNLP and on arXiv, and developed Vistral-7B-Chat, a leading Vietnamese conversational model with over 100,000 downloads. Recognized with the Lokey Award, he also interned at Microsoft Research, advancing GPU scheduling for fast inference.",
+      "social": {}
+    },
+    {
+      "id": "thanh-le",
+      "name": "Thanh Le",
+      "image": "static/img/mentor/m_2025_thanh_le.webp",
+      "alt": "Portrait of Thanh Le",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "Computer Science",
+      "position": [
+        "PhD student in Computer Science, University of Oregon",
+        "GStar Academic Team"
+      ],
+      "bio": "Chien Nguyen is a Ph.D. student in Computer Science at the University of Oregon, specializing in Natural Language Processing (NLP), Large Language Models (LLMs), and generative AI. Previously, he was a Research Resident at VinAI Research, where he worked on information extraction and the development of multilingual LLMs. Chien has co-authored multiple papers at ACL, EMNLP, and COLING, including CulturaX, one of the largest multilingual datasets for LLM training, and Okapi, a framework for instruction-tuning LLMs with RLHF in 26 languages. He also lectures on advanced NLP and LLMs at VietAI. His current research explores large-scale generative models, multimodal learning, and cross-lingual transfer techniques.",
+      "social": {}
+    },
+    {
+      "id": "long-phan",
+      "name": "Long Phan",
+      "image": "static/img/mentor/m_2025_long_phan.webp",
+      "alt": "Portrait of Long Phan",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Safety",
+      "position": [
+        "Research Engineer, Center for AI Safety",
+        "GStar Academic Team"
+      ],
+      "bio": "Long Phan is a Research Engineer at the Center for AI Safety, working with Dan Hendrycks on advancing AI Safety and robustness. He earned his B.S. in Computer Science from Case Western Reserve University in 2023, where he collaborated with Trieu H. Trinh and Minh-Thang Luong (DeepMind). Long has contributed to influential projects such as HarmBench, a standardized framework for automated red teaming, Representation Engineering, and Circuit Breakers for improving alignment and robustness. He is also a co-author on large-scale initiatives like BLOOM and multilingual models, and his research spans LLMs, transparency, and safety evaluations. Long's work has appeared in ACL, NAACL, EACL, and leading AI conferences.",
+      "social": {}
+    },
+    {
+      "id": "hieu-ngo",
+      "name": "Hieu Ngo",
+      "image": "static/img/mentor/m_2025_hieu_ngo.webp",
+      "alt": "Portrait of Hieu Ngo",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "AI Engineering",
+      "position": [
+        "Senior AI Engineer, MoMo",
+        "GStar Academic Team"
+      ],
+      "bio": "Hieu Ngo is a Senior AI Engineer at MoMo, where he leads the AI Research and Development team. He earned his B.S. in Computer Science from the University of California, Los Angeles in 2019, where he collaborated with Trieu H. Trinh and Minh-Thang Luong (DeepMind). Ngo has contributed to influential projects such as HarmBench, a standardized framework for automated red teaming, Representation Engineering, and Circuit Breakers for improving alignment and robustness. He is also a co-author on large-scale initiatives like BLOOM and multilingual models, and his research spans LLMs, transparency, and safety evaluations. Ngo's work has appeared in ACL, NAACL, EACL, and leading AI conferences.",
+      "social": {}
+    },
+    {
+      "id": "hannes-stark",
+      "name": "Hannes Stärk",
+      "image": "static/img/mentor/m_2025_hannes_stark.webp",
+      "alt": "Portrait of Hannes Stärk",
+      "group": "Academic & mentoring team",
+      "cohortStatus": "Previous cohort",
+      "category": "Machine Learning for Biomolecular Engineering",
+      "position": [
+        "Founding Scientist at Boltz",
+        "PhD in EECS, MIT",
+        "GStar Academic Team"
+      ],
+      "bio": "Hannes Stärk is a founding scientist at Boltz. He received his PhD in Electrical Engineering and Computer Science from MIT, where he was advised by Tommi Jaakkola and Regina Barzilay. His work focuses on machine learning for biomolecular engineering, including structure and affinity prediction, molecular dynamics, and drug design. He also hosts Starkly Speaking, a weekly reading group where participants discuss research papers with their authors across machine learning for biology, molecular dynamics, diffusion, generative models, and protein design.",
+      "social": {
+        "boltz": {
+          "url": "https://boltz.bio/",
+          "title": "Boltz"
+        },
+        "readingGroup": {
+          "url": "https://hannes-stark.com/starkly-speaking",
+          "title": "Starkly Speaking reading group"
+        }
+      }
+    }
+  ]
+}

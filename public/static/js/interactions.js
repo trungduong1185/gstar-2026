@@ -412,6 +412,8 @@
     };
     add(soc.linkedin, "LinkedIn");
     add(soc.twitter, "X (Twitter)");
+    add(soc.boltz, "Boltz");
+    add(soc.readingGroup, "Starkly Speaking");
   };
 
   const openModal = (card) => {
