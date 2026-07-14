@@ -7,7 +7,7 @@ import { ConsentBanner } from "@/components/ConsentBanner";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://gstar.newturing.ai").replace(/\/$/, "");
 const siteOrigin = new URL(siteUrl).origin;
-const ogImage = withBasePath("/static/img/hero-background-v2.jpg");
+const ogImage = withBasePath("/static/img/gstar-social-share-2026.jpg");
 
 const title = "GStar Bootcamp 2026 · Build frontier AI systems";
 const description =
@@ -63,6 +63,7 @@ export const metadata: Metadata = {
         url: ogImage,
         width: 1200,
         height: 630,
+        type: "image/jpeg",
         alt: "GStar Bootcamp 2026 — Build AI at the frontier"
       }
     ]
@@ -104,6 +105,7 @@ const structuredData = {
       url: siteUrl,
       inLanguage: "en",
       educationalLevel: "Advanced",
+      image: `${siteUrl}/static/img/gstar-social-share-2026.jpg`,
       provider: { "@id": "https://newturing.ai/#organization" },
       hasCourseInstance: {
         "@type": "CourseInstance",
