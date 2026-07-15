@@ -590,3 +590,127 @@
     blocks.forEach((b) => io.observe(b));
   }
 })();
+
+// ------- Outcomes community media slider -------
+(function () {
+  var sliders = document.querySelectorAll('[data-slider]');
+  sliders.forEach(function (slider) {
+    var images = slider.querySelectorAll('.outcomes-slider__track img');
+    if (images.length < 2) return;
+    var prevBtn = slider.querySelector('.outcomes-slider__btn--prev');
+    var nextBtn = slider.querySelector('.outcomes-slider__btn--next');
+    var dotsWrap = slider.querySelector('.outcomes-slider__dots');
+    var current = 0;
+
+    images[0].classList.add('is-active');
+    prevBtn.hidden = false;
+    nextBtn.hidden = false;
+    dotsWrap.hidden = false;
+
+    images.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', 'Go to image ' + (i + 1));
+      if (i === 0) dot.classList.add('is-active');
+      dot.addEventListener('click', function () { goTo(i); });
+      dotsWrap.appendChild(dot);
+    });
+
+    var dots = dotsWrap.querySelectorAll('button');
+
+    function goTo(index) {
+      images[current].classList.remove('is-active');
+      dots[current].classList.remove('is-active');
+      current = (index + images.length) % images.length;
+      images[current].classList.add('is-active');
+      dots[current].classList.add('is-active');
+    }
+
+    prevBtn.addEventListener('click', function () { goTo(current - 1); });
+    nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+    var timer = setInterval(function () { goTo(current + 1); }, 5000);
+    slider.addEventListener('mouseenter', function () { clearInterval(timer); });
+    slider.addEventListener('mouseleave', function () { timer = setInterval(function () { goTo(current + 1); }, 5000); });
+  });
+})();
+
+// ------- Nav scroll-spy: highlight link when section is in view -------
+(function () {
+  var links = document.querySelectorAll('.nav-links a[href^="#"]');
+  if (!links.length || !("IntersectionObserver" in window)) return;
+
+  var sections = [];
+  links.forEach(function (link) {
+    var id = link.getAttribute('href').slice(1);
+    var section = document.getElementById(id);
+    if (section) sections.push({ link: link, el: section });
+  });
+  if (!sections.length) return;
+
+  var current = null;
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        var match = sections.find(function (s) { return s.el === entry.target; });
+        if (match) setActive(match.link);
+      }
+    });
+  }, { rootMargin: "-30% 0px -60% 0px", threshold: 0 });
+
+  sections.forEach(function (s) { io.observe(s.el); });
+
+  function setActive(link) {
+    if (current === link) return;
+    links.forEach(function (l) { l.classList.remove('is-active'); });
+    link.classList.add('is-active');
+    current = link;
+  }
+})();
+
+// ------- Lightbox: click image to view full size -------
+(function () {
+  var galleries = document.querySelectorAll('[data-lightbox]');
+  if (!galleries.length) return;
+
+  galleries.forEach(function (gallery) {
+    var images = gallery.querySelectorAll('img');
+    images.forEach(function (img) {
+      img.addEventListener('click', function () { open(img); });
+    });
+  });
+
+  function open(img) {
+    var overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+
+    var fullImg = document.createElement('img');
+    fullImg.src = img.src;
+    fullImg.alt = img.alt;
+
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = '&times;';
+
+    overlay.appendChild(fullImg);
+    overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    function close() {
+      overlay.remove();
+      document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
+    });
+  }
+})();

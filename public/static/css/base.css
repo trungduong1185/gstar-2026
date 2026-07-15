@@ -222,8 +222,14 @@ a:hover { color: var(--pink-100); }
   font: 700 13px var(--font-display); letter-spacing: .05em; color: var(--text-1);
 }
 .nav-links { display: flex; align-items: center; gap: clamp(14px, 2vw, 26px); }
-.nav-links a { font: 500 14px var(--font-display); color: var(--text-2); text-decoration: none; }
+.nav-links a { font: 500 14px var(--font-display); color: var(--text-2); text-decoration: none; position: relative; }
 .nav-links a:hover { color: #fff; }
+.nav-links a.is-active { color: #fff; }
+.nav-links a.is-active::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
+  height: 2px; border-radius: 1px;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+}
 .nav-links .btn { padding: 9px 18px; min-height: 0; font-size: 14px; }
 
 .nav-toggle {
@@ -490,12 +496,13 @@ a:hover { color: var(--pink-100); }
 
 .event-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, minmax(180px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, minmax(200px, 1fr));
   border-radius: 16px;
   overflow: hidden;
+  margin-top: 24px;
 }
-.event-video { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+.event-video { grid-column: auto; grid-row: auto; aspect-ratio: 3 / 2; }
 
 /* Video tile — YouTube iframe */
 .event-video {
@@ -559,7 +566,7 @@ a:hover { color: var(--pink-100); }
 /* Responsive: 2 col at md, 1 col at sm */
 @media (max-width: 900px) {
   .event-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; }
-  .event-video { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16/9; }
+  .event-video { grid-column: auto; grid-row: auto; aspect-ratio: 16/9; }
   .event-photo { aspect-ratio: 16/10; }
 }
 @media (max-width: 560px) {
