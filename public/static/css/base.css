@@ -291,7 +291,7 @@ a:hover { color: var(--pink-100); }
 /* --- Breakpoints --- */
 @media (max-width: 900px) {
   .nav { padding: 8px 8px 8px 18px; }
-  .nav-brand img { height: 36px; }
+  .nav-brand img { height: 24px; }
   .nav-brand-name { font-size: 12px; }
   .nav-links { display: none; }
   .nav-toggle { display: inline-flex; }
@@ -1181,7 +1181,7 @@ body.mentor-modal-lock { overflow: hidden; }
   .section { padding: 64px 0; }
 }
 @media (max-width: 640px) {
-  .section { padding: 56px 0; }
+  .section { padding: 32px 0; }
   .container, .container-tight { padding: 0 20px; }
 
   /* Hero */
