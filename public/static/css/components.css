@@ -188,7 +188,7 @@
 .mentor-network-header .h2 { margin-top: 22px; max-width: 780px; }
 .mentor-network-header .lead { margin-top: 18px; max-width: 820px; }
 .mentor-network-meta {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
   padding: 22px 0; border-top: 1px solid var(--line-red); border-bottom: 1px solid var(--line-red);
 }
 .mentor-network-meta strong, .mentor-network-meta span { display: block; }

@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Attribution, MAX_TOUCHPOINTS, Touchpoint, hasAttribution, readUtm } from "@/lib/utm";
 import { withBasePath } from "@/lib/base-path";
-import { FormSelect } from "@/components/FormSelect";
 
 declare global {
   interface Window { gtag?: (...args: unknown[]) => void; }
@@ -11,13 +10,13 @@ declare global {
 
 const EMPTY_ATTRIBUTION: Attribution = { firstTouch: {}, lastTouch: {}, touchpoints: [], landingPage: "", referrer: "" };
 const TOUCHPOINTS_KEY = "gstar_touchpoints";
-const READINESS_OPTIONS = [
-  ["python", "Python & PyTorch"],
-  ["papers", "Research literacy"],
-  ["transformers", "Transformer internals"],
-  ["training", "Model training"],
-  ["time", "Weekly commitment"]
-] as const;
+const CAREER_GOALS = ["AI Researcher", "AI Engineer", "Startup Founder", "AI Educator", "Other"];
+const MATH_OPTIONS = ["Linear algebra: matrices and operators", "Vector calculus: derivatives, gradients and Jacobians", "Statistics: distributions, variance and confidence intervals"];
+const ML_OPTIONS = ["Supervised vs. unsupervised learning", "Loss functions: MSE, cross-entropy and hinge loss", "Cross-validation and hyperparameter tuning", "Overfitting and underfitting"];
+const DEEP_LEARNING_OPTIONS = ["Neural networks: MLP and backpropagation", "CNNs: convolution, pooling and filters", "RNN, LSTM and GRU sequence modeling", "Transformers: attention and encoder-decoder", "BatchNorm, LayerNorm and initialization", "Optimizers: Adam, SGD and RMSProp", "Transfer learning and fine-tuning"];
+const NLP_OPTIONS = ["Preprocessing: tokenization, stemming and lemmatization", "Bag-of-Words and TF-IDF", "Word embeddings: Word2Vec, GloVe and FastText", "Text classification and sentiment analysis", "Machine translation", "Question answering and retrieval-augmented generation"];
+const MOTIVATION_OPTIONS = ["Access world-class AI training and mentorship", "Build a strong portfolio through real-world AI projects", "Join a global network of AI researchers and engineers", "Pursue advanced research or academic opportunities", "Explore career opportunities in the global AI ecosystem", "Join a community pushing the boundaries of AI innovation"];
+const REFERRAL_OPTIONS = ["NTI Facebook page", "VietAI Facebook page", "NTI LinkedIn page", "VietAI LinkedIn page", "Email marketing from NTI", "Teacher or university / school", "Friend or acquaintance", "Referral program", "Community Facebook groups", "Media coverage or company communications", "Post from an NTI team member", "Dr. Thang Luong's post", "X", "Other"];
 
 type FieldErrors = Record<string, string>;
 
@@ -89,7 +88,10 @@ export function ApplicationDrawer() {
   const [message, setMessage] = useState("");
   const [resumeName, setResumeName] = useState("");
   const [readiness, setReadiness] = useState<string[]>([]);
-  const [aiExperience, setAiExperience] = useState("");
+  const [motivationReasons, setMotivationReasons] = useState<string[]>([]);
+  const [currentStatus, setCurrentStatus] = useState("");
+  const [careerGoal, setCareerGoal] = useState("");
+  const [referralSource, setReferralSource] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [attribution, setAttribution] = useState<Attribution>(EMPTY_ATTRIBUTION);
   const dialog = useRef<HTMLDivElement>(null);
@@ -127,7 +129,10 @@ export function ApplicationDrawer() {
       setErrors({});
       setResumeName("");
       setReadiness(storedReadiness());
-      setAiExperience("");
+      setMotivationReasons([]);
+      setCurrentStatus("");
+      setCareerGoal("");
+      setReferralSource("");
       idempotencyKey.current = newIdempotencyKey();
       track("apply_form_open", { placement: target.textContent?.trim() || "apply" });
     };
@@ -135,11 +140,11 @@ export function ApplicationDrawer() {
     return () => { document.removeEventListener("click", handler, true); window.removeEventListener("gstar:readiness-change", syncReadiness); };
   }, []);
 
-  function toggleReadiness(value: string) {
-    const next = readiness.includes(value) ? readiness.filter((item) => item !== value) : [...readiness, value];
-    setReadiness(next);
-    localStorage.setItem("gstar_readiness_signals", JSON.stringify(next));
-    window.dispatchEvent(new CustomEvent("gstar:readiness-set", { detail: { values: next } }));
+  function toggleMotivationReason(value: string) {
+    setMotivationReasons((current) => current.includes(value)
+      ? current.filter((item) => item !== value)
+      : current.length < 3 ? [...current, value] : current);
+    clearFieldError("motivationReasons");
   }
 
   useEffect(() => {
@@ -189,39 +194,81 @@ export function ApplicationDrawer() {
     if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) clearFieldError(target.name);
   }
 
-  function validate(form: HTMLFormElement) {
+  function validate(form: HTMLFormElement, scope: number | "all" = "all") {
     const next: FieldErrors = {};
-    const value = (name: string) => String(new FormData(form).get(name) || "").trim();
-    const required: Array<[string, string]> = [
-      ["fullName", "Enter your full name."],
-      ["email", "Enter your email address."],
-      ["yearOfBirth", "Enter your year of birth."],
-      ["country", "Enter your city and country."],
-      ["organization", "Enter your current company or school."],
-      ["currentStatus", "Select your current status."],
-      ["currentRole", "Enter your current position or school major."],
-      ["linkedin", "Enter your website or LinkedIn URL."],
-      ["motivation", "Tell us why you want to join GStar."]
-    ];
-    required.forEach(([name, text]) => { if (!value(name)) next[name] = text; });
+    const data = new FormData(form);
+    const value = (name: string) => String(data.get(name) || "").trim();
+    const values = (name: string) => data.getAll(name).filter((item) => typeof item === "string" && item.trim());
 
-    const email = form.elements.namedItem("email") as HTMLInputElement | null;
-    if (email?.value && email.validity.typeMismatch) next.email = "Enter a valid email address.";
-    const birthYear = Number(value("yearOfBirth"));
-    if (value("yearOfBirth") && (birthYear < 1940 || birthYear > 2010)) next.yearOfBirth = "Enter a year between 1940 and 2010.";
-    const linkedin = form.elements.namedItem("linkedin") as HTMLInputElement | null;
-    if (linkedin?.value && linkedin.validity.typeMismatch) next.linkedin = "Enter a complete URL starting with https://";
+    if (scope === 2 || scope === "all") {
+      const required: Array<[string, string]> = [
+        ["fullName", "Enter your full name."], ["email", "Enter your email address."],
+        ["yearOfBirth", "Enter your year of birth."], ["country", "Enter your city and country."],
+        ["organization", "Enter your current company or school."], ["currentStatus", "Select your current status."],
+        ["currentRole", "Enter your current position or school major."], ["linkedin", "Enter your website or LinkedIn URL."]
+      ];
+      required.forEach(([name, text]) => { if (!value(name)) next[name] = text; });
 
-    const resume = form.elements.namedItem("resume") as HTMLInputElement | null;
-    const file = resume?.files?.[0];
-    if (!file) next.resume = "Attach your resume or CV as a PDF.";
-    else if (file.size > 5_000_000) next.resume = "The PDF must be 5 MB or smaller.";
-    else if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) next.resume = "Choose a PDF file.";
+      const email = form.elements.namedItem("email") as HTMLInputElement | null;
+      if (email?.value && email.validity.typeMismatch) next.email = "Enter a valid email address.";
+      const birthYear = Number(value("yearOfBirth"));
+      if (value("yearOfBirth") && (birthYear < 1940 || birthYear > 2010)) next.yearOfBirth = "Enter a year between 1940 and 2010.";
+      const linkedin = form.elements.namedItem("linkedin") as HTMLInputElement | null;
+      if (linkedin?.value && linkedin.validity.typeMismatch) next.linkedin = "Enter a complete URL starting with https://";
+      if (value("currentStatus") === "Other" && !value("currentStatusDetails")) next.currentStatusDetails = "Describe your current status.";
 
-    if (!aiExperience) next.aiExperience = "Select your AI experience level.";
-    if (!(form.elements.namedItem("weeklyAvailability") as HTMLInputElement | null)?.checked) next.weeklyAvailability = "Confirm your weekly availability.";
-    if (!(form.elements.namedItem("consent") as HTMLInputElement | null)?.checked) next.consent = "Consent is required to submit your application.";
+      const resume = form.elements.namedItem("resume") as HTMLInputElement | null;
+      const file = resume?.files?.[0];
+      if (!file) next.resume = "Attach your resume or CV as a PDF.";
+      else if (file.size > 5_000_000) next.resume = "The PDF must be 5 MB or smaller.";
+      else if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) next.resume = "Choose a PDF file.";
+    }
+
+    if (scope === 3 || scope === "all") {
+      [["proudProject", "Describe the project you are most proud of."], ["careerGoal", "Select the role you want to pursue."], ["technicalChallenge", "Describe a challenging technical problem."], ["targetOrganizations", "Share the organizations you aspire to work with."], ["impactGoal", "Describe the impact you want to make."]].forEach(([name, text]) => { if (!value(name)) next[name] = text; });
+      if (value("careerGoal") === "Other" && !value("careerGoalDetails")) next.careerGoalDetails = "Describe the role you want to pursue.";
+    }
+    if (scope === 4 || scope === "all") {
+      if (!values("mathConcepts").length) next.mathConcepts = "Select at least one math concept.";
+      if (!values("machineLearningConcepts").length) next.machineLearningConcepts = "Select at least one machine learning concept.";
+      if (!values("deepLearningConcepts").length) next.deepLearningConcepts = "Select at least one deep learning concept.";
+    }
+    if (scope === 5 || scope === "all") {
+      if (values("motivationReasons").length !== 3) next.motivationReasons = "Select exactly three reasons.";
+      [["programGoals", "Tell us what you hope to achieve."], ["preferredTestSlot", "Enter your preferred entrance test time."], ["referralSource", "Select how you first heard about the program."]].forEach(([name, text]) => { if (!value(name)) next[name] = text; });
+      if (["Friend or acquaintance", "Post from an NTI team member", "Other"].includes(value("referralSource")) && !value("referralDetails")) next.referralDetails = "Please provide the name or source details.";
+      if (!(form.elements.namedItem("weeklyAvailability") as HTMLInputElement | null)?.checked) next.weeklyAvailability = "Confirm your weekly availability.";
+      if (!(form.elements.namedItem("consent") as HTMLInputElement | null)?.checked) next.consent = "Consent is required to submit your application.";
+    }
     return next;
+  }
+
+  function focusFirstError(form: HTMLFormElement, fieldErrors: FieldErrors) {
+    const firstName = Object.keys(fieldErrors)[0];
+    requestAnimationFrame(() => {
+      const target = form.querySelector<HTMLElement>(`[name="${firstName}"]`);
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      target?.focus({ preventScroll: true });
+    });
+  }
+
+  function goToStep(nextStep: number) {
+    const form = formRef.current;
+    if (!form) return;
+    if (nextStep > step) {
+      const fieldErrors = validate(form, step);
+      if (Object.keys(fieldErrors).length) {
+        setErrors(fieldErrors);
+        setStatus("error");
+        focusFirstError(form, fieldErrors);
+        return;
+      }
+    }
+    setErrors({});
+    setStatus("idle");
+    setStep(nextStep);
+    track("apply_form_step", { step: nextStep });
+    requestAnimationFrame(() => dialog.current?.scrollTo({ top: 0, behavior: "smooth" }));
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -233,13 +280,11 @@ export function ApplicationDrawer() {
       setMessage("");
       setErrors(fieldErrors);
       const firstName = Object.keys(fieldErrors)[0];
-      requestAnimationFrame(() => {
-        const target = firstName === "aiExperience"
-          ? formElement.querySelector<HTMLElement>(".form-select__trigger")
-          : formElement.querySelector<HTMLElement>(`[name="${firstName}"]`);
-        target?.scrollIntoView({ behavior: "smooth", block: "center" });
-        target?.focus({ preventScroll: true });
-      });
+      const targetStep = ["fullName","email","yearOfBirth","country","organization","currentStatus","currentStatusDetails","currentRole","resume","linkedin"].includes(firstName) ? 2
+        : ["proudProject","careerGoal","careerGoalDetails","technicalChallenge","targetOrganizations","impactGoal"].includes(firstName) ? 3
+        : ["mathConcepts","machineLearningConcepts","deepLearningConcepts","nlpConcepts"].includes(firstName) ? 4 : 5;
+      setStep(targetStep);
+      focusFirstError(formElement, fieldErrors);
       return;
     }
     setStatus("submitting");
@@ -270,9 +315,8 @@ export function ApplicationDrawer() {
   }
 
   function continueToProfile() {
-    setStep(2);
+    goToStep(2);
     track("apply_form_start");
-    requestAnimationFrame(() => dialog.current?.scrollTo({ top: 0, behavior: "smooth" }));
   }
 
   if (!open) return null;
@@ -285,10 +329,12 @@ export function ApplicationDrawer() {
           <div><span>NTI Global Talent Program · 2026</span><h2 id="apply-title">GStar Bootcamp registration</h2></div>
           <button className="apply-drawer__close" onClick={() => setOpen(false)} aria-label="Close application form"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17 7L7 17M7 7L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg></button>
         </header>
-        <div className="apply-drawer__progress" aria-label={`Step ${step} of 2`}><span className={step >= 1 ? "is-active" : ""}>01 · Overview</span><i /><span className={step >= 2 ? "is-active" : ""}>02 · Registration</span></div>
+        <div className="apply-drawer__progress" aria-label={`Step ${step} of 5`}>
+          {["Overview", "Profile", "Goals", "Skills", "Motivation"].map((label, index) => <div key={label} className={`${step === index + 1 ? "is-current" : ""}${step > index + 1 ? " is-complete" : ""}`}><b>{String(index + 1).padStart(2, "0")}</b><span>{label}</span></div>)}
+        </div>
 
         {status === "success" ? (
-          <div className="apply-success" aria-live="polite"><b>Application received</b><p>{message}</p><button className="btn btn-secondary-dark btn--size-40" onClick={() => setOpen(false)}>Done</button></div>
+          <div className="apply-success" aria-live="polite"><b>Thank you for applying!</b><p>{message || "If you are shortlisted, our team will contact you soon. Get ready to shape the future of AI."}</p><button className="btn btn-secondary-dark btn--size-40" onClick={() => setOpen(false)}>Done</button></div>
         ) : (
           <form ref={formRef} onSubmit={submit} noValidate onInput={(event) => { markTouched(event); clearEventError(event); }} onChange={clearEventError} onBlur={handleFieldBlur}>
             <input className="apply-honeypot" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
@@ -302,25 +348,50 @@ export function ApplicationDrawer() {
               <div className="apply-form-actions"><button type="button" className="btn btn-secondary-dark btn--size-40 btn--full" onClick={continueToProfile}>Start registration →</button></div>
             </section>
             <section className="apply-registration" hidden={step !== 2}>
-              <div className="apply-section-heading"><span>Personal information</span><p>Fields marked with * are required.</p></div>
+              <div className="apply-section-heading"><span>Personal information</span><p>Tell us how to contact you and understand your current professional or academic context.</p></div>
               <label className={errors.fullName ? "is-invalid" : ""}>Full name *<input name="fullName" required autoComplete="name" aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? "fullName-error" : undefined}/><FieldError name="fullName" errors={errors}/></label>
-              <div className="apply-field-row"><label className={errors.email ? "is-invalid" : ""}>Email *<input name="email" type="email" required autoComplete="email" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "email-error" : undefined}/><FieldError name="email" errors={errors}/></label><label className={errors.yearOfBirth ? "is-invalid" : ""}>Year of birth *<input name="yearOfBirth" type="number" min="1940" max="2010" required inputMode="numeric" aria-invalid={Boolean(errors.yearOfBirth)} aria-describedby={errors.yearOfBirth ? "yearOfBirth-error" : undefined}/><FieldError name="yearOfBirth" errors={errors}/></label></div>
-              <label className={errors.country ? "is-invalid" : ""}>City and country of residence &amp; work *<input name="country" required autoComplete="country-name" placeholder="Ho Chi Minh City, Vietnam" aria-invalid={Boolean(errors.country)} aria-describedby={errors.country ? "country-error" : undefined}/><FieldError name="country" errors={errors}/></label>
-              <label className={errors.organization ? "is-invalid" : ""}>Current company or school *<input name="organization" required placeholder="Full organization name" aria-invalid={Boolean(errors.organization)} aria-describedby={errors.organization ? "organization-error" : undefined}/><FieldError name="organization" errors={errors}/></label>
-              <fieldset className={`apply-options${errors.currentStatus ? " is-invalid" : ""}`} aria-invalid={Boolean(errors.currentStatus)} aria-describedby={errors.currentStatus ? "currentStatus-error" : undefined}><legend>Current status *</legend>{["Final-year undergraduate","Recent graduate","Working professional (2+ years experience)","Other"].map((item)=><label key={item}><input type="radio" name="currentStatus" value={item} required/><span>{item}</span></label>)}<FieldError name="currentStatus" errors={errors}/></fieldset>
-              <label className={errors.currentRole ? "is-invalid" : ""}>Current position or school major *<input name="currentRole" required aria-invalid={Boolean(errors.currentRole)} aria-describedby={errors.currentRole ? "currentRole-error" : undefined}/><FieldError name="currentRole" errors={errors}/></label>
-              <label className={`apply-upload${errors.resume ? " is-invalid" : ""}`}>Resume / CV (PDF, max 5 MB) *<input name="resume" type="file" accept="application/pdf,.pdf" required aria-invalid={Boolean(errors.resume)} aria-describedby={errors.resume ? "resume-error" : undefined} onChange={(event)=>setResumeName(event.target.files?.[0]?.name || "")}/><span className="apply-upload__control"><b>{resumeName || "Choose PDF"}</b><small>{resumeName ? "PDF selected · choose again to replace" : "Attach one current English resume or CV."}</small></span><FieldError name="resume" errors={errors}/></label>
-              <label className={errors.linkedin ? "is-invalid" : ""}>Website or LinkedIn profile *<input name="linkedin" type="url" required placeholder="https://" aria-invalid={Boolean(errors.linkedin)} aria-describedby={errors.linkedin ? "linkedin-error" : undefined}/><FieldError name="linkedin" errors={errors}/></label>
-              <div className="apply-section-heading"><span>Readiness</span><p>Help the selection team understand your technical starting point.</p></div>
-              <fieldset className="apply-options apply-options--signals"><legend>Signals selected in your readiness check</legend>{READINESS_OPTIONS.map(([value,label])=><label key={value}><input type="checkbox" name="readiness" value={value} checked={readiness.includes(value)} onChange={()=>toggleReadiness(value)}/><span>{label}</span></label>)}</fieldset>
-              <p className="apply-field-help">{readiness.length} of {READINESS_OPTIONS.length} signals selected · You can update these before submitting.</p>
-              <FormSelect name="aiExperience" label="AI experience *" placeholder="Select your level" value={aiExperience} onChange={(value)=>{setAiExperience(value);clearFieldError("aiExperience");setMessage("");setStatus("idle");}} invalid={Boolean(errors.aiExperience)} error={errors.aiExperience} options={["Under 1 year","1–2 years","3–5 years","5+ years"].map((item)=>({value:item,label:item}))}/>
-              <label className={errors.motivation ? "is-invalid" : ""}>Why GStar? *<textarea name="motivation" required rows={5} maxLength={2000} placeholder="What do you want to build, research or become capable of?" aria-invalid={Boolean(errors.motivation)} aria-describedby={errors.motivation ? "motivation-error" : undefined}/><FieldError name="motivation" errors={errors}/></label>
-              <label className="apply-check"><input type="checkbox" name="scholarshipRequest" value="yes" /><span>I want to request scholarship consideration.</span></label>
+              <label className={errors.email ? "is-invalid" : ""}>Email *<small>Please enter your correct and frequently used email address so the organizing team can send you information about the next rounds.</small><input name="email" type="email" required autoComplete="email" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "email-error" : undefined}/><FieldError name="email" errors={errors}/></label>
+              <label className={errors.yearOfBirth ? "is-invalid" : ""}>Year of birth *<input name="yearOfBirth" type="number" min="1940" max="2010" required inputMode="numeric" aria-invalid={Boolean(errors.yearOfBirth)} aria-describedby={errors.yearOfBirth ? "yearOfBirth-error" : undefined}/><FieldError name="yearOfBirth" errors={errors}/></label>
+              <label className={errors.country ? "is-invalid" : ""}>City of residence &amp; work *<input name="country" required autoComplete="country-name" placeholder="Ho Chi Minh City, Vietnam" aria-invalid={Boolean(errors.country)} aria-describedby={errors.country ? "country-error" : undefined}/><FieldError name="country" errors={errors}/></label>
+              <label className={errors.organization ? "is-invalid" : ""}>Current company / school *<small>Please provide the full name, e.g., ABC Joint Stock Company or Ho Chi Minh City University of Technology.</small><input name="organization" required placeholder="Full organization name" aria-invalid={Boolean(errors.organization)} aria-describedby={errors.organization ? "organization-error" : undefined}/><FieldError name="organization" errors={errors}/></label>
+              <fieldset className={`apply-options apply-options--stack${errors.currentStatus ? " is-invalid" : ""}`} aria-invalid={Boolean(errors.currentStatus)} aria-describedby={errors.currentStatus ? "currentStatus-error" : undefined}><legend>Current status *</legend>{["Final-year undergraduate","Recent graduate","Working professional (2+ years experience)","Other"].map((item)=><label key={item}><input type="radio" name="currentStatus" value={item} checked={currentStatus===item} onChange={()=>{setCurrentStatus(item);clearFieldError("currentStatus");clearFieldError("currentStatusDetails");}}/><span>{item}</span></label>)}<FieldError name="currentStatus" errors={errors}/></fieldset>
+              {currentStatus === "Other" && <label className={errors.currentStatusDetails ? "is-invalid" : ""}>Other status *<input name="currentStatusDetails" required maxLength={160} placeholder="Describe your current status" aria-invalid={Boolean(errors.currentStatusDetails)} aria-describedby={errors.currentStatusDetails ? "currentStatusDetails-error" : undefined}/><FieldError name="currentStatusDetails" errors={errors}/></label>}
+              <label className={errors.currentRole ? "is-invalid" : ""}>Current position / school major *<input name="currentRole" required aria-invalid={Boolean(errors.currentRole)} aria-describedby={errors.currentRole ? "currentRole-error" : undefined}/><FieldError name="currentRole" errors={errors}/></label>
+              <label className={`apply-upload${errors.resume ? " is-invalid" : ""}`}>Please upload your resume / CV (PDF, max 5 MB) *<input name="resume" type="file" accept="application/pdf,.pdf" required aria-invalid={Boolean(errors.resume)} aria-describedby={errors.resume ? "resume-error" : undefined} onChange={(event)=>setResumeName(event.target.files?.[0]?.name || "")}/><span className="apply-upload__control"><b>{resumeName || "Add PDF"}</b><small>{resumeName ? "PDF selected · choose again to replace" : "Upload one current English resume or CV."}</small></span><FieldError name="resume" errors={errors}/></label>
+              <label className={errors.linkedin ? "is-invalid" : ""}>Please share your website / LinkedIn profile link *<input name="linkedin" type="url" required placeholder="https://" aria-invalid={Boolean(errors.linkedin)} aria-describedby={errors.linkedin ? "linkedin-error" : undefined}/><FieldError name="linkedin" errors={errors}/></label>
+              {readiness.map((value)=><input key={value} type="hidden" name="readiness" value={value}/>)}
+              <div className="apply-form-actions"><button type="button" className="btn btn-ghost btn--size-40" onClick={() => goToStep(1)}>Back</button><button type="button" className="btn btn-secondary-dark btn--size-40" onClick={() => goToStep(3)}>Continue →</button></div>
+            </section>
+            <section className="apply-registration" hidden={step !== 3}>
+              <div className="apply-section-heading"><span>Achievements &amp; career goals</span><p>Show us what you have built and where you want your work to lead.</p></div>
+              <label className={errors.proudProject ? "is-invalid" : ""}>Which project are you most proud of? *<small>Share GitHub links, papers or demos when available.</small><textarea name="proudProject" required rows={5} maxLength={2500} aria-invalid={Boolean(errors.proudProject)} aria-describedby={errors.proudProject ? "proudProject-error" : undefined}/><FieldError name="proudProject" errors={errors}/></label>
+              <fieldset className={`apply-options${errors.careerGoal ? " is-invalid" : ""}`} aria-invalid={Boolean(errors.careerGoal)} aria-describedby={errors.careerGoal ? "careerGoal-error" : undefined}><legend>What role do you want to pursue? *</legend>{CAREER_GOALS.map((item)=><label key={item}><input type="radio" name="careerGoal" value={item} checked={careerGoal===item} onChange={()=>{setCareerGoal(item);clearFieldError("careerGoal");}}/><span>{item}</span></label>)}<FieldError name="careerGoal" errors={errors}/></fieldset>
+              {careerGoal === "Other" && <label className={errors.careerGoalDetails ? "is-invalid" : ""}>Other role *<input name="careerGoalDetails" required maxLength={160} aria-invalid={Boolean(errors.careerGoalDetails)} aria-describedby={errors.careerGoalDetails ? "careerGoalDetails-error" : undefined}/><FieldError name="careerGoalDetails" errors={errors}/></label>}
+              <label className={errors.technicalChallenge ? "is-invalid" : ""}>What is the most challenging technical problem you have solved in AI? *<textarea name="technicalChallenge" required rows={5} maxLength={2500} aria-invalid={Boolean(errors.technicalChallenge)} aria-describedby={errors.technicalChallenge ? "technicalChallenge-error" : undefined}/><FieldError name="technicalChallenge" errors={errors}/></label>
+              <label className={errors.targetOrganizations ? "is-invalid" : ""}>Which companies or organizations do you aspire to work with? *<textarea name="targetOrganizations" required rows={3} maxLength={1000} aria-invalid={Boolean(errors.targetOrganizations)} aria-describedby={errors.targetOrganizations ? "targetOrganizations-error" : undefined}/><FieldError name="targetOrganizations" errors={errors}/></label>
+              <label className={errors.impactGoal ? "is-invalid" : ""}>What impact do you want to make in AI in the next 3–5 years? *<textarea name="impactGoal" required rows={4} maxLength={2000} aria-invalid={Boolean(errors.impactGoal)} aria-describedby={errors.impactGoal ? "impactGoal-error" : undefined}/><FieldError name="impactGoal" errors={errors}/></label>
+              <div className="apply-form-actions"><button type="button" className="btn btn-ghost btn--size-40" onClick={() => goToStep(2)}>Back</button><button type="button" className="btn btn-secondary-dark btn--size-40" onClick={() => goToStep(4)}>Continue →</button></div>
+            </section>
+            <section className="apply-registration" hidden={step !== 4}>
+              <div className="apply-section-heading"><span>Self-assessment</span><p>Select the concepts you can currently explain or apply. This is not a scored test.</p></div>
+              <fieldset className={`apply-options apply-options--signals apply-options--stack${errors.mathConcepts ? " is-invalid" : ""}`}><legend>Foundational mathematics *</legend>{MATH_OPTIONS.map((item)=><label key={item}><input type="checkbox" name="mathConcepts" value={item}/><span>{item}</span></label>)}<FieldError name="mathConcepts" errors={errors}/></fieldset>
+              <fieldset className={`apply-options apply-options--signals apply-options--stack${errors.machineLearningConcepts ? " is-invalid" : ""}`}><legend>Foundational machine learning *</legend>{ML_OPTIONS.map((item)=><label key={item}><input type="checkbox" name="machineLearningConcepts" value={item}/><span>{item}</span></label>)}<FieldError name="machineLearningConcepts" errors={errors}/></fieldset>
+              <fieldset className={`apply-options apply-options--signals apply-options--stack${errors.deepLearningConcepts ? " is-invalid" : ""}`}><legend>Deep learning *</legend>{DEEP_LEARNING_OPTIONS.map((item)=><label key={item}><input type="checkbox" name="deepLearningConcepts" value={item}/><span>{item}</span></label>)}<FieldError name="deepLearningConcepts" errors={errors}/></fieldset>
+              <fieldset className="apply-options apply-options--signals apply-options--stack"><legend>Natural language processing <small>Optional</small></legend>{NLP_OPTIONS.map((item)=><label key={item}><input type="checkbox" name="nlpConcepts" value={item}/><span>{item}</span></label>)}</fieldset>
+              <div className="apply-form-actions"><button type="button" className="btn btn-ghost btn--size-40" onClick={() => goToStep(3)}>Back</button><button type="button" className="btn btn-secondary-dark btn--size-40" onClick={() => goToStep(5)}>Continue →</button></div>
+            </section>
+            <section className="apply-registration" hidden={step !== 5}>
+              <div className="apply-section-heading"><span>Motivation</span><p>Help us understand why GStar is the right next step for you.</p></div>
+              <fieldset className={`apply-options apply-options--signals apply-options--stack${errors.motivationReasons ? " is-invalid" : ""}`}><legend>Your top three reasons for joining *</legend>{MOTIVATION_OPTIONS.map((item)=>{const selected=motivationReasons.includes(item);return <label key={item} className={!selected&&motivationReasons.length>=3?"is-disabled":""}><input type="checkbox" name="motivationReasons" value={item} checked={selected} disabled={!selected&&motivationReasons.length>=3} onChange={()=>toggleMotivationReason(item)}/><span>{item}</span></label>})}<FieldError name="motivationReasons" errors={errors}/><p className="apply-field-help">{motivationReasons.length} of 3 selected</p></fieldset>
+              <label className={errors.programGoals ? "is-invalid" : ""}>What do you hope to achieve during and after this program? *<textarea name="programGoals" required rows={5} maxLength={2000} aria-invalid={Boolean(errors.programGoals)} aria-describedby={errors.programGoals ? "programGoals-error" : undefined}/><FieldError name="programGoals" errors={errors}/></label>
+              <label className={errors.preferredTestSlot ? "is-invalid" : ""}>If you pass CV screening, what is your preferred entrance test time? *<small>Include your date, time and timezone. We will confirm availability separately.</small><input name="preferredTestSlot" required maxLength={300} placeholder="Example: Saturday, 09:00–11:00 GMT+7" aria-invalid={Boolean(errors.preferredTestSlot)} aria-describedby={errors.preferredTestSlot ? "preferredTestSlot-error" : undefined}/><FieldError name="preferredTestSlot" errors={errors}/></label>
+              <fieldset className={`apply-options apply-options--stack${errors.referralSource ? " is-invalid" : ""}`}><legend>How did you first hear about the NTI Global Talent Program? *</legend>{REFERRAL_OPTIONS.map((item)=><label key={item}><input type="radio" name="referralSource" value={item} checked={referralSource===item} onChange={()=>{setReferralSource(item);clearFieldError("referralSource");}}/><span>{item}</span></label>)}<FieldError name="referralSource" errors={errors}/></fieldset>
+              {["Friend or acquaintance", "Post from an NTI team member", "Other"].includes(referralSource) && <label className={errors.referralDetails ? "is-invalid" : ""}>Source details *<input name="referralDetails" required maxLength={200} placeholder={referralSource === "Friend or acquaintance" ? "Name of the person who referred you" : referralSource === "Post from an NTI team member" ? "Name of the NTI team member" : "Please specify"} aria-invalid={Boolean(errors.referralDetails)} aria-describedby={errors.referralDetails ? "referralDetails-error" : undefined}/><FieldError name="referralDetails" errors={errors}/></label>}
+              <label className="apply-check"><input type="checkbox" name="scholarshipRequest" value="yes"/><span>I want to request scholarship consideration.</span></label>
               <label className={`apply-check${errors.weeklyAvailability ? " is-invalid" : ""}`}><input type="checkbox" name="weeklyAvailability" value="yes" required aria-invalid={Boolean(errors.weeklyAvailability)} aria-describedby={errors.weeklyAvailability ? "weeklyAvailability-error" : undefined}/><span>I can commit 15–20 hours per week.</span><FieldError name="weeklyAvailability" errors={errors}/></label>
               <label className={`apply-check${errors.consent ? " is-invalid" : ""}`}><input type="checkbox" name="consent" value="yes" required aria-invalid={Boolean(errors.consent)} aria-describedby={errors.consent ? "consent-error" : undefined}/><span>I consent to NTI processing this application.</span><FieldError name="consent" errors={errors}/></label>
               {message && <p className="apply-form-message" role="alert">{message}</p>}
-              <div className="apply-form-actions"><button type="button" className="btn btn-ghost btn--size-40" onClick={() => setStep(1)}>Back</button><button className="btn btn-secondary-dark btn--size-40" disabled={status === "submitting"}>{status === "submitting" ? "Submitting…" : "Submit application →"}</button></div>
+              <div className="apply-form-actions"><button type="button" className="btn btn-ghost btn--size-40" onClick={() => goToStep(4)}>Back</button><button className="btn btn-secondary-dark btn--size-40" disabled={status === "submitting"}>{status === "submitting" ? "Submitting…" : "Submit application →"}</button></div>
             </section>
           </form>
         )}

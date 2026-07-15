@@ -2,7 +2,7 @@
 
 import { KeyboardEvent, useEffect, useId, useRef, useState } from "react";
 
-export function AdminSelect({ name, label, options, value, onChange, labels = {} }: { name: string; label: string; options: readonly string[]; value: string; onChange: (value: string) => void; labels?: Readonly<Record<string, string>> }) {
+export function AdminSelect({ name, label, options, value, onChange, labels = {}, hideLabel = false }: { name: string; label: string; options: readonly string[]; value: string; onChange: (value: string) => void; labels?: Readonly<Record<string, string>>; hideLabel?: boolean }) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(Math.max(0, options.indexOf(value)));
   const root = useRef<HTMLDivElement>(null);
@@ -26,8 +26,8 @@ export function AdminSelect({ name, label, options, value, onChange, labels = {}
     if ((event.key === "Enter" || event.key === " ") && open) { event.preventDefault(); choose(options[active]); }
   }
 
-  return <div className={`admin-select${open ? " is-open" : ""}`} ref={root}>
-    <span className="admin-select__label">{label}</span>
+  return <div className={`admin-select${open ? " is-open" : ""}${hideLabel ? " admin-select--compact" : ""}`} ref={root}>
+    <span className={`admin-select__label${hideLabel ? " is-visually-hidden" : ""}`}>{label}</span>
     <input type="hidden" name={name} value={value} />
     <button type="button" className="admin-select__trigger" aria-haspopup="listbox" aria-expanded={open} aria-controls={listId} onClick={() => setOpen((current) => !current)} onKeyDown={keyboard}><span>{labels[value] || value}</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg></button>
     {open && <div className="admin-select__menu" id={listId} role="listbox" aria-label={label}>{options.map((option, index) => <button type="button" role="option" aria-selected={option === value} className={`${option === value ? "is-selected " : ""}${index === active ? "is-active" : ""}`} key={option} onMouseEnter={() => setActive(index)} onClick={() => choose(option)}><span>{labels[option] || option}</span>{option === value && <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" aria-hidden="true"><path d="m5 10 3 3 7-7"/></svg>}</button>)}</div>}

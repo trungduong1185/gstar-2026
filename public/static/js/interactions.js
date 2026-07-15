@@ -456,7 +456,7 @@
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 19 6v5c0 4.8-2.8 8-7 10-4.2-2-7-5.2-7-10V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>', label: "Phase 1",
       title: "Foundations & Pre-training",
       desc: "Rebuild the fundamentals, then learn to train and adapt frontier models from scratch.",
-      image: "static/img/qgentic-ai-presentation-preview.png",
+      image: "static/img/projects/project-qgentic-ai.webp",
       pages: [
         { title: "Fundamentals", subtext: "Core concepts & setup" },
         { title: "Pre-training", subtext: "Attention, MoE & Mamba" },
@@ -492,7 +492,7 @@
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 1.2 3.8L17 8l-3.8 1.2L12 13l-1.2-3.8L7 8l3.8-1.2L12 3ZM18.5 13l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2ZM5.5 14l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/></svg>', label: "Phase 3",
       title: "Agentic Systems & Capstone",
       desc: "Build the systems powering today's AI and ship a mentored, graded, ranked capstone.",
-      image: "static/img/ares-presentation-preview.png",
+      image: "static/img/projects/project-ares-ai.webp",
       pages: [
         { title: "Agentic Systems", subtext: "Computer-use & multi-agent" },
         { title: "Evaluation", subtext: "LLM-as-judge & benchmarks" },

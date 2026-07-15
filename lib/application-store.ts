@@ -19,6 +19,19 @@ export type StoredApplication = {
   github?: string;
   aiExperience: string;
   readinessSignals: string[];
+  proudProject?: string;
+  careerGoal?: string;
+  technicalChallenge?: string;
+  targetOrganizations?: string;
+  impactGoal?: string;
+  mathConcepts?: string[];
+  machineLearningConcepts?: string[];
+  deepLearningConcepts?: string[];
+  nlpConcepts?: string[];
+  motivationReasons?: string[];
+  programGoals?: string;
+  preferredTestSlot?: string;
+  referralSource?: string;
   motivation: string;
   resumeFileName: string;
   resumeSize: number;
@@ -37,12 +50,16 @@ export type StoredApplication = {
     referrer?: string;
   };
   status?: ApplicationStatus;
+  confirmationEmailStatus?: string;
+  confirmationEmailSentAt?: string;
+  confirmationEmailError?: string;
 };
 
 export const dataDirectory = path.join(process.cwd(), "data");
 export const uploadDirectory = path.join(dataDirectory, "uploads");
 
 const applicationStatuses = new Set<ApplicationStatus>(["Submitted", "Assessment", "Shortlisted", "Rejected"]);
+const stringArray = (value: unknown) => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
 
 function toStoredApplication(row: Application): StoredApplication {
   const status = applicationStatuses.has(row.status as ApplicationStatus) ? row.status as ApplicationStatus : "Submitted";
@@ -60,7 +77,20 @@ function toStoredApplication(row: Application): StoredApplication {
     linkedin: row.linkedin,
     github: row.github || undefined,
     aiExperience: row.aiExperience,
-    readinessSignals: Array.isArray(row.readinessSignals) ? row.readinessSignals.filter((value): value is string => typeof value === "string") : [],
+    readinessSignals: stringArray(row.readinessSignals),
+    proudProject: row.proudProject,
+    careerGoal: row.careerGoal,
+    technicalChallenge: row.technicalChallenge,
+    targetOrganizations: row.targetOrganizations,
+    impactGoal: row.impactGoal,
+    mathConcepts: stringArray(row.mathConcepts),
+    machineLearningConcepts: stringArray(row.machineLearningConcepts),
+    deepLearningConcepts: stringArray(row.deepLearningConcepts),
+    nlpConcepts: stringArray(row.nlpConcepts),
+    motivationReasons: stringArray(row.motivationReasons),
+    programGoals: row.programGoals,
+    preferredTestSlot: row.preferredTestSlot,
+    referralSource: row.referralSource,
     motivation: row.motivation,
     resumeFileName: row.resumeFileName,
     resumeSize: row.resumeSize,
@@ -72,7 +102,10 @@ function toStoredApplication(row: Application): StoredApplication {
     weeklyAvailability: row.weeklyAvailability,
     consent: row.consent,
     attribution: (row.attribution || {}) as StoredApplication["attribution"],
-    status
+    status,
+    confirmationEmailStatus: row.confirmationEmailStatus,
+    confirmationEmailSentAt: row.confirmationEmailSentAt?.toISOString(),
+    confirmationEmailError: row.confirmationEmailError || undefined
   };
 }
 
@@ -91,6 +124,19 @@ function applicationData(application: StoredApplication): Prisma.ApplicationCrea
     github: application.github || null,
     aiExperience: application.aiExperience,
     readinessSignals: application.readinessSignals as Prisma.InputJsonValue,
+    proudProject: application.proudProject || "",
+    careerGoal: application.careerGoal || "",
+    technicalChallenge: application.technicalChallenge || "",
+    targetOrganizations: application.targetOrganizations || "",
+    impactGoal: application.impactGoal || "",
+    mathConcepts: (application.mathConcepts || []) as Prisma.InputJsonValue,
+    machineLearningConcepts: (application.machineLearningConcepts || []) as Prisma.InputJsonValue,
+    deepLearningConcepts: (application.deepLearningConcepts || []) as Prisma.InputJsonValue,
+    nlpConcepts: (application.nlpConcepts || []) as Prisma.InputJsonValue,
+    motivationReasons: (application.motivationReasons || []) as Prisma.InputJsonValue,
+    programGoals: application.programGoals || "",
+    preferredTestSlot: application.preferredTestSlot || "",
+    referralSource: application.referralSource || "",
     motivation: application.motivation,
     resumeFileName: application.resumeFileName,
     resumeSize: application.resumeSize,
@@ -102,7 +148,10 @@ function applicationData(application: StoredApplication): Prisma.ApplicationCrea
     weeklyAvailability: application.weeklyAvailability,
     consent: application.consent,
     attribution: application.attribution as Prisma.InputJsonValue,
-    status: application.status || "Submitted"
+    status: application.status || "Submitted",
+    confirmationEmailStatus: application.confirmationEmailStatus || "not-configured",
+    confirmationEmailSentAt: application.confirmationEmailSentAt ? new Date(application.confirmationEmailSentAt) : null,
+    confirmationEmailError: application.confirmationEmailError || null
   };
 }
 
@@ -138,4 +187,15 @@ export async function updateApplicationStatus(id: string, status: ApplicationSta
   if (!existing) return null;
   const application = await prisma.application.update({ where: { id }, data: { status } });
   return toStoredApplication(application);
+}
+
+export async function updateConfirmationEmailStatus(id: string, status: string, error = "") {
+  await prisma.application.update({
+    where: { id },
+    data: {
+      confirmationEmailStatus: status,
+      confirmationEmailSentAt: status === "sent" ? new Date() : null,
+      confirmationEmailError: error || null
+    }
+  });
 }

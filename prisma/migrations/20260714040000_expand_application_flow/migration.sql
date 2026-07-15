@@ -1,0 +1,13 @@
+ALTER TABLE "Application" ADD COLUMN "proudProject" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "careerGoal" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "technicalChallenge" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "targetOrganizations" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "impactGoal" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "mathConcepts" JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE "Application" ADD COLUMN "machineLearningConcepts" JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE "Application" ADD COLUMN "deepLearningConcepts" JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE "Application" ADD COLUMN "nlpConcepts" JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE "Application" ADD COLUMN "motivationReasons" JSONB NOT NULL DEFAULT '[]';
+ALTER TABLE "Application" ADD COLUMN "programGoals" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "preferredTestSlot" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Application" ADD COLUMN "referralSource" TEXT NOT NULL DEFAULT '';

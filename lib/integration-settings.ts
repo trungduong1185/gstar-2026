@@ -7,6 +7,15 @@ export type IntegrationSettings = {
   googleAppsScriptUrl: string;
   googleAppsScriptSecret: string;
   slackWebhookUrl: string;
+  confirmationEmailEnabled: boolean;
+  smtpHost: string;
+  smtpPort: number;
+  smtpSecurity: "starttls" | "tls" | "none";
+  smtpUsername: string;
+  smtpPassword: string;
+  emailFromName: string;
+  emailFromAddress: string;
+  emailReplyTo: string;
   updatedAt: string;
 };
 
@@ -17,6 +26,15 @@ const defaults: IntegrationSettings = {
   googleAppsScriptUrl: "",
   googleAppsScriptSecret: "",
   slackWebhookUrl: "",
+  confirmationEmailEnabled: false,
+  smtpHost: "",
+  smtpPort: 587,
+  smtpSecurity: "starttls",
+  smtpUsername: "",
+  smtpPassword: "",
+  emailFromName: "GStar Bootcamp",
+  emailFromAddress: "",
+  emailReplyTo: "",
   updatedAt: ""
 };
 
@@ -34,6 +52,15 @@ export async function readIntegrationSettings(): Promise<IntegrationSettings> {
     googleAppsScriptUrl: stored.googleAppsScriptUrl,
     googleAppsScriptSecret: stored.googleAppsScriptSecret,
     slackWebhookUrl: stored.slackWebhookUrl,
+    confirmationEmailEnabled: stored.confirmationEmailEnabled,
+    smtpHost: stored.smtpHost,
+    smtpPort: stored.smtpPort,
+    smtpSecurity: stored.smtpSecurity === "tls" || stored.smtpSecurity === "none" ? stored.smtpSecurity : "starttls",
+    smtpUsername: stored.smtpUsername,
+    smtpPassword: stored.smtpPassword,
+    emailFromName: stored.emailFromName,
+    emailFromAddress: stored.emailFromAddress,
+    emailReplyTo: stored.emailReplyTo,
     updatedAt: stored.updatedAt.toISOString()
   };
 }
@@ -56,6 +83,23 @@ export async function resolvedSlackWebhookUrl(): Promise<string> {
   return stored.slackWebhookUrl || process.env.SLACK_WEBHOOK_URL || "";
 }
 
+export async function resolvedEmailSettings() {
+  const stored = await readIntegrationSettings();
+  const security = stored.smtpSecurity || (process.env.SMTP_SECURE === "true" ? "tls" : "starttls");
+  return {
+    enabled: stored.confirmationEmailEnabled || process.env.CONFIRMATION_EMAIL_ENABLED === "true",
+    host: stored.smtpHost || process.env.SMTP_HOST || "",
+    port: stored.smtpHost ? stored.smtpPort : Number(process.env.SMTP_PORT || 587),
+    security,
+    username: stored.smtpUsername || process.env.SMTP_USERNAME || "",
+    password: stored.smtpPassword || process.env.SMTP_PASSWORD || "",
+    fromName: stored.emailFromName || process.env.EMAIL_FROM_NAME || "GStar Bootcamp",
+    fromAddress: stored.emailFromAddress || process.env.EMAIL_FROM_ADDRESS || "",
+    replyTo: stored.emailReplyTo || process.env.EMAIL_REPLY_TO || "",
+    source: stored.smtpHost ? "admin" : "environment"
+  };
+}
+
 export async function writeIntegrationSettings(settings: IntegrationSettings) {
   const data = {
     googleSheetsEnabled: settings.googleSheetsEnabled,
@@ -63,7 +107,16 @@ export async function writeIntegrationSettings(settings: IntegrationSettings) {
     googleSheetUrl: settings.googleSheetUrl,
     googleAppsScriptUrl: settings.googleAppsScriptUrl,
     googleAppsScriptSecret: settings.googleAppsScriptSecret,
-    slackWebhookUrl: settings.slackWebhookUrl
+    slackWebhookUrl: settings.slackWebhookUrl,
+    confirmationEmailEnabled: settings.confirmationEmailEnabled,
+    smtpHost: settings.smtpHost,
+    smtpPort: settings.smtpPort,
+    smtpSecurity: settings.smtpSecurity,
+    smtpUsername: settings.smtpUsername,
+    smtpPassword: settings.smtpPassword,
+    emailFromName: settings.emailFromName,
+    emailFromAddress: settings.emailFromAddress,
+    emailReplyTo: settings.emailReplyTo
   };
   await prisma.integrationSetting.upsert({
     where: { id: 1 },

@@ -7,6 +7,7 @@ import { findIdempotent, findRecentByEmail, rememberIdempotent, sanitizeIdempote
 import { notifySlack } from "@/lib/slack-notifier";
 import { sendMetaLead } from "@/lib/meta-capi";
 import { sanitizeTouchpoints } from "@/lib/utm";
+import { sendApplicationConfirmation } from "@/lib/email-notifier";
 
 export const runtime = "nodejs";
 
@@ -57,6 +58,9 @@ export async function POST(request: Request) {
       const form = await request.formData();
       body = Object.fromEntries(form.entries());
       body.readiness = form.getAll("readiness").filter((value): value is string => typeof value === "string");
+      for (const field of ["mathConcepts", "machineLearningConcepts", "deepLearningConcepts", "nlpConcepts", "motivationReasons"]) {
+        body[field] = form.getAll(field).filter((value): value is string => typeof value === "string");
+      }
       const candidate = form.get("resume");
       resumeFile = candidate instanceof File && candidate.size ? candidate : null;
       if (typeof body.attribution === "string") {
@@ -73,6 +77,10 @@ export async function POST(request: Request) {
   if (!resumeFile || resumeFile.size > 5_000_000 || (resumeFile.type !== "application/pdf" && !resumeFile.name.toLowerCase().endsWith(".pdf"))) {
     return NextResponse.json({ error: "Please attach a PDF resume up to 5 MB." }, { status: 400 });
   }
+  const resumeBuffer = Buffer.from(await resumeFile.arrayBuffer());
+  if (resumeBuffer.subarray(0, 5).toString("ascii") !== "%PDF-") {
+    return NextResponse.json({ error: "The resume file is not a valid PDF." }, { status: 400 });
+  }
 
   const application = {
     id: crypto.randomUUID(),
@@ -81,14 +89,29 @@ export async function POST(request: Request) {
     email: text(body.email, 180).toLowerCase(),
     yearOfBirth: text(body.yearOfBirth, 4),
     country: text(body.country, 100),
-    currentStatus: text(body.currentStatus, 80),
+    currentStatus: text(body.currentStatus, 80) === "Other" && text(body.currentStatusDetails, 160)
+      ? `Other: ${text(body.currentStatusDetails, 160)}`
+      : text(body.currentStatus, 80),
     currentRole: text(body.currentRole, 140),
     organization: text(body.organization, 180),
     linkedin: text(body.linkedin, 300),
     github: text(body.github, 300),
-    aiExperience: text(body.aiExperience, 50),
+    aiExperience: text(body.aiExperience, 50) || "Self-assessed via technical checklist",
     readinessSignals: Array.isArray(body.readiness) ? body.readiness.map((value) => text(value, 40)).filter(Boolean).slice(0, 5) : [],
-    motivation: text(body.motivation, 2000),
+    proudProject: text(body.proudProject, 2500),
+    careerGoal: text(body.careerGoal, 80) === "Other" && text(body.careerGoalDetails, 160) ? `Other: ${text(body.careerGoalDetails, 160)}` : text(body.careerGoal, 80),
+    technicalChallenge: text(body.technicalChallenge, 2500),
+    targetOrganizations: text(body.targetOrganizations, 1000),
+    impactGoal: text(body.impactGoal, 2000),
+    mathConcepts: Array.isArray(body.mathConcepts) ? body.mathConcepts.map((value) => text(value, 120)).filter(Boolean).slice(0, 10) : [],
+    machineLearningConcepts: Array.isArray(body.machineLearningConcepts) ? body.machineLearningConcepts.map((value) => text(value, 120)).filter(Boolean).slice(0, 12) : [],
+    deepLearningConcepts: Array.isArray(body.deepLearningConcepts) ? body.deepLearningConcepts.map((value) => text(value, 120)).filter(Boolean).slice(0, 15) : [],
+    nlpConcepts: Array.isArray(body.nlpConcepts) ? body.nlpConcepts.map((value) => text(value, 120)).filter(Boolean).slice(0, 12) : [],
+    motivationReasons: Array.isArray(body.motivationReasons) ? body.motivationReasons.map((value) => text(value, 160)).filter(Boolean).slice(0, 3) : [],
+    programGoals: text(body.programGoals, 2000),
+    preferredTestSlot: text(body.preferredTestSlot, 300),
+    referralSource: text(body.referralDetails, 200) ? `${text(body.referralSource, 120)}: ${text(body.referralDetails, 200)}` : text(body.referralSource, 200),
+    motivation: text(body.programGoals || body.motivation, 2000),
     resumeFileName: resumeFile.name.replace(/[^a-zA-Z0-9._-]/g, "-"),
     resumeSize: resumeFile.size,
     scholarshipRequest: body.scholarshipRequest === "yes",
@@ -105,7 +128,8 @@ export async function POST(request: Request) {
   application.attribution = { ...rawAttribution, touchpoints };
 
   const birthYear = Number(application.yearOfBirth);
-  if (!application.fullName || !EMAIL.test(application.email) || birthYear < 1940 || birthYear > 2010 || !application.country || !application.organization || !application.currentStatus || !application.currentRole || !application.linkedin || !application.aiExperience || !application.motivation || !application.weeklyAvailability || !application.consent) {
+  const referralNeedsDetails = ["Friend or acquaintance", "Post from an NTI team member", "Other"].includes(application.referralSource);
+  if (!application.fullName || !EMAIL.test(application.email) || birthYear < 1940 || birthYear > 2010 || !application.country || !application.organization || !application.currentStatus || application.currentStatus === "Other" || !application.currentRole || !application.linkedin || !application.aiExperience || !application.proudProject || !application.careerGoal || application.careerGoal === "Other" || !application.technicalChallenge || !application.targetOrganizations || !application.impactGoal || !application.mathConcepts.length || !application.machineLearningConcepts.length || !application.deepLearningConcepts.length || application.motivationReasons.length !== 3 || !application.programGoals || !application.preferredTestSlot || !application.referralSource || referralNeedsDetails || !application.weeklyAvailability || !application.consent) {
     return NextResponse.json({ error: "Please complete all required fields." }, { status: 400 });
   }
 
@@ -122,7 +146,6 @@ export async function POST(request: Request) {
 
   const { googleSheetsEnabled, resumeStorage, endpoint, secret, spreadsheetId } = await resolvedGoogleSheetsSettings();
   const googleRequired = googleSheetsEnabled || resumeStorage === "google-drive";
-  const resumeBuffer = Buffer.from(await resumeFile.arrayBuffer());
   let resumeUrl = "";
 
   if (googleRequired) {
@@ -181,6 +204,10 @@ export async function POST(request: Request) {
   // Server-side Meta Conversions API — bypasses ITP / ad-blockers.
   // No-op unless META_PIXEL_ID + META_ACCESS_TOKEN are set. Fire-and-forget.
   sendMetaLead(storedApplication);
+
+  // Wait for the confirmation attempt so its delivery status is available to Admin
+  // when the applicant sees success. SMTP failure never rolls back the saved record.
+  await sendApplicationConfirmation(storedApplication);
 
   return NextResponse.json({ ok: true, mode: googleRequired ? "local-and-google" : "local", id: application.id });
 }

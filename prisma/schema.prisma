@@ -8,33 +8,49 @@ datasource db {
 }
 
 model Application {
-  id                 String   @id
-  submittedAt        DateTime
-  fullName           String
-  email              String
-  yearOfBirth        String
-  country            String
-  currentStatus      String
-  currentRole        String
-  organization       String
-  linkedin           String
-  github             String?
-  aiExperience       String
-  readinessSignals   Json
-  motivation         String
-  resumeFileName     String
-  resumeSize         Int
-  resumeStorage      String   @default("vps")
-  resumePath         String?
-  resumeUrl          String?
-  googleSheetsSynced Boolean  @default(false)
-  scholarshipRequest Boolean  @default(false)
-  weeklyAvailability Boolean  @default(false)
-  consent            Boolean  @default(false)
-  attribution        Json
-  status             String   @default("Submitted")
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                      String    @id
+  submittedAt             DateTime
+  fullName                String
+  email                   String
+  yearOfBirth             String
+  country                 String
+  currentStatus           String
+  currentRole             String
+  organization            String
+  linkedin                String
+  github                  String?
+  aiExperience            String
+  readinessSignals        Json
+  proudProject            String    @default("")
+  careerGoal              String    @default("")
+  technicalChallenge      String    @default("")
+  targetOrganizations     String    @default("")
+  impactGoal              String    @default("")
+  mathConcepts            Json      @default("[]")
+  machineLearningConcepts Json      @default("[]")
+  deepLearningConcepts    Json      @default("[]")
+  nlpConcepts             Json      @default("[]")
+  motivationReasons       Json      @default("[]")
+  programGoals            String    @default("")
+  preferredTestSlot       String    @default("")
+  referralSource          String    @default("")
+  motivation              String
+  resumeFileName          String
+  resumeSize              Int
+  resumeStorage           String    @default("vps")
+  resumePath              String?
+  resumeUrl               String?
+  googleSheetsSynced      Boolean   @default(false)
+  scholarshipRequest      Boolean   @default(false)
+  weeklyAvailability      Boolean   @default(false)
+  consent                 Boolean   @default(false)
+  attribution             Json
+  status                  String    @default("Submitted")
+  confirmationEmailStatus String    @default("not-configured")
+  confirmationEmailSentAt DateTime?
+  confirmationEmailError  String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   @@index([email, submittedAt])
   @@index([submittedAt])
@@ -70,14 +86,23 @@ model ProgramSetting {
 }
 
 model IntegrationSetting {
-  id                     Int      @id @default(1)
-  googleSheetsEnabled    Boolean  @default(false)
-  resumeStorage          String   @default("vps")
-  googleSheetUrl         String   @default("")
-  googleAppsScriptUrl    String   @default("")
-  googleAppsScriptSecret String   @default("")
-  slackWebhookUrl        String   @default("")
-  updatedAt              DateTime @updatedAt
+  id                       Int      @id @default(1)
+  googleSheetsEnabled      Boolean  @default(false)
+  resumeStorage            String   @default("vps")
+  googleSheetUrl           String   @default("")
+  googleAppsScriptUrl      String   @default("")
+  googleAppsScriptSecret   String   @default("")
+  slackWebhookUrl          String   @default("")
+  confirmationEmailEnabled Boolean  @default(false)
+  smtpHost                 String   @default("")
+  smtpPort                 Int      @default(587)
+  smtpSecurity             String   @default("starttls")
+  smtpUsername             String   @default("")
+  smtpPassword             String   @default("")
+  emailFromName            String   @default("GStar Bootcamp")
+  emailFromAddress         String   @default("")
+  emailReplyTo             String   @default("")
+  updatedAt                DateTime @updatedAt
 }
 
 model IdempotencyKey {
@@ -87,4 +112,20 @@ model IdempotencyKey {
   createdAt     DateTime @default(now())
 
   @@index([expiresAt])
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  displayName  String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("admin")
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([username])
+  @@index([active])
 }

@@ -30,10 +30,12 @@ export function notifySlack(application: StoredApplication): void {
         .filter(Boolean)
         .join(", ") || "none";
 
-      const text = `*New GStar application* · ${application.fullName}`;
+      const esc = (s: string) => s.replace(/[&*_~`<>]/g, (c) => `\\${c}`);
+
+      const text = `*New GStar application* · ${esc(application.fullName)}`;
       const detail = [
-        `*Email:* ${application.email}`,
-        `*Status:* ${application.currentStatus} · ${application.aiExperience}`,
+        `*Email:* ${esc(application.email)}`,
+        `*Status:* ${esc(application.currentStatus)} · ${esc(application.aiExperience)}`,
         `*Source:* ${source} / ${medium}`,
         `*Campaign:* ${campaign}`,
         `*Readiness signals:* ${readiness} of 5`,

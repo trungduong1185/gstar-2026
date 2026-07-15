@@ -185,7 +185,6 @@ main section[id] { scroll-margin-top: 96px; }
 .project-v3 > img {
   display: block;
   width: 100%;
-  aspect-ratio: 37 / 20;
   object-fit: contain;
   object-position: center;
   border: 1px solid rgba(255, 255, 255, .12);

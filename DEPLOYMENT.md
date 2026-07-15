@@ -13,10 +13,11 @@ Set all of these values before deploying:
 
 - `GOOGLE_APPS_SCRIPT_URL`: optional deployed Apps Script Web App URL for Google Sheets + Drive storage.
 - `GOOGLE_APPS_SCRIPT_SECRET`: optional shared secret for Google storage, identical to Apps Script.
-- `DASHBOARD_USER` and `DASHBOARD_PASSWORD`: credentials for `/dashboard`.
+- `SEED_ADMIN_USERNAME`, `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD`: one-time values used by `npm run db:seed` to create the first database-backed superadmin.
 - `ADMIN_SESSION_SECRET`: at least 32 random characters used to sign HttpOnly admin sessions.
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID`: GA4 ID. This value is embedded at image build time.
 - `DATABASE_URL`: optional SQLite URL. Leave blank to use `data/gstar.db`.
+- SMTP is configured in `/dashboard/settings`. The `SMTP_*` and `EMAIL_*` variables in `.env.example` are optional fallback values.
 
 ## 2. Migrate existing data
 
@@ -37,9 +38,12 @@ touch data/gstar.db
 chmod 600 data/gstar.db
 npm run db:migrate
 npm run db:import
+npm run db:seed
 ```
 
 `db:import` upserts legacy applications by ID and imports existing mentor, program and integration settings. Run it once during migration. Future releases only need `npm run db:migrate`.
+
+`db:seed` creates the first superadmin only when the `AdminUser` table is empty. Login reads this table exclusively; remove seed credentials from the runtime environment after the account is created.
 
 ## 3. Build and run
 
@@ -82,7 +86,7 @@ npm audit --omit=dev
 docker compose logs --tail=100 gstar
 ```
 
-Verify the landing page, submit one controlled application, confirm the row appears in Google Sheets, and verify GA4 DebugView receives the form events. `/dashboard` currently presents the dashboard UX with representative data; connect its data layer to GA4/Looker before treating it as production reporting.
+Verify the landing page, submit one controlled application, confirm the applicant receives the confirmation email, confirm the row appears in Google Sheets, and verify GA4 DebugView receives the form events. `/dashboard` currently presents the dashboard UX with representative data; connect its data layer to GA4/Looker before treating it as production reporting.
 
 Application storage is managed at `/dashboard/settings`. Prisma stores application records, mentors and settings in `data/gstar.db`. Google Sheets sync is optional and runs in parallel. Resume/CV files can be stored privately in `data/uploads/` or uploaded to Google Drive through Apps Script. Back up the complete `data` directory, including `gstar.db`, `gstar.db-wal` and `gstar.db-shm` when present.
 

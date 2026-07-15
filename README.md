@@ -61,6 +61,12 @@ Each drawer open mints an idempotency key that the client sends as `X-Idempotenc
 
 Set `SLACK_WEBHOOK_URL` (or override in `/dashboard/settings` once wired) to receive a summary in Slack or Discord after every successful application. Delivery is fire-and-forget with a 5s timeout so it never delays the response to the applicant.
 
+## Applicant confirmation email
+
+Enable and configure SMTP in `/dashboard/settings`. After an application is saved, the API sends a branded receipt containing a complete copy of the applicant's submitted profile, goals, self-assessment, motivation and logistics. Delivery records `sent`, `sending`, `failed`, or `not-configured` on the application. SMTP failure never rolls back the stored application. The SMTP password is write-only in Admin and is not returned by the settings API. Admin can send a full sample receipt from the Applicant email connection block to verify both SMTP and rendering before accepting applications.
+
+Environment variables (`SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `EMAIL_FROM_NAME`, `EMAIL_FROM_ADDRESS`, and `EMAIL_REPLY_TO`) are supported as a fallback. Admin-saved SMTP settings take precedence.
+
 ## Multi-touch attribution (Sprint 2)
 
 Each visit that carries a UTM or click ID appends a `Touchpoint` to `localStorage['gstar_touchpoints']`. Same-campaign visits within 30 minutes are deduped so a refresh doesn't spam entries. The array is capped at 20 touchpoints. On submit the full array is sent along with the legacy `firstTouch` / `lastTouch` snapshots — old records are still readable, new records unlock linear and position-based (40/20/40) attribution models in the dashboard.
@@ -87,4 +93,4 @@ Every required text field emits an `apply_form_field_exit` GA4 event when the ap
 
 ## Production
 
-`/dashboard` uses a signed, HttpOnly admin session. Configure `DASHBOARD_USER`, `DASHBOARD_PASSWORD`, and a strong `ADMIN_SESSION_SECRET`. See `DEPLOYMENT.md` for Docker Compose, Nginx, TLS, required environment variables, and release checks.
+`/dashboard` authenticates against Prisma `AdminUser` records and uses a signed, HttpOnly session cookie. Configure a strong `ADMIN_SESSION_SECRET`, run `npm run db:seed` once for the first superadmin, then manage accounts from `/dashboard/users`. Environment credentials are never used by the runtime login route.
