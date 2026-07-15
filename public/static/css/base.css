@@ -502,10 +502,11 @@ a:hover { color: var(--pink-100); }
   overflow: hidden;
   margin-top: 24px;
 }
-.event-video { grid-column: auto; grid-row: auto; aspect-ratio: 3 / 2; }
 
-/* Video tile — YouTube iframe */
+/* Video tile — YouTube iframe (spans left column full-height) */
 .event-video {
+  grid-column: 1;
+  grid-row: 1 / span 2;
   position: relative;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,.35);
