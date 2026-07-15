@@ -305,9 +305,47 @@ main section[id] { scroll-margin-top: 96px; }
 }
 
 @media (max-width: 620px) {
-  .cohort-gallery { grid-template-columns: 1fr; }
-  .cohort-gallery__lead { grid-column: 1; grid-row: auto; }
-  .cohort-gallery__support { display: contents; }
+  .cohort-gallery {
+    display: block;
+    padding: 6px;
+    position: relative;
+  }
+  .cohort-gallery__lead,
+  .cohort-gallery__support {
+    display: none;
+  }
+  .cohort-gallery.is-mobile-slider {
+    overflow: hidden;
+  }
+  .cohort-gallery__mobile-track {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .cohort-gallery__mobile-track::-webkit-scrollbar { display: none; }
+  .cohort-gallery__mobile-track > img {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+  }
+  .cohort-gallery__mobile-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .cohort-gallery__mobile-dots button {
+    width: 7px; height: 7px;
+    padding: 0; border: 0; border-radius: 50%;
+    background: rgba(255, 255, 255, .3);
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .cohort-gallery__mobile-dots button.is-active {
+    background: #fff;
+    transform: scale(1.3);
+  }
 }
 
 .outcomes-community-media--group {
@@ -408,6 +446,38 @@ main section[id] { scroll-margin-top: 96px; }
 
 .outcomes-community-media__support {
   display: contents;
+}
+
+.outcomes-mobile-slider { display: none; }
+.outcomes-mobile-slider__track {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.outcomes-mobile-slider__track::-webkit-scrollbar { display: none; }
+.outcomes-mobile-slider__track > img {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  border-radius: 8px;
+}
+.outcomes-mobile-slider__dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.outcomes-mobile-slider__dots button {
+  width: 7px; height: 7px;
+  padding: 0; border: 0; border-radius: 50%;
+  background: rgba(255, 255, 255, .3);
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+.outcomes-mobile-slider__dots button.is-active {
+  background: #fff;
+  transform: scale(1.3);
 }
 
 .outcomes-community-media--group figcaption {
@@ -512,8 +582,13 @@ body:has(#apply:target) .sticky-apply-v3 { transform: translate(-50%, calc(100% 
   .project-v3 { padding: 30px 0; }
   .project-v3 dl { gap: 12px; }
   .outcomes-community-media--group { grid-template-columns: 1fr; grid-template-rows: none; gap: 6px; }
-  .outcomes-community-media__lead { grid-column: 1; grid-row: auto; }
+  .outcomes-community-media--group:not(.is-mobile-slider) .outcomes-community-media__lead { grid-column: 1; grid-row: auto; }
   .outcomes-community-media__support { display: contents; }
+  .outcomes-community-media--group.is-mobile-slider { overflow: hidden; }
+  .outcomes-community-media--group.is-mobile-slider .outcomes-community-media__lead,
+  .outcomes-community-media--group.is-mobile-slider .outcomes-community-media__support,
+  .outcomes-community-media--group.is-mobile-slider figcaption { display: none; }
+  .outcomes-community-media--group.is-mobile-slider .outcomes-mobile-slider { display: block; }
   .admissions-actions__buttons { display: grid; gap: 10px; }
   .admissions-actions__buttons .btn { width: 100%; }
   .mentors-v2:not(.show-all-mobile) .mentor-group-title--secondary,

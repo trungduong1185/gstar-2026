@@ -714,3 +714,153 @@
     });
   }
 })();
+
+// ------- Cohort gallery: mobile slider -------
+(function () {
+  var gallery = document.querySelector('[data-lightbox].cohort-gallery');
+  if (!gallery) return;
+
+  var mql = window.matchMedia('(max-width: 620px)');
+
+  function setup() {
+    var images = gallery.querySelectorAll('img');
+    if (images.length < 2) return;
+
+    var track = document.createElement('div');
+    track.className = 'cohort-gallery__mobile-track';
+
+    images.forEach(function (img) {
+      var clone = img.cloneNode(true);
+      clone.addEventListener('click', function () { openLightbox(img); });
+      track.appendChild(clone);
+    });
+
+    var dots = document.createElement('div');
+    dots.className = 'cohort-gallery__mobile-dots';
+
+    images.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', 'Image ' + (i + 1));
+      if (i === 0) dot.classList.add('is-active');
+      dot.addEventListener('click', function () {
+        track.scrollTo({ left: track.children[i].offsetLeft, behavior: 'smooth' });
+      });
+      dots.appendChild(dot);
+    });
+
+    gallery.appendChild(track);
+    gallery.appendChild(dots);
+    gallery.classList.add('is-mobile-slider');
+
+    track.addEventListener('scroll', function () {
+      var idx = Math.round(track.scrollLeft / track.clientWidth);
+      dots.querySelectorAll('button').forEach(function (d, i) {
+        d.classList.toggle('is-active', i === idx);
+      });
+    });
+  }
+
+  function openLightbox(img) {
+    var overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    var fullImg = document.createElement('img');
+    fullImg.src = img.src;
+    fullImg.alt = img.alt;
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = '&times;';
+    overlay.appendChild(fullImg);
+    overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    function close() { overlay.remove(); document.body.style.overflow = ''; }
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
+    });
+  }
+
+  function handle() {
+    var existing = gallery.querySelector('.cohort-gallery__mobile-track');
+    if (mql.matches && !existing) {
+      setup();
+    } else if (!mql.matches && existing) {
+      existing.remove();
+      gallery.querySelector('.cohort-gallery__mobile-dots')?.remove();
+      gallery.classList.remove('is-mobile-slider');
+    }
+  }
+
+  handle();
+  mql.addEventListener('change', handle);
+})();
+
+// ------- Outcomes community media: mobile slider -------
+(function () {
+  var group = document.querySelector('.outcomes-community-media--group');
+  if (!group) return;
+
+  var mql = window.matchMedia('(max-width: 640px)');
+
+  function setup() {
+    var images = group.querySelectorAll('img');
+    if (images.length < 2) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'outcomes-mobile-slider';
+
+    var track = document.createElement('div');
+    track.className = 'outcomes-mobile-slider__track';
+
+    images.forEach(function (img) {
+      var clone = img.cloneNode(true);
+      clone.removeAttribute('class');
+      track.appendChild(clone);
+    });
+
+    var dots = document.createElement('div');
+    dots.className = 'outcomes-mobile-slider__dots';
+
+    images.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', 'Image ' + (i + 1));
+      if (i === 0) dot.classList.add('is-active');
+      dot.addEventListener('click', function () {
+        track.scrollTo({ left: track.children[i].offsetLeft, behavior: 'smooth' });
+      });
+      dots.appendChild(dot);
+    });
+
+    wrap.appendChild(track);
+    wrap.appendChild(dots);
+    group.appendChild(wrap);
+    group.classList.add('is-mobile-slider');
+
+    track.addEventListener('scroll', function () {
+      var idx = Math.round(track.scrollLeft / track.clientWidth);
+      dots.querySelectorAll('button').forEach(function (d, i) {
+        d.classList.toggle('is-active', i === idx);
+      });
+    });
+  }
+
+  function handle() {
+    var existing = group.querySelector('.outcomes-mobile-slider');
+    if (mql.matches && !existing) {
+      setup();
+    } else if (!mql.matches && existing) {
+      existing.remove();
+      group.classList.remove('is-mobile-slider');
+    }
+  }
+
+  handle();
+  mql.addEventListener('change', handle);
+})();
