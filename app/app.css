@@ -87,8 +87,9 @@
 .apply-check.is-invalid input { outline: 1px solid #fc4059; outline-offset: 2px; }
 .apply-check > .apply-field-error { grid-column: 2; margin-top: 0; }
 .apply-overview-step, .apply-registration { padding-bottom: 88px; }
-.apply-form-actions { position: fixed; z-index: 4; right: 0; bottom: 0; display: flex; justify-content: space-between; gap: 12px; width: min(680px, 100vw); box-sizing: border-box; margin: 0; padding: 16px 34px calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(255,255,255,.1); background: rgba(13,13,16,.94); box-shadow: 0 -16px 36px rgba(0,0,0,.28); backdrop-filter: blur(16px); }
-.apply-form-actions .btn { height: 40px; min-height: 40px; }
+.apply-form-actions { position: fixed; z-index: 4; right: 0; bottom: 0; display: flex; justify-content: flex-end; gap: 12px; width: min(680px, 100vw); box-sizing: border-box; margin: 0; padding: 16px 34px calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(255,255,255,.1); background: rgba(13,13,16,.94); box-shadow: 0 -16px 36px rgba(0,0,0,.28); backdrop-filter: blur(16px); }
+.apply-form-actions .btn { width: auto; height: 40px; min-height: 40px; white-space: nowrap; }
+.apply-form-actions--single .btn { width: 100%; }
 .apply-form-message { margin: 0; color: #f2b8be; font-size: 13px; }
 .apply-honeypot { position: absolute !important; left: -9999px !important; }
 .apply-success { margin-top: 80px; text-align: center; }
@@ -103,7 +104,7 @@
   .apply-overview__facts { grid-template-columns: 1fr; }
   .apply-overview__facts div + div { padding-left: 0; border-top: 1px solid rgba(255,255,255,.1); border-left: 0; }
   .apply-overview-step, .apply-registration { padding-bottom: 76px; }
-  .apply-form-actions { display: grid; grid-template-columns: 1fr 1.5fr; padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); }
+  .apply-form-actions { padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); }
   .apply-drawer__progress span { display: none; }
   .apply-drawer__progress > div.is-current span { display: block; overflow: visible; white-space: normal; }
   .settings-setup-guide__action { align-items: flex-start; flex-direction: column; }

@@ -19,6 +19,7 @@ type Settings = {
   emailFromName: string;
   emailFromAddress: string;
   emailReplyTo: string;
+  gaMeasurementId: string;
   source: "admin" | "environment";
   updatedAt: string;
 };
@@ -38,6 +39,7 @@ const empty: Settings = {
   emailFromName: "GStar Bootcamp",
   emailFromAddress: "",
   emailReplyTo: "",
+  gaMeasurementId: "",
   source: "environment",
   updatedAt: ""
 };
@@ -94,6 +96,7 @@ export function IntegrationSettingsForm() {
         secretConfigured: googleRequired ? true : current.secretConfigured,
         confirmationEmailEnabled: result.confirmationEmailEnabled,
         smtpPasswordConfigured: result.smtpPasswordConfigured,
+        gaMeasurementId: result.gaMeasurementId ?? current.gaMeasurementId,
         source: "admin",
         updatedAt: result.updatedAt
       }));
@@ -187,6 +190,19 @@ export function IntegrationSettingsForm() {
                     {testMessage && <p className={testError ? "is-error" : ""} role="status">{testMessage}</p>}
                   </div>
                 </div>}
+              </div>
+
+              <div className="settings-integration-group is-enabled is-open">
+                <div className="settings-integration-group__top">
+                  <div className="settings-toggle settings-toggle--embedded">
+                    <span><b>Google Analytics</b><small>Enter your GA4 Measurement ID to enable visitor tracking.</small></span>
+                  </div>
+                </div>
+                <div className="settings-collapsible__content" style={{ display: "block" }}>
+                  <div className="settings-collapsible__intro"><span>Analytics tracking</span><p>Add the GA4 Measurement ID (e.g. G-XXXXXXXXXX) to enable Google Analytics on the landing page.</p></div>
+                  <label>GA4 Measurement ID<input name="gaMeasurementId" defaultValue={settings.gaMeasurementId} placeholder="G-XXXXXXXXXX" autoComplete="off" /></label>
+                  <div className="settings-storage-note"><b>{settings.gaMeasurementId ? "GA4 tracking enabled" : "No GA4 ID configured"}</b><small>Leave blank to disable analytics. Env variable NEXT_PUBLIC_GA_MEASUREMENT_ID is used as fallback.</small></div>
+                </div>
               </div>
 
               <div className={`settings-integration-group${settings.googleSheetsEnabled ? " is-enabled" : ""}${googleSettingsOpen ? " is-open" : ""}`}>

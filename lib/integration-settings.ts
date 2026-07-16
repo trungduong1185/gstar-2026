@@ -16,6 +16,7 @@ export type IntegrationSettings = {
   emailFromName: string;
   emailFromAddress: string;
   emailReplyTo: string;
+  gaMeasurementId: string;
   updatedAt: string;
 };
 
@@ -35,6 +36,7 @@ const defaults: IntegrationSettings = {
   emailFromName: "GStar Bootcamp",
   emailFromAddress: "",
   emailReplyTo: "",
+  gaMeasurementId: "",
   updatedAt: ""
 };
 
@@ -61,6 +63,7 @@ export async function readIntegrationSettings(): Promise<IntegrationSettings> {
     emailFromName: stored.emailFromName,
     emailFromAddress: stored.emailFromAddress,
     emailReplyTo: stored.emailReplyTo,
+    gaMeasurementId: stored.gaMeasurementId,
     updatedAt: stored.updatedAt.toISOString()
   };
 }
@@ -81,6 +84,11 @@ export async function resolvedGoogleSheetsSettings() {
 export async function resolvedSlackWebhookUrl(): Promise<string> {
   const stored = await readIntegrationSettings();
   return stored.slackWebhookUrl || process.env.SLACK_WEBHOOK_URL || "";
+}
+
+export async function resolvedGaMeasurementId(): Promise<string> {
+  const stored = await readIntegrationSettings();
+  return stored.gaMeasurementId || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
 }
 
 export async function resolvedEmailSettings() {
@@ -116,7 +124,8 @@ export async function writeIntegrationSettings(settings: IntegrationSettings) {
     smtpPassword: settings.smtpPassword,
     emailFromName: settings.emailFromName,
     emailFromAddress: settings.emailFromAddress,
-    emailReplyTo: settings.emailReplyTo
+    emailReplyTo: settings.emailReplyTo,
+    gaMeasurementId: settings.gaMeasurementId
   };
   await prisma.integrationSetting.upsert({
     where: { id: 1 },

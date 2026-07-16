@@ -235,8 +235,8 @@ main section[id] { scroll-margin-top: 96px; }
   margin-top: 24px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  padding: 6px;
+  gap: 0px;
+  padding: 0px;
   overflow: hidden;
   border: 1px solid var(--line-red);
   border-radius: 16px;
@@ -255,7 +255,7 @@ main section[id] { scroll-margin-top: 96px; }
   height: 100%;
   object-fit: cover;
   aspect-ratio: 3 / 2;
-  border-radius: 8px;
+  border-radius: 0px;
   border: 1px solid rgba(255, 255, 255, .1);
   cursor: pointer;
   transition: transform .3s ease, opacity .2s ease;

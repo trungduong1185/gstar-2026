@@ -32,6 +32,7 @@ export async function GET() {
     emailFromName: stored.emailFromName,
     emailFromAddress: stored.emailFromAddress,
     emailReplyTo: stored.emailReplyTo,
+    gaMeasurementId: stored.gaMeasurementId,
     source: resolved.source,
     updatedAt: stored.updatedAt
   });
@@ -67,6 +68,7 @@ export async function PUT(request: Request) {
   const emailFromName = typeof body.emailFromName === "string" ? body.emailFromName.trim().slice(0, 100) : current.emailFromName;
   const emailFromAddress = typeof body.emailFromAddress === "string" ? body.emailFromAddress.trim().toLowerCase() : current.emailFromAddress;
   const emailReplyTo = typeof body.emailReplyTo === "string" ? body.emailReplyTo.trim().toLowerCase() : current.emailReplyTo;
+  const gaMeasurementId = typeof body.gaMeasurementId === "string" ? body.gaMeasurementId.trim() : current.gaMeasurementId;
 
   if (confirmationEmailEnabled) {
     if (!smtpHost) return NextResponse.json({ error: "SMTP host is required for confirmation emails." }, { status: 400 });
@@ -92,8 +94,9 @@ export async function PUT(request: Request) {
     emailFromName: emailFromName || "GStar Bootcamp",
     emailFromAddress,
     emailReplyTo,
+    gaMeasurementId,
     updatedAt: new Date().toISOString()
   };
   await writeIntegrationSettings(settings);
-  return NextResponse.json({ ok: true, googleSheetsEnabled, resumeStorage, confirmationEmailEnabled, smtpPasswordConfigured: Boolean(smtpPassword), updatedAt: settings.updatedAt });
+  return NextResponse.json({ ok: true, googleSheetsEnabled, resumeStorage, confirmationEmailEnabled, smtpPasswordConfigured: Boolean(smtpPassword), gaMeasurementId, updatedAt: settings.updatedAt });
 }

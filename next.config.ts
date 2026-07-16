@@ -7,6 +7,7 @@ const scriptSrc = process.env.NODE_ENV === "development"
 
 const nextConfig: NextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
+  trailingSlash: true,
   output: "standalone",
   outputFileTracingExcludes: {
     "/*": ["./data/**/*", "./data-backup*/**/*"]

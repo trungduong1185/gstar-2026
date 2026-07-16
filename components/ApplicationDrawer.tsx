@@ -345,7 +345,7 @@ export function ApplicationDrawer() {
                 <div className="apply-overview__group"><span>Who should apply</span><ul><li><b>Technical foundation</b><small>Python, PyTorch and hands-on AI/ML project or research experience.</small></li><li><b>Builder mindset</b><small>Strong English, collaborative practice and the drive to ship.</small></li></ul></div>
                 <dl className="apply-overview__facts"><div><dt>Format</dt><dd>12 weeks · Online</dd></div><div><dt>Language</dt><dd>English</dd></div><div><dt>Financial aid</dt><dd>Up to 100% tuition</dd></div></dl>
               </div>
-              <div className="apply-form-actions"><button type="button" className="btn btn-secondary-dark btn--size-40 btn--full" onClick={continueToProfile}>Start registration →</button></div>
+              <div className="apply-form-actions apply-form-actions--single"><button type="button" className="btn btn-secondary-dark btn--size-40" onClick={continueToProfile}>Start registration →</button></div>
             </section>
             <section className="apply-registration" hidden={step !== 2}>
               <div className="apply-section-heading"><span>Personal information</span><p>Tell us how to contact you and understand your current professional or academic context.</p></div>
