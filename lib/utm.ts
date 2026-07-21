@@ -107,3 +107,36 @@ export function sanitizeTouchpoints(input: unknown): Touchpoint[] {
   }
   return output;
 }
+
+/**
+ * Server-side helper: sanitize a single UtmData object (firstTouch/lastTouch).
+ * Only keeps known attribution keys, truncates values, drops junk.
+ */
+export function sanitizeUtmData(input: unknown): UtmData {
+  if (!input || typeof input !== "object") return {};
+  const record = input as Record<string, unknown>;
+  const result: UtmData = {};
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = record[key];
+    if (typeof value === "string") {
+      const trimmed = value.trim().slice(0, 120);
+      if (trimmed) result[key] = trimmed;
+    }
+  }
+  return result;
+}
+
+/**
+ * Server-side helper: sanitize the full attribution object from the client.
+ * Validates firstTouch, lastTouch, touchpoints, landingPage, referrer.
+ */
+export function sanitizeAttribution(input: unknown): Attribution {
+  const raw = (!input || typeof input !== "object" ? {} : input) as Record<string, unknown>;
+  return {
+    firstTouch: sanitizeUtmData(raw.firstTouch),
+    lastTouch: sanitizeUtmData(raw.lastTouch),
+    touchpoints: sanitizeTouchpoints(raw.touchpoints),
+    landingPage: typeof raw.landingPage === "string" ? raw.landingPage.slice(0, 500) : "",
+    referrer: typeof raw.referrer === "string" ? raw.referrer.slice(0, 500) : ""
+  };
+}

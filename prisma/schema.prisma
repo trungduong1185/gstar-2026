@@ -130,3 +130,23 @@ model AdminUser {
   @@index([username])
   @@index([active])
 }
+
+model UtmLink {
+  id          String   @id @default(cuid())
+  label       String
+  baseUrl     String   @default("https://summit.newturing.ai/gstar/")
+  source      String
+  medium      String
+  campaign    String
+  content     String   @default("")
+  term        String   @default("")
+  fullUrl     String
+  shortCode   String?  @unique
+  clicks      Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([source, medium])
+  @@index([campaign])
+}

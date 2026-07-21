@@ -1,5 +1,6 @@
 import { readApplications, StoredApplication } from "@/lib/application-store";
 import { ATTRIBUTION_MODELS, AttributionModel, channelsForApplication, creditByChannel } from "@/lib/attribution-model";
+import { fetchGa4CampaignSessions, fetchGa4TotalSessions, ga4Configured } from "@/lib/ga4-client";
 
 export type DateRange = "7d" | "30d" | "90d" | "all";
 
@@ -99,17 +100,38 @@ export async function computeMetrics(query: MetricsQuery): Promise<MetricsRespon
   }
 
   const credited = creditByChannel(matched, query.model);
+
+  // Try to enrich with GA4 session data if configured
+  const days = query.range === "all" ? 365 : RANGE_DAYS[query.range as Exclude<DateRange, "all">] || 30;
+  const ga4Connected = ga4Configured();
+  const ga4Sessions = ga4Connected ? await fetchGa4CampaignSessions(days) : null;
+  const ga4Totals = ga4Connected ? await fetchGa4TotalSessions(days) : null;
+
+  // Build a lookup map: source::medium::campaign → sessions
+  const sessionMap = new Map<string, number>();
+  if (ga4Sessions) {
+    for (const row of ga4Sessions) {
+      const key = `${row.source}::${row.medium}::${row.campaign}`;
+      sessionMap.set(key, (sessionMap.get(key) || 0) + row.sessions);
+    }
+  }
+
   const campaigns: CampaignRow[] = credited
     .sort((a, b) => b.credit - a.credit)
-    .map((row) => ({
-      campaign: row.campaign,
-      source: row.source,
-      medium: row.medium,
-      applications: Number(row.credit.toFixed(2)),
-      reachedApplications: row.reachedApplications,
-      cvr: null,
-      cpa: null
-    }));
+    .map((row) => {
+      const key = `${row.source}::${row.medium}::${row.campaign}`;
+      const sessions = ga4Sessions ? (sessionMap.get(key) || 0) : null;
+      const apps = Number(row.credit.toFixed(2));
+      return {
+        campaign: row.campaign,
+        source: row.source,
+        medium: row.medium,
+        applications: apps,
+        reachedApplications: row.reachedApplications,
+        cvr: sessions ? (apps / sessions) * 100 : null,
+        cpa: null
+      };
+    });
 
   const shortlisted = matched.filter((app) => app.status === "Shortlisted").length;
 
@@ -119,10 +141,10 @@ export async function computeMetrics(query: MetricsQuery): Promise<MetricsRespon
     admitted: 0,
     formStarts: null,
     applyClicks: null,
-    sessions: null,
+    sessions: ga4Totals?.totalSessions ?? null,
     cpa: null,
     spend: null,
-    conversionRate: null
+    conversionRate: ga4Totals?.totalSessions ? (matched.length / ga4Totals.totalSessions) * 100 : null
   };
 
   const funnel: FunnelStage[] = [
@@ -142,7 +164,7 @@ export async function computeMetrics(query: MetricsQuery): Promise<MetricsRespon
       source: query.source,
       model: query.model,
       generatedAt: new Date().toISOString(),
-      dataSources: { applications: "prisma-sqlite", sessions: "unknown", clicks: "unknown", spend: "unknown" },
+      dataSources: { applications: "prisma-sqlite", sessions: ga4Connected ? "ga4" : "unknown", clicks: ga4Connected ? "ga4" : "unknown", spend: "unknown" },
       counts: { total: all.length, inRange: inRangeApps.length, matched: matched.length }
     },
     kpis,

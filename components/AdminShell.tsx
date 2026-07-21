@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { withBasePath } from "@/lib/base-path";
 
 const nav = [
-  ["Workspace", [["Overview", "/dashboard", "grid"], ["Applications", "/dashboard/applications", "users"], ["Campaigns & UTM", "/dashboard/campaigns", "chart"]]],
+  ["Workspace", [["Overview", "/dashboard", "grid"], ["Applications", "/dashboard/applications", "users"], ["Campaigns & UTM", "/dashboard/campaigns", "chart"], ["UTM Builder", "/dashboard/utm", "link"]]],
   ["Program", [["Program content", "/dashboard/program", "calendar"], ["Mentor network", "/dashboard/mentors", "users"]]],
   ["System", [["User accounts", "/dashboard/users", "key"], ["Integrations", "/dashboard/settings", "settings"]]]
 ] as const;
@@ -16,7 +16,8 @@ function Icon({ name }: { name: string }) {
     chart: <><path d="M3 3v18h18"/><path d="m7 16 4-5 4 3 5-7"/></>,
     calendar: <><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></>,
     settings: <><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.35.7.6 1 .3.3.7.43 1.1.4h.09v4h-.09a1.7 1.7 0 0 0-1.7.6Z"/></>,
-    key: <><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.5 12.5 8-8M16 3l3 3M14 5l3 3"/></>
+    key: <><circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.5 12.5 8-8M16 3l3 3M14 5l3 3"/></>,
+    link: <><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></>
   };
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{paths[name]}</svg>;
 }

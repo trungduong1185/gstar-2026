@@ -316,6 +316,13 @@
 .applicant-detail__motivation { margin: 0; color: #b2aeb4; font-size: 13px; line-height: 1.75; }
 .applicant-detail__signals { display: flex; flex-wrap: wrap; gap: 7px; margin: 0; padding: 0; list-style: none; }
 .applicant-detail__signals li { padding: 7px 9px; border: 1px solid rgba(255,255,255,.1); border-radius: 4px; background: #141418; color: #aaa6ad; font-size: 10px; }
+.applicant-detail__touchpoints { grid-column: 1 / -1; }
+.applicant-detail__timeline { margin: 8px 0 0; padding: 0; list-style: none; }
+.applicant-detail__timeline li { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.applicant-detail__timeline li:last-child { border-bottom: 0; }
+.applicant-detail__timeline time { color: #68656d; font-size: 9px; white-space: nowrap; }
+.applicant-detail__timeline span { color: #d7d3d5; font-size: 11px; }
+.applicant-detail__timeline small { color: #82151a; font-size: 9px; }
 .admin-empty { margin: 0; padding: 28px 14px; color: #77737d; font-size: 12px; text-align: center; }
 .applicant-detail__drawer > footer { display: flex; justify-content: flex-end; gap: 10px; padding-top: 24px; }
 .applicant-detail__drawer > footer button { min-height: 40px; padding: 9px 14px; border: 1px solid rgba(255,255,255,.13); border-radius: 5px; background: transparent; color: #d7d3d5; font: 700 10px var(--font-display); cursor: pointer; }
@@ -452,3 +459,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) { .applicant-detail__drawer { animation: none; } }
+
+.admin-form--grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.admin-form__preview { grid-column: 1 / -1; padding: 16px; background: #16161a; border-radius: 8px; border: 1px solid rgba(255,255,255,.1); }
+.admin-form__preview b { display: block; color: #f2b8be; font-size: 11px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+.admin-form__preview code { display: block; color: #d7d3d5; font-size: 12px; word-break: break-all; margin-bottom: 10px; line-height: 1.5; }
+.admin-form__actions { grid-column: 1 / -1; }
+.utm-url-cell { display: flex; align-items: center; gap: 8px; }
+.utm-url-cell code { font-size: 11px; color: #aaa6ad; word-break: break-all; }

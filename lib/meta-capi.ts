@@ -62,13 +62,14 @@ function buildUserData(application: StoredApplication) {
   const country = application.country?.split(",").at(-1)?.trim().slice(0, 2).toLowerCase();
   const last3 = application.attribution?.touchpoints?.at(-1);
   const fbclid = last3?.fbclid || application.attribution?.lastTouch?.fbclid;
+  const clickTime = last3?.at ? Date.parse(last3.at) : Date.now();
 
   const user: Record<string, unknown> = {};
   if (email) user.em = [sha256(email)];
   if (first) user.fn = [sha256(first)];
   if (last) user.ln = [sha256(last)];
   if (country && country.length === 2) user.country = [sha256(country)];
-  if (fbclid) user.fbc = buildFbc(fbclid, Date.now());
+  if (fbclid) user.fbc = buildFbc(fbclid, clickTime);
   return user;
 }
 

@@ -46,6 +46,7 @@ type Applicant = {
   attribution?: {
     firstTouch?: Record<string, string>;
     lastTouch?: Record<string, string>;
+    touchpoints?: Array<{ at: string; landingPage?: string; referrer?: string } & Record<string, string>>;
     landingPage?: string;
     referrer?: string;
   };
@@ -136,8 +137,13 @@ export function ApplicationsAdmin() {
   }
 
   function exportCsv() {
-    const headers = ["ID", "Submitted", "Name", "Email", "Country", "Organization", "Current role", "AI experience", "Proud project", "Career goal", "Technical challenge", "Target organizations", "Impact goal", "Math concepts", "Machine learning concepts", "Deep learning concepts", "NLP concepts", "Motivation reasons", "Program goals", "Preferred test slot", "Referral source", "Scholarship", "Status", "Google Sheets"];
-    const rows = filtered.map((applicant) => [applicant.id, applicant.submittedAt, applicant.fullName, applicant.email, applicant.country, applicant.organization, applicant.currentRole, applicant.aiExperience, applicant.proudProject, applicant.careerGoal, applicant.technicalChallenge, applicant.targetOrganizations, applicant.impactGoal, applicant.mathConcepts?.join("; "), applicant.machineLearningConcepts?.join("; "), applicant.deepLearningConcepts?.join("; "), applicant.nlpConcepts?.join("; "), applicant.motivationReasons?.join("; "), applicant.programGoals, applicant.preferredTestSlot, applicant.referralSource, applicant.scholarshipRequest ? "Yes" : "No", applicant.status, applicant.googleSheetsSynced ? "Synced" : "Local only"]);
+    const headers = ["ID", "Submitted", "Name", "Email", "Country", "Organization", "Current role", "AI experience", "Proud project", "Career goal", "Technical challenge", "Target organizations", "Impact goal", "Math concepts", "Machine learning concepts", "Deep learning concepts", "NLP concepts", "Motivation reasons", "Program goals", "Preferred test slot", "Referral source", "Scholarship", "Status", "Google Sheets", "First touch source", "First touch medium", "First touch campaign", "Last touch source", "Last touch medium", "Last touch campaign", "GCLID", "FBCLID", "TTCLID", "MSCLKID", "LI_FAT_ID", "Landing page", "Referrer", "Touchpoints"];
+    const rows = filtered.map((a) => {
+      const ft = a.attribution?.firstTouch || {};
+      const lt = a.attribution?.lastTouch || {};
+      const tp = a.attribution?.touchpoints || [];
+      return [a.id, a.submittedAt, a.fullName, a.email, a.country, a.organization, a.currentRole, a.aiExperience, a.proudProject, a.careerGoal, a.technicalChallenge, a.targetOrganizations, a.impactGoal, a.mathConcepts?.join("; "), a.machineLearningConcepts?.join("; "), a.deepLearningConcepts?.join("; "), a.nlpConcepts?.join("; "), a.motivationReasons?.join("; "), a.programGoals, a.preferredTestSlot, a.referralSource, a.scholarshipRequest ? "Yes" : "No", a.status, a.googleSheetsSynced ? "Synced" : "Local only", ft.utm_source || "", ft.utm_medium || "", ft.utm_campaign || "", lt.utm_source || "", lt.utm_medium || "", lt.utm_campaign || "", lt.gclid || ft.gclid || "", lt.fbclid || ft.fbclid || "", lt.ttclid || ft.ttclid || "", lt.msclkid || ft.msclkid || "", lt.li_fat_id || ft.li_fat_id || "", a.attribution?.landingPage || "", a.attribution?.referrer || "", tp.length];
+    });
     const blob = new Blob([[headers, ...rows].map((row) => row.map(csvCell).join(",")).join("\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -149,7 +155,12 @@ export function ApplicationsAdmin() {
 
   const resumeHref = selected?.resumeUrl || (selected?.resumeDownload ? withBasePath(selected.resumeDownload) : "");
   const resumeDownloadHref = selected?.resumeDownload ? `${withBasePath(selected.resumeDownload)}?download=1` : "";
+  const firstTouch = selected?.attribution?.firstTouch || {};
   const lastTouch = selected?.attribution?.lastTouch || {};
+  const touchpoints = selected?.attribution?.touchpoints || [];
+  const clickIdKeys = ["gclid", "gbraid", "wbraid", "fbclid", "ttclid", "msclkid", "li_fat_id"];
+  const firstClickIds = clickIdKeys.filter((k) => firstTouch[k]).map((k) => `${k}: ${firstTouch[k]}`);
+  const lastClickIds = clickIdKeys.filter((k) => lastTouch[k]).map((k) => `${k}: ${lastTouch[k]}`);
 
   return <>
     <main className="admin-page">
@@ -174,7 +185,15 @@ export function ApplicationsAdmin() {
         <section><span>Technical self-assessment</span><div className="applicant-detail__assessment"><div><b>Math</b><ul>{selected.mathConcepts?.length ? selected.mathConcepts.map((item)=><li key={item}>{item}</li>) : <li>Not collected</li>}</ul></div><div><b>Machine learning</b><ul>{selected.machineLearningConcepts?.length ? selected.machineLearningConcepts.map((item)=><li key={item}>{item}</li>) : <li>Not collected</li>}</ul></div><div><b>Deep learning</b><ul>{selected.deepLearningConcepts?.length ? selected.deepLearningConcepts.map((item)=><li key={item}>{item}</li>) : <li>Not collected</li>}</ul></div><div><b>NLP</b><ul>{selected.nlpConcepts?.length ? selected.nlpConcepts.map((item)=><li key={item}>{item}</li>) : <li>None selected</li>}</ul></div></div></section>
         <section><span>Motivation &amp; logistics</span><div className="applicant-detail__answers"><div><b>Top reasons</b><ul className="applicant-detail__signals">{selected.motivationReasons?.length ? selected.motivationReasons.map((item)=><li key={item}>{item}</li>) : <li>Not collected</li>}</ul></div><div><b>Program goals</b><p>{selected.programGoals || selected.motivation || "Not collected"}</p></div><div><b>Preferred test time</b><p>{selected.preferredTestSlot || "Not collected"}</p></div><div><b>Referral source</b><p>{selected.referralSource || "Not collected"}</p></div></div></section>
         <section><span>Readiness signals</span><ul className="applicant-detail__signals">{selected.readinessSignals.length ? selected.readinessSignals.map((signal) => <li key={signal}>{signal}</li>) : <li>No signals selected</li>}</ul></section>
-        <section><span>Attribution</span><dl><div><dt>Campaign</dt><dd>{lastTouch.utm_campaign || "Direct"}</dd></div><div><dt>Source / medium</dt><dd>{`${lastTouch.utm_source || "direct"} / ${lastTouch.utm_medium || "none"}`}</dd></div></dl></section>
+        <section><span>Attribution</span><dl>
+          <div><dt>First touch</dt><dd>{firstTouch.utm_source ? `${firstTouch.utm_source} / ${firstTouch.utm_medium || "none"} / ${firstTouch.utm_campaign || "—"}` : "Direct"}</dd></div>
+          <div><dt>Last touch</dt><dd>{lastTouch.utm_source ? `${lastTouch.utm_source} / ${lastTouch.utm_medium || "none"} / ${lastTouch.utm_campaign || "—"}` : "Direct"}</dd></div>
+          {firstClickIds.length > 0 && <div><dt>First click IDs</dt><dd>{firstClickIds.join(", ")}</dd></div>}
+          {lastClickIds.length > 0 && <div><dt>Last click IDs</dt><dd>{lastClickIds.join(", ")}</dd></div>}
+          {selected.attribution?.landingPage && <div><dt>Landing page</dt><dd>{selected.attribution.landingPage}</dd></div>}
+          {selected.attribution?.referrer && <div><dt>Referrer</dt><dd>{selected.attribution.referrer}</dd></div>}
+          {touchpoints.length > 0 && <div className="applicant-detail__touchpoints"><dt>Touchpoint history ({touchpoints.length})</dt><dd><ul className="applicant-detail__timeline">{touchpoints.map((tp, i) => <li key={i}><time>{tp.at ? new Date(tp.at).toLocaleString("en", { dateStyle: "short", timeStyle: "short" }) : "—"}</time><span>{tp.utm_source || "direct"} / {tp.utm_medium || "none"}{tp.utm_campaign ? ` · ${tp.utm_campaign}` : ""}</span>{tp.fbclid && <small>fbclid: {tp.fbclid}</small>}{tp.gclid && <small>gclid: {tp.gclid}</small>}</li>)}</ul></dd></div>}
+        </dl></section>
         <footer><button onClick={() => setSelected(null)}>Close</button><button onClick={() => updateStatus(pendingStatus)} disabled={statusSaving || pendingStatus === selected.status}>{statusSaving ? "Applying…" : pendingStatus === selected.status ? "Status applied" : `Apply ${pendingStatus}`}</button></footer>
       </aside>
     </div>}

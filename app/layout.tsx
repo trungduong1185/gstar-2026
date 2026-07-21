@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./app.css";
 import "./admin-nti.css";
 import { withBasePath } from "@/lib/base-path";
+import { resolvedGaMeasurementId } from "@/lib/integration-settings";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://gstar.newturing.ai").replace(/\/$/, "");
@@ -124,8 +125,8 @@ const structuredData = {
   ]
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const fallbackGaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const gaId = await resolvedGaMeasurementId();
   return (
     <html lang="en">
       <head>
@@ -137,10 +138,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        {gaId && <>
+          <script id="gstar-consent-defaults" dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('consent','default',{ad_storage:'denied',analytics_storage:'granted',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});` }} />
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+          <script id="gstar-ga4" dangerouslySetInnerHTML={{ __html: `gtag('js',new Date());gtag('config','${gaId}',{send_page_view:true});` }} />
+        </>}
       </head>
       <body data-mentor-source={withBasePath("/api/mentors")}>
         {children}
-        <GoogleAnalytics fallbackGaId={fallbackGaId} />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );

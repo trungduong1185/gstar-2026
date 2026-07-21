@@ -6,7 +6,7 @@ import { resolvedGoogleSheetsSettings } from "@/lib/integration-settings";
 import { findIdempotent, findRecentByEmail, rememberIdempotent, sanitizeIdempotencyKey } from "@/lib/dedup";
 import { notifySlack } from "@/lib/slack-notifier";
 import { sendMetaLead } from "@/lib/meta-capi";
-import { sanitizeTouchpoints } from "@/lib/utm";
+import { sanitizeAttribution } from "@/lib/utm";
 import { sendApplicationConfirmation } from "@/lib/email-notifier";
 
 export const runtime = "nodejs";
@@ -120,12 +120,9 @@ export async function POST(request: Request) {
     attribution: body.attribution || {}
   };
 
-  // Sanitize the client-supplied touchpoints[] array. Bad input is dropped
-  // silently — the firstTouch/lastTouch legacy fields still carry attribution
-  // in that case, so we never fail a submission on malformed history data.
-  const rawAttribution = (application.attribution || {}) as Record<string, unknown>;
-  const touchpoints = sanitizeTouchpoints(rawAttribution.touchpoints);
-  application.attribution = { ...rawAttribution, touchpoints };
+  // Sanitize the full client-supplied attribution object — firstTouch,
+  // lastTouch, touchpoints, landingPage, referrer are all validated and capped.
+  application.attribution = sanitizeAttribution(application.attribution);
 
   const birthYear = Number(application.yearOfBirth);
   const referralNeedsDetails = ["Friend or acquaintance", "Post from an NTI team member", "Other"].includes(application.referralSource);

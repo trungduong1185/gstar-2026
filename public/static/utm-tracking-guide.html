@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GStar UTM Tracking — Hướng dẫn cho Marketing Team</title>
+<style>
+:root { --red: #b21f2d; --red-dark: #4a0b12; --bg: #faf9fb; --card: #fff; --text: #1a0e10; --text-2: #5c4f51; --text-3: #8a7e80; --border: #ece9eb; --code-bg: #f4f2f4; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; padding: 0 16px 60px; }
+.wrap { max-width: 820px; margin: 0 auto; }
+header { text-align: center; padding: 48px 0 36px; border-bottom: 2px solid var(--red); margin-bottom: 36px; }
+header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+header p { color: var(--text-2); font-size: 14px; }
+.toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 36px; }
+.toc h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); margin-bottom: 12px; }
+.toc ol { padding-left: 20px; }
+.toc li { margin-bottom: 6px; font-size: 14px; }
+.toc a { color: var(--text); text-decoration: none; }
+.toc a:hover { color: var(--red); }
+h2 { font-size: 22px; font-weight: 700; margin: 36px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+h3 { font-size: 17px; font-weight: 700; margin: 28px 0 12px; }
+h4 { font-size: 15px; font-weight: 700; margin: 20px 0 10px; }
+p { margin-bottom: 12px; font-size: 15px; color: var(--text); }
+ul, ol { margin-bottom: 12px; padding-left: 22px; }
+li { margin-bottom: 6px; font-size: 15px; }
+code { background: var(--code-bg); color: var(--red); padding: 2px 6px; border-radius: 4px; font-family: "SF Mono", Monaco, Consolas, monospace; font-size: 13px; }
+pre { background: var(--red-dark); color: #fff; padding: 16px 20px; border-radius: 10px; overflow-x: auto; margin-bottom: 16px; }
+pre code { background: none; color: #fff; padding: 0; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 14px; }
+th { background: var(--red); color: #fff; padding: 10px 12px; text-align: left; font-weight: 700; font-size: 13px; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tr:nth-child(even) { background: var(--card); }
+.checklist { list-style: none; padding-left: 0; }
+.checklist li { padding-left: 28px; position: relative; }
+.checklist li::before { content: "☐"; position: absolute; left: 0; font-size: 18px; color: var(--red); }
+.callout { background: #fff5f5; border-left: 4px solid var(--red); padding: 16px 20px; border-radius: 8px; margin-bottom: 16px; }
+.callout b { color: var(--red); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+.tag-req { background: #fee2e2; color: #991b1b; }
+.tag-opt { background: #f3f4f6; color: #6b7280; }
+.tag-auto { background: #dcfce7; color: #166534; }
+footer { text-align: center; padding: 32px 0; color: var(--text-3); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; }
+@media (max-width: 600px) { header h1 { font-size: 22px; } h2 { font-size: 19px; } table { font-size: 13px; } th, td { padding: 8px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+<h1>GStar UTM Tracking</h1>
+<p>Hướng dẫn dành cho Marketing Team · Cập nhật July 2026</p>
+</header>
+
+<div class="toc">
+<h3>Mục lục</h3>
+<ol>
+<li><a href="#s1">UTM là gì</a></li>
+<li><a href="#s2">Các tham số UTM</a></li>
+<li><a href="#s3">Cách tạo link UTM</a></li>
+<li><a href="#s4">Quy chuẩn đặt tên</a></li>
+<li><a href="#s5">Cách hệ thống ghi nhận</a></li>
+<li><a href="#s6">Xem dữ liệu UTM</a></li>
+<li><a href="#s7">Checklist Marketing</a></li>
+<li><a href="#s8">Lưu ý quan trọng</a></li>
+</ol>
+</div>
+
+<h2 id="s1">1. UTM là gì</h2>
+<p>UTM (Urchin Tracking Module) là các tham số được gắn vào cuối URL để theo dõi nguồn traffic đến website. Khi user nhấp vào link có UTM, hệ thống tự động ghi lại:</p>
+<ul>
+<li><b>Họ đến từ đâu</b> — Facebook, Google, Email, etc.</li>
+<li><b>Qua kênh nào</b> — quảng cáo trả phí, organic, email</li>
+<li><b>Chiến dịch nào</b> — tuyển sinh, học bổng, early bird</li>
+<li><b>Hành trình đầy đủ</b> — từ lần đầu tiếp xúc đến khi nộp đơn</li>
+</ul>
+<p>Dữ liệu này giúp biết kênh nào mang lại nhiều ứng viên nhất, tính chi phí trên mỗi conversion (CPA), và tối ưu ngân sách quảng cáo.</p>
+
+<h2 id="s2">2. Các tham số UTM</h2>
+
+<h3>2.1. UTM cơ bản</h3>
+<table>
+<thead><tr><th>Tham số</th><th>Bắt buộc</th><th>Mô tả</th><th>Ví dụ</th></tr></thead>
+<tbody>
+<tr><td><code>utm_source</code></td><td><span class="tag tag-req">Có</span></td><td>Nguồn traffic</td><td><code>facebook</code>, <code>google</code></td></tr>
+<tr><td><code>utm_medium</code></td><td><span class="tag tag-req">Có</span></td><td>Loại kênh</td><td><code>paid_social</code>, <code>cpc</code></td></tr>
+<tr><td><code>utm_campaign</code></td><td><span class="tag tag-req">Có</span></td><td>Tên chiến dịch</td><td><code>gstar_scholarship</code></td></tr>
+<tr><td><code>utm_content</code></td><td><span class="tag tag-opt">Không</span></td><td>Phân biệt ads</td><td><code>carousel_v1</code></td></tr>
+<tr><td><code>utm_term</code></td><td><span class="tag tag-opt">Không</span></td><td>Từ khóa</td><td><code>ai_bootcamp</code></td></tr>
+<tr><td><code>utm_id</code></td><td><span class="tag tag-opt">Không</span></td><td>ID nội bộ</td><td><code>camp_001</code></td></tr>
+</tbody>
+</table>
+
+<h3>2.2. Click IDs (tự động ghi)</h3>
+<p>Các nền tảng quảng cáo tự động thêm click ID vào URL. <b>Không cần làm gì thủ công.</b></p>
+<table>
+<thead><tr><th>Click ID</th><th>Nền tảng</th><th>Tự động</th></tr></thead>
+<tbody>
+<tr><td><code>gclid</code></td><td>Google Ads</td><td><span class="tag tag-auto">Có</span></td></tr>
+<tr><td><code>fbclid</code></td><td>Facebook / Meta Ads</td><td><span class="tag tag-auto">Có</span></td></tr>
+<tr><td><code>ttclid</code></td><td>TikTok Ads</td><td><span class="tag tag-auto">Có</span></td></tr>
+<tr><td><code>msclkid</code></td><td>Microsoft Ads</td><td><span class="tag tag-auto">Có</span></td></tr>
+<tr><td><code>li_fat_id</code></td><td>LinkedIn Ads</td><td><span class="tag tag-auto">Có</span></td></tr>
+</tbody>
+</table>
+
+<h2 id="s3">3. Cách tạo link UTM</h2>
+<h3>3.1. Công thức</h3>
+<pre><code>https://summit.newturing.ai/gstar/?utm_source=SOURCE&utm_medium=MEDIUM&utm_campaign=CAMPAIGN&utm_content=CONTENT</code></pre>
+
+<h3>3.2. Ví dụ theo kênh</h3>
+
+<h4>Facebook Ads</h4>
+<pre><code>https://summit.newturing.ai/gstar/?utm_source=facebook&utm_medium=paid_social&utm_campaign=gstar_scholarship&utm_content=carousel_v1</code></pre>
+
+<h4>Google Search Ads</h4>
+<pre><code>https://summit.newturing.ai/gstar/?utm_source=google&utm_medium=cpc&utm_campaign=brand_term&utm_term=gstar+bootcamp</code></pre>
+
+<h4>LinkedIn Ads</h4>
+<pre><code>https://summit.newturing.ai/gstar/?utm_source=linkedin&utm_medium=paid_social&utm_campaign=ai_engineers_2026</code></pre>
+
+<h4>Email Newsletter</h4>
+<pre><code>https://summit.newturing.ai/gstar/?utm_source=nti_newsletter&utm_medium=email&utm_campaign=july_intake&utm_content=header_button</code></pre>
+
+<h4>YouTube / Facebook organic</h4>
+<pre><code>https://summit.newturing.ai/gstar/?utm_source=youtube&utm_medium=organic_social&utm_campaign=mentor_stories</code></pre>
+
+<h2 id="s4">4. Quy chuẩn đặt tên</h2>
+<h3>4.1. Bảng chuẩn source/medium</h3>
+<table>
+<thead><tr><th>Kênh</th><th>utm_source</th><th>utm_medium</th></tr></thead>
+<tbody>
+<tr><td>Facebook Ads</td><td><code>facebook</code></td><td><code>paid_social</code></td></tr>
+<tr><td>Facebook organic</td><td><code>facebook</code></td><td><code>organic_social</code></td></tr>
+<tr><td>Google Search Ads</td><td><code>google</code></td><td><code>cpc</code></td></tr>
+<tr><td>LinkedIn Ads</td><td><code>linkedin</code></td><td><code>paid_social</code></td></tr>
+<tr><td>TikTok Ads</td><td><code>tiktok</code></td><td><code>paid_social</code></td></tr>
+<tr><td>YouTube Ads</td><td><code>youtube</code></td><td><code>paid_video</code></td></tr>
+<tr><td>Email newsletter</td><td><code>nti_newsletter</code></td><td><code>email</code></td></tr>
+<tr><td>X (Twitter)</td><td><code>x</code></td><td><code>organic_social</code></td></tr>
+<tr><td>Zalo</td><td><code>zalo</code></td><td><code>organic_social</code></td></tr>
+</tbody>
+</table>
+
+<h3>4.2. Quy tắc đặt tên campaign</h3>
+<p>Format: <code>[Chương trình]_[Mục đích]</code></p>
+<table>
+<thead><tr><th>Tên campaign</th><th>Mô tả</th></tr></thead>
+<tbody>
+<tr><td><code>gstar_scholarship</code></td><td>Chiến dịch học bổng</td></tr>
+<tr><td><code>gstar_intake_jul</code></td><td>Tuyển sinh tháng 7</td></tr>
+<tr><td><code>gstar_mentor_stories</code></td><td>Chia sẻ mentor</td></tr>
+<tr><td><code>gstar_early_bird</code></td><td>Early bird deadline</td></tr>
+<tr><td><code>gstar_final_deadline</code></td><td>Deadline cuối</td></tr>
+</tbody>
+</table>
+
+<h2 id="s5">5. Cách hệ thống ghi nhận</h2>
+<div class="callout">
+<b>Ví dụ hành trình user:</b><br>
+Lần 1 (Facebook Ads) → Lần 2 (Direct) → Lần 3 (Google Ads) → Nộp đơn<br>
+→ <b>First touch</b> = Facebook · <b>Last touch</b> = Google · <b>Touchpoints</b> = [Facebook, Google]
+</div>
+
+<h3>Quy tắc</h3>
+<ul>
+<li>Cùng source/medium/campaign trong <b>30 phút</b> → tính 1 touchpoint (chống F5 spam)</li>
+<li>Tối đa <b>20 touchpoints</b> — tự động giữ 20 lần gần nhất</li>
+<li>Click IDs tự động capture, không cần thao tác</li>
+<li>Ad-blocker không ảnh hưởng — tracking chạy server-side</li>
+</ul>
+
+<h2 id="s6">6. Xem dữ liệu UTM</h2>
+
+<h3>6.1. Admin Dashboard</h3>
+<p>Vào <b>Dashboard → Applications</b> → click vào applicant để xem:</p>
+<ul>
+<li><b>First touch</b> — kênh user đến lần đầu</li>
+<li><b>Last touch</b> — kênh cuối trước khi nộp</li>
+<li><b>Click IDs</b> — gclid, fbclid, ttclid, msclkid, li_fat_id</li>
+<li><b>Touchpoint timeline</b> — toàn bộ hành trình với timestamp</li>
+</ul>
+
+<h3>6.2. Export CSV</h3>
+<p>Click <b>Export CSV</b> — 13 cột attribution: First/Last touch source/medium/campaign, 5 Click IDs, Landing page, Referrer, Touchpoint count.</p>
+
+<h3>6.3. Slack notification</h3>
+<p>Mỗi đơn mới gửi message realtime lên Slack channel với source, campaign, click IDs.</p>
+
+<h2 id="s7">7. Checklist Marketing</h2>
+
+<h3>Trước khi chạy campaign</h3>
+<ul class="checklist">
+<li>Tạo link UTM theo quy chuẩn ở Mục 3</li>
+<li>Test link: dán vào trình duyệt, kiểm tra <code>?utm_...</code> hiển thị</li>
+<li>Gắn link vào ads platform</li>
+<li>Bật <b>Auto-tagging</b> trong Google Ads</li>
+<li>Mỗi creative có <code>utm_content</code> riêng</li>
+</ul>
+
+<h3>Hàng tuần</h3>
+<ul class="checklist">
+<li>Vào Admin → Applications → Export CSV</li>
+<li>Lọc theo <code>Last touch source</code> — xem kênh nào đang hoạt động</li>
+<li>Lọc theo <code>First touch source</code> — xem kênh awareness</li>
+<li>Đối chiếu chi phí quảng cáo để tính CPA</li>
+</ul>
+
+<h2 id="s8">8. Lưu ý quan trọng</h2>
+<div class="callout">
+<ol>
+<li><b>UTM phải lowercase</b> — <code>facebook</code> không phải <code>Facebook</code></li>
+<li><b>Không dùng space</b> — dùng <code>_</code> hoặc <code>-</code></li>
+<li><b>Click IDs tự động</b> — không cần gắn thủ công</li>
+<li><b>URL có /gstar/</b> — tất cả link phải có prefix này</li>
+<li><b>Ad-blocker</b> — hệ thống vẫn capture server-side</li>
+<li><b>Không reuse campaign name</b> cho mục đích khác</li>
+<li><b>Link rút gọn</b> — đảm bảo UTM không bị mất</li>
+</ol>
+</div>
+
+<footer>
+GStar Tech Team · New Turing Institute · July 2026
+</footer>
+
+</div>
+</body>
+</html>
