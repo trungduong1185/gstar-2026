@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminCookie, verifyAdminSession } from "@/lib/admin-auth";
 import { withBasePath } from "@/lib/base-path";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const session = await verifyAdminSession(request.cookies.get(adminCookie.name)?.value);
   if (session) {
     const response = NextResponse.next();

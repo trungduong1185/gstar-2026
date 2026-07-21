@@ -55,7 +55,7 @@ export type StoredApplication = {
   confirmationEmailError?: string;
 };
 
-export const dataDirectory = path.join(process.cwd(), "data");
+export const dataDirectory = process.env.GSTAR_DATA_DIR || path.join(process.cwd(), "data");
 export const uploadDirectory = path.join(dataDirectory, "uploads");
 
 const applicationStatuses = new Set<ApplicationStatus>(["Submitted", "Assessment", "Shortlisted", "Rejected"]);
