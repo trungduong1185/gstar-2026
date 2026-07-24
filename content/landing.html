@@ -152,6 +152,9 @@
         <img src="static/img/event/gstar-2025-05.webp" alt="GStar Cohort 1 demo day" loading="lazy" decoding="async">
       </div>
     </div>
+    <div style="text-align: center; margin-top: 32px;">
+      <a href="https://gstar.newturing.ai/2025" class="btn btn-ghost" target="_blank" rel="noopener">See Previous Cohorts →</a>
+    </div>
 
     <div class="events" id="previous-events">
       <span class="eyebrow">The NTI stage</span>
@@ -295,14 +298,116 @@
 
 <!-- ============ CURRICULUM (cream) ============ -->
 <section id="curriculum" class="section section--cream">
-  <div class="container">
-    <span class="eyebrow">What you'll learn</span>
-    <h2 class="h2" style="margin-top: 22px; max-width: 900px;">A 12-week curriculum built on what AI labs are actually shipping today — now with an expanded Agent Tech track.</h2>
+  <div class="container cur">
+    <div class="cur-intro">
+      <span class="eyebrow">What you'll learn</span>
+      <h2 class="h2" style="margin-top: 22px;">What you will learn in this bootcamp</h2>
+      <p class="lead" style="margin-top: 18px; max-width: 340px;">A 12-week, state-of-the-art LLM curriculum run in parallel with a capstone project — from fundamentals to shipped systems.</p>
+      <a href="#apply" class="btn btn-primary btn--icon-right cur-intro__cta">Register Your Interest <span class="btn-arrow" aria-hidden="true">→</span></a>
+    </div>
 
-    <div id="curriculum-scrolly" class="scrolly"></div>
+    <div class="cur-grid">
+      <div class="cur-head" style="grid-column: 2 / 4; grid-row: 1;">
+        <span class="cur-head__col cur-head__col--train">State-of-the-art LLM training</span>
+        <span class="cur-head__col cur-head__col--capstone">Capstone project</span>
+      </div>
 
-    <div id="curriculum-cta" class="scrolly-main__cta">
-      <a href="#apply" class="btn btn-primary btn--size-48 btn--icon-right">Register Your Interest <span class="btn-arrow" aria-hidden="true">→</span></a>
+      <div class="cur-week" style="grid-column: 1; grid-row: 2;">Week 1</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 2;">
+        <h3 class="cur-card__title">Review of advanced NLP techniques</h3>
+        <p>Goal: recap fundamental knowledge such as attention, tokenization, Transformer, and end-to-end training.</p>
+      </article>
+      <article class="cur-card cur-card--capstone" style="grid-column: 3; grid-row: 2 / 4;">
+        <h3 class="cur-card__title">Individual Project brainstorming</h3>
+        <p>Goal: think critically about interesting and impactful ideas that can be achieved in 12 weeks.</p>
+        <p>Deliverables: project proposal (2–4 pages) to be reviewed by technical buddies &amp; program leads.</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 3;">Week 2</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 3;">
+        <h3 class="cur-card__title">Pre-training</h3>
+        <p>Goal: develop in-depth understanding of attention (e.g., Linear Attention, FlashAttention), advanced Transformers (Sparse Transformer · Transformer-XL, MoE) and LLM pretraining.</p>
+        <p>Tutorial: train a large language model from scratch.</p>
+        <p>Assignment 1 (week 1–2): optimizer state sharding.</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 4;">Week 3</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 4;">
+        <h3 class="cur-card__title">Post-training</h3>
+        <p>Goal: understand supervised finetuning (SFT) and parameter-efficient methods. Learn how to prepare data, setup training, hyperparameter optimization, perform decoding, and evaluation.</p>
+      </article>
+      <article class="cur-card cur-card--capstone" style="grid-column: 3; grid-row: 4 / 7;">
+        <h3 class="cur-card__title">Individual Project prototype</h3>
+        <p>Goal: implement the first version of the project proposal utilizing knowledge learned during the first 6 weeks.</p>
+        <p>Deliverables: project presentation presented to technical buddies, program leads, and senior advisors.</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 5;">Week 4</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 5;">
+        <h3 class="cur-card__title">Alignment &amp; Advanced reasoning</h3>
+        <p>Goal: understand learning from human feedback (RLHF, DPO) and recent developments for advanced reasoning models (DeepSeek-R1 and GRPO).</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 6;">Week 5</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 6;">
+        <h3 class="cur-card__title">Assignment 2 (week 3–5): train math reasoning models with GRPO</h3>
+      </article>
+
+      <div class="cur-week cur-week--banner" style="grid-column: 1; grid-row: 7;">Week 6</div>
+      <div class="cur-banner" style="grid-column: 2 / 4; grid-row: 7;">
+        <div class="cur-banner__title">Project Prototype Presentation</div>
+        <div class="cur-banner__sub">Individual students will merge into teams for collaborative works</div>
+      </div>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 8;">Week 7</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 8;">
+        <h3 class="cur-card__title">Guest lectures on either or both</h3>
+        <ul class="cur-card__list"><li>Text diffusion models</li><li>Flash attention</li></ul>
+      </article>
+      <article class="cur-card cur-card--capstone" style="grid-column: 3; grid-row: 8 / 11;">
+        <h3 class="cur-card__title">Team Project refinement</h3>
+        <p>Goal: refine the idea and implementation based on feedback of the prototype.</p>
+        <p>Deliverables:</p>
+        <ul class="cur-card__list"><li>project mid-term report (2–4 pages) on the latest results</li><li>initial code submission</li></ul>
+        <p>To be reviewed by technical buddies &amp; program leads.</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 9;">Week 8</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 9;">
+        <h3 class="cur-card__title">Advanced Inference</h3>
+        <p>Goal: kv-caching, advanced decoding algorithms &amp; serving optimizations.</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 10;">Week 9</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 10;">
+        <h3 class="cur-card__title">Agents and Evaluation</h3>
+        <p>Goal: understand AI agents and automated benchmarks (BLEURT, COMET, LLM judge).</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 11;">Week 10</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 11;">
+        <h3 class="cur-card__title">Guest lectures on either or both</h3>
+        <ul class="cur-card__list"><li>AI Safety</li><li>AI for Drug Discovery</li></ul>
+      </article>
+      <article class="cur-card cur-card--capstone" style="grid-column: 3; grid-row: 11 / 13;">
+        <h3 class="cur-card__title">Team Project completion</h3>
+        <p>Goal: complete the project with polished results and implementation.</p>
+        <p>Deliverables:</p>
+        <ul class="cur-card__list"><li>final project presentation to everyone</li><li>project final report (4–8 pages)</li><li>final code submission</li></ul>
+        <p>To be graded by technical buddies &amp; program leads.</p>
+      </article>
+
+      <div class="cur-week" style="grid-column: 1; grid-row: 12;">Week 11</div>
+      <article class="cur-card cur-card--train" style="grid-column: 2; grid-row: 12;">
+        <h3 class="cur-card__title">Guest lectures on either or both</h3>
+        <ul class="cur-card__list"><li>Leadership</li><li>Research skills</li></ul>
+      </article>
+
+      <div class="cur-week cur-week--banner" style="grid-column: 1; grid-row: 13;">Week 12</div>
+      <div class="cur-banner" style="grid-column: 2 / 4; grid-row: 13;">
+        <div class="cur-banner__title">Final Project Presentation</div>
+        <div class="cur-banner__sub">Later followed by blog-post / camera-ready presentation to post on Medium / HF / NTI website</div>
+      </div>
     </div>
   </div>
 </section>
