@@ -232,7 +232,7 @@
   background: hsl(var(--primary-1) / .18); color: var(--pink-100); font-size: 15px;
 }
 .mentors-v2 .mentors-grid--featured .mentor-name { font-size: 18px; }
-.mentors-v2 .mentors-grid--featured .mentor-role { margin-top: 8px; max-width: 420px; font-size: 13.5px; line-height: 1.55; }
+.mentors-v2 .mentors-grid--featured .mentor-role { margin-top: 8px; max-width: 420px; font-size: 14px; line-height: 1.55; }
 
 .mentors-v2 .mentor-avatar {
   position: relative;
