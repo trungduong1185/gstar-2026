@@ -117,7 +117,7 @@ export function ApplicationDrawer() {
     };
     window.addEventListener("gstar:readiness-change", syncReadiness);
 
-    const selector = 'a[href="#apply"], a[href^="https://gstar.newturing.ai"]';
+    const selector = 'a[href="#apply"], a[href="https://gstar.newturing.ai"], a[href="https://gstar.newturing.ai/"]';
     const handler = (event: Event) => {
       const target = (event.target as HTMLElement).closest<HTMLAnchorElement>(selector);
       if (!target) return;

@@ -2,12 +2,17 @@ node_modules/
 .next/
 .env
 .env*.local
-/data/
+.env.production
+.env.production.local
 /generated/prisma/
 npm-debug.log*
 *.tsbuildinfo
 .DS_Store
 data-backup*/
-data/
-.env.production
-.env.production.local
+
+# Runtime data: ignore everything under data/ EXCEPT the DB and uploads.
+# Committed intentionally for this internal repo so others can pull & deploy.
+# NOTE: gstar.db contains applicant PII and integration secrets — keep this repo private.
+/data/*
+!/data/gstar.db
+!/data/uploads/

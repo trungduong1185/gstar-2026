@@ -640,13 +640,13 @@ body:has(#apply:target) .sticky-apply-v3 { transform: translate(-50%, calc(100% 
 }
 
 .cur-head__col--train {
-  color: #731013;
-  border-color: #731013;
+  color: #1a365d;
+  border-color: #1a365d;
 }
 
 .cur-head__col--capstone {
-  color: #1a365d;
-  border-color: #1a365d;
+  color: #731013;
+  border-color: #731013;
 }
 
 .cur-week {
