@@ -1,5 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
+import dotenv from "dotenv";
 
 const root = process.cwd();
 
@@ -9,6 +10,13 @@ const standaloneData = path.join(root, "data");
 const projectData = path.join(root, "..", "..", "data");
 const dataDir = fs.existsSync(projectData) ? projectData : standaloneData;
 process.env.GSTAR_DATA_DIR = dataDir;
+
+// The standalone server bundle doesn't auto-load .env files, so load them here.
+// Same root as the data dir above (project root either directly or two levels up).
+const envRoot = fs.existsSync(projectData) ? path.join(root, "..", "..") : root;
+for (const file of [".env.production.local", ".env.local", ".env.production", ".env"]) {
+  dotenv.config({ path: path.join(envRoot, file) });
+}
 
 const configuredDatabaseUrl = process.env.DATABASE_URL;
 
