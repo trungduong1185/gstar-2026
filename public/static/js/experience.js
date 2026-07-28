@@ -119,13 +119,21 @@
   });
 })();
 
-(function () {
+(function initHeroExperience() {
+  const config = window.GSTAR_CONFIG;
+  if (!config || !config.dates) {
+    // /api/program-config is a no-store request that can resolve after this
+    // (often cached) script runs; retry for up to ~10s so the hero copy,
+    // schedule dates and sticky bar don't stay stuck on the static defaults.
+    initHeroExperience._waited = (initHeroExperience._waited || 0) + 100;
+    if (initHeroExperience._waited <= 10000) setTimeout(initHeroExperience, 100);
+    return;
+  }
   const sticky = document.getElementById("sticky-apply");
   const hero = document.getElementById("top");
   const admissions = document.getElementById("admissions");
   const apply = document.getElementById("apply");
-  const config = window.GSTAR_CONFIG;
-  if (!sticky || !hero || !admissions || !apply || !config) return;
+  if (!sticky || !hero || !admissions || !apply) return;
 
   const now = new Date();
   const dates = config.dates;
@@ -178,7 +186,7 @@
   } else if (now <= finalDeadline) {
     label.textContent = "Final application round";
     value.textContent = "Final deadline · " + shortDate(finalDeadline);
-    if (heroNote) heroNote.textContent = "Applications are open · Final Deadline: " + longDate(finalDeadline);
+    if (heroNote) heroNote.textContent = "Applications are open · Closes " + longDate(finalDeadline);
     if (finalNote) finalNote.textContent = "Applications are open · Final Deadline: " + longDate(finalDeadline) + " (" + config.timezoneLabel + ")";
   } else {
     label.textContent = "Applications closed";
