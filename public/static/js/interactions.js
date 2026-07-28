@@ -64,12 +64,6 @@
 })();
 
 (function () {
-  const configDates = window.GSTAR_CONFIG && window.GSTAR_CONFIG.dates;
-  const earlyBirdTarget = new Date(configDates ? configDates.earlyBirdDeadline : "2026-07-25T23:59:59+07:00").getTime();
-  const finalTarget = new Date(configDates ? configDates.finalDeadline : "2026-07-25T23:59:59+07:00").getTime();
-  const target = Date.now() <= earlyBirdTarget ? earlyBirdTarget : finalTarget;
-  const targetLabel = target === earlyBirdTarget ? "Early Bird Deadline" : "Final Deadline";
-
   const el = {
     d: document.getElementById("cd-days"),
     h: document.getElementById("cd-hours"),
@@ -79,28 +73,54 @@
   };
   if (!el.wrap) return;
   const countdownLabel = el.wrap.querySelector(".countdown-label");
-  if (countdownLabel) countdownLabel.textContent = targetLabel;
-
   const pad = (n) => String(Math.max(0, n)).padStart(2, "0");
 
-  function tick() {
-    const diff = target - Date.now();
-    if (diff <= 0) {
-      const closedCopy = configDates ? "Applications closed" : "Early Bird đã đóng";
-      el.wrap.innerHTML = '<div class="countdown-cell" style="min-width:auto;padding:14px 24px"><div class="countdown-num" style="font-size:18px;color:#fff">' + closedCopy + '</div></div>';
-      return;
+  function start() {
+    // GSTAR_CONFIG is injected by the /api/program-config script, which is a
+    // no-store dynamic request. This static file is often cached and can run
+    // before that config arrives, so we wait for it (see waitForConfig below)
+    // to avoid falling back to a stale hardcoded deadline.
+    const configDates = window.GSTAR_CONFIG && window.GSTAR_CONFIG.dates;
+    const earlyBirdTarget = new Date(configDates ? configDates.earlyBirdDeadline : "2026-07-25T23:59:59+07:00").getTime();
+    const finalTarget = new Date(configDates ? configDates.finalDeadline : "2026-08-10T23:59:59+07:00").getTime();
+    const target = Date.now() <= earlyBirdTarget ? earlyBirdTarget : finalTarget;
+    const targetLabel = target === earlyBirdTarget ? "Early Bird Deadline" : "Final Deadline";
+    if (countdownLabel) countdownLabel.textContent = targetLabel;
+
+    function tick() {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        const closedCopy = "Applications closed";
+        el.wrap.innerHTML = '<div class="countdown-cell" style="min-width:auto;padding:14px 24px"><div class="countdown-num" style="font-size:18px;color:#fff">' + closedCopy + '</div></div>';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      if (el.d) el.d.textContent = pad(d);
+      if (el.h) el.h.textContent = pad(h);
+      if (el.m) el.m.textContent = pad(m);
+      if (el.s) el.s.textContent = pad(s);
     }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    if (el.d) el.d.textContent = pad(d);
-    if (el.h) el.h.textContent = pad(h);
-    if (el.m) el.m.textContent = pad(m);
-    if (el.s) el.s.textContent = pad(s);
+    tick();
+    setInterval(tick, 1000);
   }
-  tick();
-  setInterval(tick, 1000);
+
+  // Wait for the program config to load before starting, so a cache-warm run of
+  // this script doesn't lock the countdown onto the hardcoded fallback deadline.
+  if (window.GSTAR_CONFIG && window.GSTAR_CONFIG.dates) {
+    start();
+  } else {
+    let waited = 0;
+    const waitId = setInterval(function () {
+      waited += 100;
+      if ((window.GSTAR_CONFIG && window.GSTAR_CONFIG.dates) || waited >= 10000) {
+        clearInterval(waitId);
+        start();
+      }
+    }, 100);
+  }
 })();
 
 // ------- Stats bar animation -------
